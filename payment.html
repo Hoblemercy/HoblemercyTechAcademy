@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Payment – Himiko Tech Academy</title>
+
+  <!-- Remixicon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+
+  <!-- Notyf -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0a0716;
+      --card: linear-gradient(145deg, #0f0b1e, #140f24);
+      --accent: #a78bfa;
+      --text: #f8f9ff;
+      --text-dim: #c9b8e8;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .lux-payment-card, .lux-confirmation-card {
+      background: var(--card);
+      border: 1px solid rgba(167,139,250,0.18);
+      border-radius: 24px;
+      box-shadow: 0 30px 90px -20px rgba(0,0,0,0.75);
+      width: 100%;
+      max-width: 520px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .lux-header i {
+      font-size: 3.5rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .lux-amount-value {
+      font-size: 3.8rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #d5b9ff, #c4a1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .lux-countdown {
+      background: rgba(147,51,234,0.12);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      color: #d6bcfa;
+    }
+    .lux-countdown strong {
+      font-size: 1.5rem;
+      color: white;
+      min-width: 80px;
+    }
+    .lux-countdown.pulse {
+      animation: pulse-bg 1.5s infinite;
+    }
+    @keyframes pulse-bg {
+      0%,100% { background: rgba(147,51,234,0.12); }
+      50% { background: rgba(147,51,234,0.28); }
+    }
+    .lux-btn-confirm {
+      background: linear-gradient(90deg, #6d28d9, #a855f7, #c084fc);
+      color: white;
+      border: none;
+      padding: 1.1rem 2.4rem;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 2rem auto;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: all 0.4s;
+    }
+    .lux-btn-confirm:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 50px rgba(109,40,217,0.5);
+    }
+    .lux-bank-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 0.8rem 0;
+    }
+    .lux-copy-btn {
+      margin-left: auto;
+      background: rgba(167,139,250,0.15);
+      border: 1px solid rgba(167,139,250,0.3);
+      color: var(--accent);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .lux-big-check i {
+      font-size: 6rem;
+      color: #10b981;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .lux-bank-banner-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 1.5rem auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px -15px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(167, 139, 250, 0.12);
+  background: linear-gradient(145deg, #0f0b1e, #140f24);
+  transition: all 0.4s ease;
+}
+
+.lux-bank-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  transition: transform 0.6s ease;
+}
+
+.lux-bank-banner-image-wrapper:hover .lux-bank-banner-img {
+  transform: scale(1.05);
+}
+
+/* Optional glow/neon border on hover */
+.lux-bank-banner-image-wrapper:hover {
+  box-shadow:
+    0 25px 70px -20px rgba(167, 139, 250, 0.35),
+    0 0 0 2px rgba(167, 139, 250, 0.25) inset;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .lux-bank-banner-image-wrapper {
+    max-width: 280px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<div class="lux-payment-card" id="paymentSection">
+  <div class="lux-header">
+    <i class="ri-bank-card-line lux-icon-header"></i>
+    <h3>Complete Your Secure Payment</h3>
+  </div>
+
+  <div class="lux-amount-display">
+    <span>Amount Due:</span>
+    <strong id="paymentAmount" class="lux-amount-value">₦0</strong>
+  </div>
+
+  <div class="lux-countdown" id="countdownDisplay" style="display:none;">
+    <i class="ri-timer-line"></i>
+    <span>Verification window closes in:</span>
+    Time left: <strong id="countdownTimer">15:00</strong>
+  </div>
+
+  <div class="lux-bank-banner">
+    <div class="lux-bank-banner-image-wrapper">
+      <img 
+        id="bankBannerImg" 
+        src="opay.png" 
+        alt="Bank Account Details" 
+        width="320" 
+        height="480" 
+        loading="lazy"
+        class="lux-bank-banner-img"
+      >
+    </div>
+    <div class="lux-bank-info">
+      <p class="lux-bank-note">Transfer <strong>exactly</strong> the amount shown above.</p>
+
+      <div class="lux-bank-detail" id="accountNameRow">
+        <i class="ri-user-line"></i>
+        <span><strong>Account Name:</strong> Blessing Joshua Ogundele</span>
+        <button class="lux-copy-btn" data-copy-target="accountNameRow">
+          <i class="ri-file-copy-line"></i> Copy
+        </button>
+      </div>
+
+      <div class="lux-bank-detail" id="bankNameRow">
+        <i class="ri-bank-line"></i>
+        <span><strong>Bank:</strong> Opay</span>
+        <button class="lux-copy-btn" data-copy-target="bankNameRow">
+          <i class="ri-file-copy-line"></i> Copy
+        </button>
+      </div>
+
+      <div class="lux-bank-detail" id="acctNoRow">
+        <i class="ri-bank-card-line"></i>
+        <span><strong>Acct No:</strong> 6518546439</span>
+        <button class="lux-copy-btn" data-copy-target="acctNoRow">
+          <i class="ri-file-copy-line"></i> Copy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button class="lux-btn-confirm" id="confirmPaymentBtn">
+    <i class="ri-check-double-line"></i>
+    I Have Made The Payment
+  </button>
+
+  <p class="lux-warning">
+    <i class="ri-error-warning-line"></i>
+    Do not refresh or close this page after payment.
+  </p>
+</div>
+
+<div id="confirmationSection" style="display:none; max-width:520px; margin:2rem auto;">
+  <div class="lux-confirmation-card">
+    
+    <!-- Confirming -->
+    <div id="confirmingState">
+      <div class="lux-big-check"><i class="ri-check-double-line"></i></div>
+      <h3>Payment Recorded</h3>
+      <p style="margin: 1.2rem 0; font-size: 1.1rem; color: #d6bcfa;">
+        We are confirming your transfer.<br>This could take about 15 minutes.
+      </p>
+      <p style="color: #f87171; font-weight: 500; margin: 0.8rem 0;">
+        <i class="ri-error-warning-line"></i> Please do not refresh or close this page.
+      </p>
+      
+      <div class="lux-countdown" style="font-size: 1.05rem; padding: 0.9rem;">
+        <i class="ri-timer-line"></i>
+        Time remaining: <strong id="countdownTimerConfirm">15:00</strong>
+      </div>
+
+      <div class="lux-premium-spinner" style="margin: 1.5rem auto;">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+
+      <p style="margin-top: 1.5rem;">
+        <a href="https://wa.me/2349064748799?text=I%20need%20help%20with%20my%20transaction" 
+           target="_blank" 
+           style="color:#25D366; font-weight:600; text-decoration:none;">
+          <i class="ri-whatsapp-line"></i> Need help with the transaction?
+        </a>
+      </p>
+    </div>
+
+    <!-- Success -->
+    <div id="finalSuccess" style="display:none; text-align:center;">
+      <div class="lux-success-icon"><i class="ri-rocket-2-fill"></i></div>
+      <h2 class="lux-success-title">Welcome Aboard!</h2>
+      <p>Your spot is secured. Payment verified.</p>
+      
+      <button class="lux-btn-whatsapp" id="whatsappBtn">
+        <i class="ri-whatsapp-line"></i> Join Course WhatsApp Group
+      </button>
+      
+      <button class="lux-btn-dashboard" id="dashboardBtn" style="margin-top:1rem;">
+        <i class="ri-arrow-left-line"></i> Back to Dashboard
+      </button>
+    </div>
+
+    <!-- Timeout -->
+    <div id="timeoutState" style="display:none;">
+      <div style="font-size: 4rem; color: #f87171;"><i class="ri-time-line"></i></div>
+      <h3>Verification Pending</h3>
+      <p style="color: #fda4af;">
+        This payment is not yet verified.<br>
+        Please contact support with your proof of payment.
+      </p>
+      <a href="https://wa.me/2349064748799?text=My%20payment%20is%20not%20verified%20-%20help!" 
+         target="_blank" 
+         class="lux-btn-confirm" style="background:#ef4444; margin-top:1rem;">
+        <i class="ri-whatsapp-line"></i> Contact Support
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── Basic inline styles for buttons ─── -->
+<style>
+  .lux-btn-confirm,
+  .lux-btn-whatsapp,
+  .lux-btn-dashboard {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.8rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0.5rem 0;
+  }
+
+  .lux-btn-confirm {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+  }
+
+  .lux-btn-whatsapp {
+    background: #25D366;
+    color: white;
+    box-shadow: 0 4px 6px rgba(37, 213, 102, 0.3);
+  }
+
+  .lux-btn-dashboard {
+    background: #6b7280;
+    color: white;
+    box-shadow: 0 4px 6px rgba(107, 114, 128, 0.3);
+  }
+
+  .lux-btn-confirm:hover,
+  .lux-btn-whatsapp:hover,
+  .lux-btn-dashboard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  }
+
+  .lux-btn-confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+</style>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
+  
+  const supabase = createClient(
+    "https://jffkatwagcfshvddnipr.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8"
+  );
+  
+  const notyf = new Notyf({
+    duration: 5000,
+    ripple: true,
+    dismissible: true,
+    position: { x: 'right', y: 'top' }
+  });
+  
+  const END_KEY = 'payment_verification_end';
+  
+  function show(id, display = 'block') {
+    const el = document.getElementById(id);
+    if (el) el.style.display = display;
+  }
+  
+  window.startVerificationCountdown = function() {
+    if (window.countdownTimerId) clearInterval(window.countdownTimerId);
+    
+    const timerEl = document.getElementById('countdownTimerConfirm');
+    if (!timerEl) return console.error("Countdown timer (#countdownTimerConfirm) missing");
+    
+    let endTime = Number(localStorage.getItem(END_KEY));
+    
+    if (!endTime || isNaN(endTime) || endTime <= Date.now()) {
+      endTime = Date.now() + 15 * 60 * 1000;
+      localStorage.setItem(END_KEY, String(endTime));
+    }
+    
+    function tick() {
+      const remaining = endTime - Date.now();
+      if (remaining <= 0) {
+        timerEl.textContent = "00:00";
+        show('confirmingState', 'none');
+        show('timeoutState', 'block');
+        clearInterval(window.countdownTimerId);
+        window.countdownTimerId = null;
+        localStorage.removeItem(END_KEY);
+        return;
+      }
+      const min = Math.floor(remaining / 60000);
+      const sec = Math.floor((remaining % 60000) / 1000);
+      timerEl.textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    }
+    
+    tick();
+    window.countdownTimerId = setInterval(tick, 1000);
+  };
+  
+  async function saveEnrollment(stage, amount, course) {
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) throw new Error("Not authenticated");
+      
+      const userId = user.id;
+      
+      await supabase.from('users').update({ selected_stage: stage }).eq('id', userId);
+      
+      await supabase.from('course_enrollments').upsert({
+        user_id: userId,
+        course,
+        selected_stage: stage,
+        amount_paid: amount,
+        payment_status: 'pending',
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,course' });
+      
+      return true;
+    } catch (err) {
+      console.error("Enrollment save failed:", err);
+      notyf.error("Could not record enrollment");
+      return false;
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stage = urlParams.get('stage') || '1';
+    const amount = Number(urlParams.get('amount')) || 0;
+    const course = urlParams.get('course') || 'general';
+    
+    if (amount <= 0) return notyf.error("Invalid amount");
+    
+    document.getElementById('paymentAmount').textContent = `₦${amount.toLocaleString()}`;
+    
+    sessionStorage.setItem('selected_stage', `stage${stage}`);
+    sessionStorage.setItem('enrolled_course', course);
+    
+    const savedEnd = Number(localStorage.getItem(END_KEY));
+    if (savedEnd && savedEnd > Date.now()) {
+      show('paymentSection', 'none');
+      show('confirmationSection', 'block');
+      show('confirmingState', 'block');
+      show('timeoutState', 'none');
+      show('finalSuccess', 'none');
+      window.startVerificationCountdown();
+    }
+    
+    const confirmBtn = document.getElementById('confirmPaymentBtn');
+    if (confirmBtn) {
+      let isProcessing = false;
+      
+      confirmBtn.addEventListener('click', async () => {
+        if (isProcessing) return;
+        isProcessing = true;
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<i class="ri-loader-2-line ri-spin"></i> Processing...';
+        
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) throw new Error("Login required");
+          
+          show('paymentSection', 'none');
+          show('confirmationSection', 'block');
+          show('confirmingState', 'block');
+          
+          const saved = await saveEnrollment(Number(stage), amount, course);
+          if (!saved) {
+  show('paymentSection', 'block');
+  show('confirmationSection', 'none');
+  return;
+}
+
+// ✅ SEND ADMIN ALERT: user claims payment
+const { error: notifyError } = await supabase
+  .from('admin_notifications')
+  .insert([
+    {
+      user_id: user.id,
+      title:'Course Enrollment',
+      message: `User has made ${amount} payment for ${course}. Please confirm.`,
+      type: 'payment_pending',
+      is_read: false,
+      created_at: new Date().toISOString()
+    }
+  ]);
+
+if (notifyError) {
+  console.error("Notification error:", notifyError);
+}
+          
+          window.startVerificationCountdown();
+          notyf.success("Payment recorded — verifying...");
+          
+          const startTime = Date.now();
+          const POLL_INTERVAL_MS = 15000;
+          const MAX_DURATION = 15 * 60 * 1000;
+          let isPolling = true;
+          
+          const poll = setInterval(async () => {
+            if (Date.now() - startTime > MAX_DURATION) {
+              clearInterval(poll);
+              isPolling = false;
+              if (document.getElementById('confirmingState').style.display !== 'none') {
+                show('confirmingState', 'none');
+                show('timeoutState', 'block');
+                notyf.warning("Time expired – contact support");
+              }
+              return;
+            }
+            
+            if (!isPolling) return clearInterval(poll);
+            
+            try {
+              const { data, error } = await supabase
+                .from('course_enrollments')
+                .select('payment_status')
+                .eq('user_id', user.id)
+                .eq('course', course)
+                .maybeSingle();
+              
+              if (error) return console.error("Poll error:", error);
+              if (!data) return;
+              
+              if (data.payment_status === 'verified') {
+                
+                await supabase.from('notifications').insert([
+  {
+    user_id: user.id,
+    title:'Course Enrollment',
+    message: `Your Payment have been verified for ${course}`,
+    type: 'payment_verified',
+    is_read: false,
+    created_at: new Date().toISOString()
+  }
+]);
+                isPolling = false;
+                clearInterval(poll);
+                clearInterval(window.countdownTimerId);
+                localStorage.removeItem(END_KEY);
+                show('confirmingState', 'none');
+                show('finalSuccess', 'block');
+                notyf.success("Payment verified! Welcome 🎉");
+              } else if (data.payment_status === 'rejected') {
+                isPolling = false;
+                clearInterval(poll);
+                clearInterval(window.countdownTimerId);
+                show('confirmingState', 'none');
+                show('timeoutState', 'block');
+                notyf.error("Payment rejected");
+              }
+            } catch (err) {
+              console.error("Polling error:", err);
+            }
+          }, POLL_INTERVAL_MS);
+        } catch (err) {
+          notyf.error(err.message || "Something went wrong");
+          show('paymentSection', 'block');
+          show('confirmationSection', 'none');
+        } finally {
+          isProcessing = false;
+          if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = '<i class="ri-check-double-line"></i> I Have Made The Payment';
+          }
+        }
+      });
+    }
+    
+    // WhatsApp button – now more reliable
+    const whatsappBtn = document.getElementById('whatsappBtn');
+    if (whatsappBtn) {
+      whatsappBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent any default if wrapped in <a> or form
+        
+        const courseName = (sessionStorage.getItem('enrolled_course') || 'general').toLowerCase();
+        const stageName  = sessionStorage.getItem('selected_stage') || 'stage1';
+      const links = {
+  frontend: {
+    stage1: "https://chat.whatsapp.com/EAF87vf3h7N47nYmmTzTxX?mode=gi_t",
+    stage2: "https://chat.whatsapp.com/BlYUrRt2ZNGJndNFc2aHy3?mode=gi_t",
+    stage3: "https://chat.whatsapp.com/K71AsCiOwyi7VMumxqFdo3?mode=gi_t"
+  },
+  fullstack: {
+    stage1: "https://chat.whatsapp.com/EAF87vf3h7N47nYmmTzTxX?mode=gi_t",
+    stage2: "https://chat.whatsapp.com/BlYUrRt2ZNGJndNFc2aHy3?mode=gi_t",
+    stage3: "https://chat.whatsapp.com/K71AsCiOwyi7VMumxqFdo3?mode=gi_t"
+  },
+    backend: {
+    stage1: "https://chat.whatsapp.com/EAF87vf3h7N47nYmmTzTxX?mode=gi_t",
+    stage2: "https://chat.whatsapp.com/LiKhLgJ9WGv7wxXJM6mbwH?mode=gi_t",
+    stage3: "https://chat.whatsapp.com/GfMa35YwVXiCUHQGujuK0P?mode=gi_t"
+  },
+  ai: {
+    stage1: "https://chat.whatsapp.com/C6ARYsTLfCTK27IYsHB9Sy?mode=gi_t",
+    stage2: "https://chat.whatsapp.com/HRforLuxPkFEAYzw6Ddz8L?mode=gi_t",
+    stage3: "https://chat.whatsapp.com/DEFRjc4Sdxb2tiPGbSrtA6?mode=gi_t"
+  },
+  general: {
+    stage1: "https://chat.whatsapp.com/F2RC2XwnswBErWT2unsQFb?mode=gi_t",
+    stage2: "https://chat.whatsapp.com/F2RC2XwnswBErWT2unsQFb?mode=gi_t",
+    stage3: "https://chat.whatsapp.com/F2RC2XwnswBErWT2unsQFb?mode=gi_t"
+  }
+};
+
+        
+        const url = links[courseName]?.[stageName] || links.general.stage1;
+        
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!newWindow) {
+          notyf.error("Popup blocked – allow popups or click the link manually");
+          window.location.href = url; // fallback
+        }
+      });
+    }
+    
+    // New Dashboard button
+    const dashboardBtn = document.getElementById('dashboardBtn');
+    if (dashboardBtn) {
+      dashboardBtn.addEventListener('click', () => {
+        window.location.href = 'dashboard.html'; // ← change this to your actual dashboard URL
+      });
+    }
+    
+    window.addEventListener('beforeunload', () => {
+      if (window.countdownTimerId) clearInterval(window.countdownTimerId);
+    });
+  });
+</script>
+</body>
+</html>
+
+
+     
+     
+     
+         

@@ -1,0 +1,3202 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Support • Hoblemercy Tech</title>
+  
+  
+  <!-- Highlight.js CSS (choose a theme you like) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css" />
+
+<!-- Highlight.js core + auto-detect languages -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+
+<!-- Optional: add common languages if auto-detect is not enough -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/javascript.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/typescript.min.js"></script> -->
+  
+<!-- Prism CSS - choose a theme, e.g. okaidia (dark) or coy (light) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+<!-- Prism core + common languages (add more if needed: bash, python, etc.) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+<!-- add more languages as needed -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #000;
+      --text: #ffffff;
+      --text-secondary: rgba(255,255,255,0.75);
+      --text-muted: rgba(255,255,255,0.45);
+      --accent: #a855f7;
+      --accent-dark: #9333ea;
+      --secondary: #60a5fa;
+      --glass: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.14);
+      --glow: rgba(168,85,247,0.35);
+      --transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      --input-bg: rgba(255,255,255,0.06);
+      --bubble-user: linear-gradient(135deg, #a855f7, #9333ea);
+      --bubble-ai: rgba(255,255,255,0.09);
+    }
+
+    body.light {
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --glass: rgba(255,255,255,0.75);
+      --glass-border: rgba(15,23,42,0.16);
+      --glow: rgba(168,85,247,0.18);
+      --input-bg: rgba(15,23,42,0.05);
+      --bubble-user: linear-gradient(135deg, #9333ea, #7e22ce);
+      --bubble-ai: rgba(15,23,42,0.08);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    
+
+    /* Header */
+    .support-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 70px;
+      padding: 0 1.5rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .support-logo { height: 42px; width: auto; }
+    .support-avatars { display: flex; align-items: center; }
+    .support-avatars img {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--bg);
+      box-shadow: 0 0 12px var(--glow);
+      transition: var(--transition);
+    }
+    .support-avatars img:not(:last-child) { margin-right: -16px; }
+    .support-avatars img:hover { transform: scale(1.1); }
+
+    .close-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.7rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .close-btn:hover { color: var(--accent); background: var(--glass); transform: rotate(90deg); }
+
+    /* Main Content */
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--accent); }
+    h2 { font-size: 1.25rem; opacity: 0.9; margin-bottom: 2rem; }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    /* Search */
+    .search-box {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3.2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--glass-border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.3rem;
+    }
+
+    /* FAQ */
+    .faq-item {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.2rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .faq-question {
+      width: 100%;
+      padding: 1.1rem 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.05rem;
+      transition: var(--transition);
+    }
+    .faq-question:hover { background: rgba(168,85,247,0.08); }
+    .faq-answer {
+      display: none;
+      padding: 0 1.5rem 1.3rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .faq-answer.show { display: block; }
+
+    /* Chat Trigger */
+    #openAiChat {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-size: 1.8rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px var(--glow);
+      transition: var(--transition);
+      z-index: 999;
+    }
+    #openAiChat:hover { transform: scale(1.08) translateY(-4px); }
+
+    /* Chat Window */
+    #aiChatBox {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+    }
+    #aiChatBox.open {
+      display: flex;
+      transform: translateY(0);
+    }
+
+    
+    .chat-title { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+.menu-btn, .close-nav-btn, #closeAiChat {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #c084fc;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+   .message {
+  max-width: 86%;
+  padding: 1rem 1.3rem;
+  border-radius: 1.25rem;
+  line-height: 1.48;
+  position: relative;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #6366f1;
+  color: white;
+  border-bottom-right-radius: 0.4rem;
+}
+
+.message.ai {
+  align-self: flex-start;
+  background: rgba(30,41,59,0.9);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-bottom-left-radius: 0.4rem;
+  border-top-left-radius: 0.4rem;
+}
+
+   .section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #60a5fa;           /* nice blue */
+  display: block;
+  margin: 1.2em 0 0.5em;
+}
+
+.code-container {
+  position: relative;
+  margin: 1.2em 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #3764AE;
+}
+
+.code-container pre {
+  margin: 0;
+  padding: 1.1em;
+  overflow-x: auto;
+}
+
+.copy-code-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #334155;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.message.ai .content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.message .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.message pre, .message code {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 0.9rem 0;
+  position: relative;
+}
+
+
+
+
+
+/* Side Nav */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 380px;
+  height: 100%;
+  background: rgba(15,23,42,0.96);
+  backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(99,102,241,0.15);
+  transition: left 0.35s ease;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-nav.open { left: 0; }
+
+.side-header {
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(99,102,241,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-chat-btn {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+    .typing {
+      align-self: flex-start;
+      display: flex;
+      gap: 0.4rem;
+      padding: 1rem;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    .chat-input {
+      padding: 1rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      gap: 0.8rem;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 0.9rem 1.3rem;
+      border-radius: 2rem;
+      border: 1px solid var(--glass-border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .chat-input button {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .chat-input button:hover { background: var(--accent-dark); transform: scale(1.08); }
+
+/* OPEN SUPPORT BUTTON */
+
+.support-open-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px var(--glow);
+  transition: var(--transition);
+}
+
+.support-open-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* PANEL */
+
+.support-panel {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 380px;
+  height: 100%;
+  background: var(--bg);
+  border-left: 1px solid var(--glass-border);
+  padding: 2rem;
+  transition: var(--transition);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.support-panel.active {
+  right: 0;
+}
+
+/* HEADER */
+.support-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.support-header h2 {
+  font-size: 1.4rem;
+}
+
+/* BACK BUTTON */
+
+.back-btn {
+  border: none;
+  background: var(--glass);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+}
+
+/* FORM */
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-group select,
+.form-group textarea,
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 16px;
+}
+
+/* SUBMIT BUTTON */
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--glow);
+  transition: var(--transition);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ────────────────────────────────────────────────
+   Premium Toast Notification
+───────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 380px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(20, 25, 40, 0.92);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(120, 120, 255, 0.18);
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(100, 120, 255, 0.12) inset;
+  color: #e0e7ff;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(120%);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast.success    { border-color: rgba(34, 197, 94, 0.4); }
+.toast.success .toast-icon    { color: #86efac; }
+.toast.error      { border-color: rgba(239, 68, 68, 0.4); }
+.toast.error .toast-icon      { color: #fca5a5; }
+.toast.warning    { border-color: rgba(245, 158, 11, 0.4); }
+.toast.warning .toast-icon    { color: #fde047; }
+.toast.info       { border-color: rgba(59, 130, 246, 0.4); }
+.toast.info .toast-icon       { color: #93c5fd; }
+
+.toast-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.toast-progress {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+.toast-progress-bar {
+  height: 100%;
+  width: 100%;
+  transform: translateX(-100%);
+  transition: transform 4.2s linear;
+  background: linear-gradient(90deg, transparent, currentColor 50%, transparent);
+}
+
+.toast-progress-bar.active {
+  transform: translateX(0);
+}
+
+/* Remove toast animation */
+.toast.closing {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.96);
+  transition: all 0.35s ease-out;
+}
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+.loading-content {
+  text-align: center;
+  color: var(--text);
+}
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.5rem;
+  border: 6px solid var(--accent);
+  border-top: 6px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Optional: make text fancier */
+.loading-content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.upload-card.dragover {
+  border: 2px dashed #4caf50;
+  background-color: #f0fff0;
+}
+
+
+#historyEmpty {
+  position: fixed;
+  inset: 0 0 0 auto;           /* right side, full height */
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: -4px 0 20px rgba(0,0,0,0.18);
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.32,0.72,0,1), opacity 0.35s;
+  z-index: 1000;
+  display: none;               /* ← important change */
+}
+
+#historyEmpty.active {
+  transform: translateX(0);
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-content {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  max-width: 320px;
+}
+
+
+
+  /* Dark mode styling */
+  body.dark #historyEmpty {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: -2px 0 12px rgba(255,255,255,0.1);
+  }
+
+  
+  /* Back button inside section */
+  #historyEmpty .backBtn {
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 40px;
+background: var(--glass);
+color: var(--text);
+width: 36px;
+height: 36px;
+border-radius: 10px;
+cursor: pointer;
+border: 1px solid var(--glass-border);
+  }
+
+  /* Optional icon style */
+  #historyEmpty i {
+    color: #a855f7;
+    margin-bottom: 1rem;
+  }
+
+#sessionsList {
+  max-height: 400px; /* adjust as needed */
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  color: black;
+  border-radius: 0.5rem;
+  background: white;
+  backdrop-filter: blur(10px);
+}
+#sessionsList {
+  display: none;               /* controlled by JS */
+  height: 100%;
+  background: var(--bg-primary);
+  overflow-y: auto;
+  padding: 1.2rem 1rem;
+}
+
+#sessionsList.active,
+#sessionsList:not(:empty) {    /* or just always block + hide via opacity */
+  display: block;
+}
+
+
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.8rem;
+}
+
+
+
+.history-item:hover, .history-item.active {
+  background: rgba(99,102,241,0.15);
+}
+
+.history-item .title {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #c084fc;
+}
+
+.history-item .date {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+/* Input area */
+.chat-input-area {
+  padding: 1rem 1.2rem;
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(99,102,241,0.15);
+  display: flex;
+  gap: 0.8rem;
+}
+
+#userQuestion {
+  flex: 1;
+  padding: 0.95rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(99,102,241,0.3);
+  background: rgba(30,41,59,0.6);
+  color: white;
+  font-size: 1rem;
+}
+
+#sendQuestion {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #6366f1;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+#sendQuestion:hover { background: #4f46e5; transform: scale(1.08); }
+.history-drawer, .support-panel, .chat-panel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-primary, #0f0f17);
+  border-left: 1px solid var(--border, rgba(255,255,255,0.08));
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-drawer.active, .support-panel.active, .chat-panel.open {
+  transform: translateX(0);
+}
+
+/* Header in drawer */
+.drawer-header, .support-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+.chat-header {
+  padding: 0.9rem 1.2rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Sessions list – glassmorphism cards */
+.sessions-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.session-item, .ticket-item {
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.1rem 1.3rem;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.session-item:active, .ticket-item:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ticket-item .status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  color: white;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+.status-open    { background: blueviolet; color: #92400e; }
+.status-resolved{ background: orangered; color: #065f46; }
+
+/* Dark mode adjustments */
+body.dark .status-open    { background: #78350f; color: #fef3c7; }
+body.dark .status-progress{ background: #1e3a8a; color: #bfdbfe; }
+/* ... etc */
+
+
+.ticket-detail-panel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: 100%;
+  color: white;
+  max-width: 420px;
+  background: var(--bg-primary, #0f0f17);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-detail-panel.open {
+  transform: translateX(0);
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+
+.detail-content {
+  flex: 1;
+
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.detail-content h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.detail-content p {
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.detail-content img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+/* ========================= */
+/* AI OVERLAY */
+/* ========================= */
+
+.hoble-ai-overlay{
+  width:100vw;
+  max-width:100vw;
+  overflow:hidden;
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  z-index:9999;
+  transform:translateY(100%);
+  transition:var(--transition);
+}
+
+.hoble-ai-overlay.open{
+  transform:translateY(0);
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.hoble-ai-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 18px;
+  background:var(--glass);
+  border-bottom:1px solid var(--glass-border);
+  backdrop-filter:blur(12px);
+}
+
+.hoble-ai-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  color:var(--accent);
+}
+
+.hoble-ai-menu-btn,
+.hoble-ai-close{
+  background:none;
+  border:none;
+  font-size:20px;
+  color:var(--text);
+  cursor:pointer;
+  transition:var(--transition);
+}
+
+.hoble-ai-menu-btn:hover,
+.hoble-ai-close:hover{
+  color:var(--accent);
+}
+
+/* ========================= */
+/* SIDEBAR */
+/* ========================= */
+
+.hoble-ai-sidebar{
+  position:absolute;
+  top:0;
+  left:-350px;
+  width:270px;
+  height:100%;
+  background:var(--bg);
+  border-right:1px solid var(--glass-border);
+  transition:var(--transition);
+  display:flex;
+  flex-direction:column;
+  z-index:10;
+}
+
+.hoble-ai-sidebar.open{
+  left:0;
+}
+
+.hoble-ai-sidebar-header{
+  padding:18px;
+  border-bottom:1px solid var(--glass-border);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.hoble-ai-newchat{
+  background:var(--accent);
+  border:none;
+  padding:8px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+}
+
+.hoble-ai-newchat:hover{
+  background:var(--accent-dark);
+}
+
+.hoble-ai-sidebar-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  border:none;
+  background:none;
+  color:var(--text-muted);
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* ========================= */
+/* HISTORY LIST */
+/* ========================= */
+
+.hoble-ai-history{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.hoble-ai-history-item{
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+  margin-bottom:6px;
+  transition:var(--transition);
+}
+
+.hoble-ai-history-item:hover{
+  background:var(--glass);
+}
+
+.hoble-ai-history-item.active{
+  background:var(--accent);
+  color:white;
+}
+
+.hoble-ai-history-item .title{
+  font-size:13px;
+  font-weight:500;
+}
+
+.hoble-ai-history-item .date{
+  font-size:11px;
+  opacity:0.7;
+}
+
+/* ========================= */
+/* CHAT MESSAGES */
+/* ========================= */
+
+.hoble-ai-messages{
+  flex:1;
+  overflow-y:auto;
+  max-width:100%;
+  overflow-wrap:break-word;
+  white-space: pre-wrap;      /* allow wrapping */
+  word-break: break-word;     /* break long words */
+  overflow-x: auto;    
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+
+  mask-image:linear-gradient(
+    to bottom,
+    transparent,
+    black 30px,
+    black calc(100% - 30px),
+    transparent
+  );
+  animation:hobleMessage 0.35s ease;
+}
+
+@keyframes hobleMessage{
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+.hoble-ai-message-body {
+  white-space: pre-wrap;      /* allow wrapping */
+  word-break: break-word;     /* break long words */
+  overflow-x: auto;    
+  line-height: 1.65;
+  font-size: 1.02rem;
+}
+
+.hoble-ai-message-body strong {
+  font-weight: 700;
+  color: #60a5fa;           /* blue highlight */
+  font-size: 1.15em;        /* slightly bigger */
+}
+
+
+.section-label {
+  display: inline-block;
+  font-size: 1.22rem !important;       /* bigger than normal text */
+  font-weight: 700;
+  color: #60a5fa;                      /* nice blue – change to your accent */
+  margin: 1.4em 0 0.6em 0;
+  padding-bottom: 0.25em;
+  border-bottom: 2px solid #60a5fa40;  /* subtle underline */
+}
+
+.inline-code {
+  background: #1e293b;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: 'Consolas', monospace;
+  color: #f0f0f0;
+}
+
+
+
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #334155;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.copy-btn:hover {
+  background: #475569;
+}
+
+.hoble-ai-message .content {
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Make section labels like "Pro Tip", "Example", "Why It Matters" bigger & distinct */
+.hoble-ai-message strong {
+  font-size: 1.18rem;          /* a bit bigger than normal text */
+  font-weight: 700;            /* already bold, but we make it stronger */
+  color: #3b82f6;              /* blue accent – change to your brand color */
+  display: inline-block;
+  margin: 1.2em 0 0.5em 0;     /* nice spacing above & below */
+  padding-bottom: 0.2em;
+  border-bottom: 2px solid #3b82f6;  /* underline for emphasis */
+}
+
+/* Optional: even more standout for the very first label in a section */
+.hoble-ai-message strong:first-child {
+  font-size: 1.25rem;
+}
+
+.hoble-ai-message div {
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+    white-space: pre-wrap;      
+  overflow-x: auto;    
+}
+
+.hoble-ai-message p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+/* ========================= */
+/* USER MESSAGE */
+/* ========================= */
+
+.hoble-ai-message.user{
+  align-self:flex-end;
+  background:var(--bubble-user);
+  color:white;
+  padding:12px 14px;
+  border-radius:16px 16px 4px 16px;
+  max-width:75%;
+  font-size:14px;
+}
+
+/* ========================= */
+/* AI MESSAGE */
+/* ========================= */
+
+.hoble-ai-message.ai{
+  margin-bottom:12px;
+  word-wrap:break-word;
+  align-self:flex-start;
+  display:flex;
+  gap:10px;
+border-radius: 12px;
+  white-space:pre-wrap;
+  line-height:1.6;
+  max-width: 80%;
+}
+
+/* Make section labels like "Pro Tip", "Example", "Why It Matters" bigger & distinct */
+.hoble-ai-message.ai strong {
+  font-size: 1.18rem;          /* a bit bigger than normal text */
+  font-weight: 700;            /* already bold, but we make it stronger */
+  color: #3b82f6;              /* blue accent – change to your brand color */
+  display: inline-block;
+  margin: 1.2em 0 0.5em 0;     /* nice spacing above & below */
+  padding-bottom: 0.2em;
+  border-bottom: 2px solid #3b82f6;  /* underline for emphasis */
+}
+
+/* Optional: even more standout for the very first label in a section */
+.hoble-ai-message.ai strong:first-child {
+  font-size: 1.25rem;
+}
+
+.hoble-ai-message.ai .content {
+ 
+  background: var(--bubble-ai);
+  padding:12px 14px;
+  border-radius:16px 16px 16px 4px;
+  line-height:1.6;
+  font-size:1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.hoble-ai-message.ai div {
+
+  background: var(--bubble-ai);
+  padding: 12px 14px;
+  border-radius: 16px 16px 16px 4px;
+  line-height: 1.6;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.hoble-ai-message.ai .content p {
+  margin: 0 0 10px 0;
+}
+
+.hoble-ai-message.ai .content ul,
+.hoble-ai-message.ai .content ol {
+  padding-left: 18px;
+  margin: 8px 0;
+}
+
+.hoble-ai-message.ai .content li {
+  margin-bottom: 4px;
+}
+
+/* ========================= */
+/* AVATAR */
+/* ========================= */
+
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  box-shadow:
+    0 0 8px var(--glow),
+    0 0 16px var(--glow);
+}
+
+/* ========================= */
+/* CODE BLOCK */
+.history-item {
+  margin-top:10px;
+  position: relative;
+  background:#0f172a;
+  border-radius:10px;
+  max-width:100%;
+  overflow:hidden;
+  border:1px solid var(--glass-border);
+}
+.code-block-wrapper{
+  position:relative;
+}
+
+.code-block-wrapper pre{
+  border-radius: 20px;
+  gap: 10px;
+  background:#0F172A66;
+  border: 2px solid blueviolet;
+  margin:0;
+  position: relative;
+  padding:12px;
+  max-width:100%;
+  overflow:auto;
+  max-height:600px;
+  white-space:pre;
+  word-break:normal;
+  font-size:15px;
+  line-height:1.5;
+  font-family: monospace;
+}
+
+.code-block-wrapper pre::-webkit-scrollbar{
+  height:8px;
+  width:8px;
+}
+
+.code-block-wrapper pre::-webkit-scrollbar-thumb{
+  background: var(--accent);
+  border-radius:20px;
+}
+
+
+/* ========================= */
+/* SYNTAX HIGHLIGHTING COLORS */
+.hljs {
+  display:block;
+  background: transparent;
+  padding:0;
+  color:inherit;
+}
+
+.hljs-comment,
+.hljs-quote { color: #6a9955; font-style: italic; }
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst { color: #c586c0; font-weight: bold; }
+.hljs-literal,
+.hljs-number,
+.hljs-tag .hljs-attr,
+.hljs-template-variable,
+.hljs-variable { color: #b5cea8; }
+.hljs-string,
+.hljs-doctag,
+.hljs-title,
+.hljs-section,
+.hljs-selector-id { color: #ce9178; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+
+/* ========================= */
+/* AI TYPING INDICATOR */
+/* ========================= */
+
+.hoble-ai-typing{
+  display:flex;
+  gap:6px;
+  padding:10px 14px;
+  background:var(--bubble-ai);
+  width:fit-content;
+  border-radius:14px;
+}
+
+.hoble-ai-dot{
+  width:6px;
+  height:6px;
+  background:var(--text-muted);
+  border-radius:50%;
+  animation:hobleTyping 1.2s infinite;
+}
+
+.hoble-ai-dot:nth-child(2){
+  animation-delay:0.2s;
+}
+
+.hoble-ai-dot:nth-child(3){
+  animation-delay:0.4s;
+}
+
+@keyframes hobleTyping{
+  0%{
+    transform:translateY(0);
+    opacity:0.4;
+  }
+  50%{
+    transform:translateY(-6px);
+    opacity:1;
+  }
+  100%{
+    transform:translateY(0);
+    opacity:0.4;
+  }
+}
+
+
+/* ========================= */
+/* INPUT AREA */
+/* ========================= */
+
+.hoble-ai-input-area{
+  display:flex;
+  gap:10px;
+  padding:14px;
+  border-top:1px solid var(--glass-border);
+  background:var(--glass);
+  backdrop-filter:blur(10px);
+}
+
+.hoble-ai-input{
+  flex:1;
+  border:none;
+  outline:none;
+  min-width: 0;
+  background:var(--input-bg);
+  padding:12px 14px;
+  border-radius:25px;
+  color:var(--text);
+  font-size:14px;
+}
+
+.hoble-ai-input::placeholder{
+  color:var(--text-muted);
+}
+
+
+/* SEND BUTTON */
+
+.hoble-ai-send{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  background:var(--accent);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:var(--transition);
+}
+
+.hoble-ai-send:hover{
+  background:var(--accent-dark);
+
+  box-shadow:
+  0 0 10px var(--glow),
+  0 0 20px var(--glow),
+  0 0 30px var(--glow);
+
+  transform:scale(1.05);
+}
+
+
+/* ========================= */
+/* SCROLLBAR */
+/* ========================= */
+
+.hoble-ai-messages::-webkit-scrollbar,
+.hoble-ai-history::-webkit-scrollbar{
+  width:6px;
+}
+
+.hoble-ai-messages::-webkit-scrollbar-thumb,
+.hoble-ai-history::-webkit-scrollbar-thumb{
+  background:var(--accent);
+  border-radius:10px;
+}
+
+/* History item layout */
+.history-item {
+  position: relative;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 4px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.history-item:hover,
+.history-item.active {
+  background: rgba(100, 100, 255, 0.08);
+}
+
+.history-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date {
+  font-size: 0.78rem;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.three-dots {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.three-dots:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown menu */
+.history-menu {
+  position: absolute;
+  right: 8px;
+  top: 100%;
+  background: #1e1e2e;
+  border: 1px solid #333;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  min-width: 140px;
+  z-index: 9999;
+  padding: 4px 0;
+  display: none;
+}
+
+.history-menu:not(.hidden) {
+  display: block !important;
+}
+.hidden{
+  display: none !important;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: #ddd;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.menu-item:hover {
+  background: rgba(100, 100, 255, 0.15);
+}
+
+.menu-item.danger:hover {
+  background: rgba(255, 80, 80, 0.2);
+  color: #ff8080;
+}
+
+.menu-item i {
+  width: 18px;
+  text-align: center;
+}
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
+
+@media (max-width:600px){
+
+  .hoble-ai-message.user{
+    max-width:85%;
+  }
+
+  .hoble-ai-message.ai{
+    max-width:95%;
+  }
+
+  .hoble-ai-sidebar{
+    width:80%;
+  }
+
+}
+
+    @media (min-width: 768px) {
+      #aiChatBox {
+        inset: auto;
+        bottom: 90px; right: 24px;
+        width: 420px;
+        height: 580px;
+        border-radius: 1.6rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        transform: scale(0.95);
+      }
+      #aiChatBox.open { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Header -->
+  <header class="support-panel-header">
+    <img src="./logo.png" alt="Hoblemercy Tech" class="support-logo">
+    <div class="support-avatars">
+      <img src="./team1.jpeg" alt="">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150" alt="">
+      <img src="./team2.jpeg" alt="">
+    </div>
+    <button class="close-btn" onclick="history.back()">×</button>
+  </header>
+  
+  <div class="container">
+    <h1 id="supportUsername">Hello Developer 👋</h1>
+    <h2>How can we help you today?</h2>
+    
+    <div class="welcome-card">
+      <strong style="display:block; margin-bottom:0.6rem;">Quick Support</strong>
+      <p style="opacity:0.9;">Ask anything about your courses, code, assessments, payments or platform — our AI agent is here 24/7.</p>
+    </div>
+    
+    <div class="welcome-card actions">
+      <button class="support-open-btn" onclick="openSupport()">
+        <i class="fas fa-headset"></i> Contact Support
+      </button>
+      <button id="showHistoryBtn" class="support-open-btn">
+        <i class="fas fa-inbox"></i> History & Replies
+      </button>
+    </div>
+    
+    <!-- Search -->
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="helpSearch" placeholder="Search help articles, FAQs...">
+    </div>
+    
+    <!-- FAQ -->
+    <div class="faq-section" id="faqSection"></div>
+    
+ <!-- Chat Trigger Button -->
+<button id="openAiChat" class="fab"><i class="fas fa-robot"></i></button>
+
+<!-- Full Chat Overlay -->
+<div id="aiChatBox" class="hoble-ai-overlay">
+
+  <div class="hoble-ai-header">
+    <button id="historyToggle" class="hoble-ai-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="hoble-ai-title">
+      <i class="fas fa-robot"></i>
+      <span>AI Coding Tutor • Hoblemercy</span>
+    </div>
+
+    <button id="closeAiChat" class="hoble-ai-close">×</button>
+  </div>
+
+
+<!-- Side Navigation -->
+<div id="sideNav" class="hoble-ai-sidebar">
+  
+  <div class="hoble-ai-sidebar-header">
+    <h3>Chat History</h3>
+    
+    <button id="newChatBtn" class="hoble-ai-newchat">
+      + New Chat
+    </button>
+    
+    <button id="closeNavBtn" class="hoble-ai-sidebar-close">
+      ×
+    </button>
+  </div>
+  
+  <div id="historyList" class="hoble-ai-history"></div>
+  
+</div>
+
+  <!-- Chat Messages -->
+  <div id="chatMessages" class="hoble-ai-messages"></div>
+
+
+  <!-- Input -->
+  <div class="hoble-ai-input-area">
+
+    <input
+      type="text"
+      id="userQuestion"
+      class="hoble-ai-input"
+      placeholder="Ask anything about coding..."
+      autocomplete="off"
+    />
+
+    <button id="sendQuestion" class="hoble-ai-send">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+
+  </div>
+
+</div>
+  <!-- Support Ticket Form Panel -->
+  <div id="supportTab" class="support-panel">
+    <div class="support-header">
+      <button class="back-btn" onclick="closeSupport()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2>Talk to our Agent</h2>
+    </div>
+    <form id="supportForm">
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="ticketSubject" required>
+          <option value="">Select topic</option>
+          <option value="Platform">Platform / App issue</option>
+          <option value="Payment">Payment / Billing</option>
+          <option value="Certificate">Certificate</option>
+          <option value="Bug">Bug / Error</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="ticketMessage" rows="6" placeholder="Describe your issue..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Attach screenshot (optional)</label>
+        <input type="file" id="ticketScreenshot" accept="image/*">
+      </div>
+      <button type="submit" class="submit-btn">
+        <i class="fas fa-paper-plane"></i> Submit Ticket
+      </button>
+    </form>
+  </div>
+  
+  <!-- History Drawer -->
+  <div id="historyDrawer" class="history-drawer">
+    <div class="drawer-header">
+      <button class="back-btn" id="closeHistory">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2>Your History</h2>
+    </div>
+    <div id="historyEmpty" class="empty-state">
+      <i class="far fa-comment-dots fa-5x"></i>
+      <h3>No conversations or tickets yet</h3>
+      <p>Start chatting or submit a ticket — it'll appear here.</p>
+    </div>
+    <div id="sessionsList" class="sessions-list"></div>
+  </div>
+  
+  <!-- Ticket Detail View (slides in from right or appears as modal) -->
+<div id="ticketDetailBox" class="ticket-detail-panel">
+  <div class="detail-header">
+    <button class="back-btn" onclick="document.getElementById('ticketDetailBox').classList.remove('open')">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    <h2>Ticket Details</h2>
+  </div>
+  <div class="detail-content">
+    <!-- Content gets filled here by JS -->
+  </div>
+</div>
+  
+  <div id="toast-container"></div>
+  
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm"
+
+const supabaseUrl  = "https://jffkatwagcfshvddnipr.supabase.co"
+const supabaseKey  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8"
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+  document.addEventListener('DOMContentLoaded', () => {
+    hljs.highlightAll();  // highlights all <pre><code> on page load
+  });
+
+
+
+  let currentUser = null
+
+  // ────────────── AUTH & USERNAME ──────────────
+  async function checkAuth() {
+    try {
+      const { data, error } = await supabase.auth.getSession()
+      if (error) throw error
+      if (!data.session) {
+        location.replace("auth.html")
+        return
+      }
+      currentUser = data.session.user
+      await updateSupportUsername()
+    } catch (err) {
+      console.error("Auth error:", err)
+      showToast("Connection problem. Please check internet.", "error", 6000)
+    }
+  }
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT" || !session) {
+      location.replace("auth.html")
+    }
+  })
+hljs.highlightAll();
+
+  async function updateSupportUsername() {
+    if (!currentUser) return
+
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('username')
+        .eq('id', currentUser.id)
+        .maybeSingle()
+
+      const username = data?.username || currentUser.email?.split('@')[0] || 'Coder'
+      document.getElementById('supportUsername').textContent = `Hello ${username} 👋`
+    } catch (err) {
+      console.error("Username fetch error:", err)
+      document.getElementById('supportUsername').textContent = 'Hello Coder 👋'
+    }
+  }
+// ────────────── UTILITIES ──────────────
+function escapeHtml(text) {
+  if (!text) return ''
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+
+function openSupportPage() {
+  document.getElementById('supportContainerPanel')?.classList.add('open');
+}
+
+function closeSupportPage() {
+  document.getElementById('supportContainerPanel')?.classList.remove('open');
+}
+
+// ────────────── DOM elements (declared ONCE) ──────────────
+const faqSection    = document.getElementById('faqSection');
+const chatMessages  = document.getElementById('chatMessages');
+const userInput     = document.getElementById('userQuestion');
+const sendBtn       = document.getElementById('sendQuestion');
+const chatBox       = document.getElementById('aiChatBox');
+const closeBtn      = document.getElementById('closeAiChat');
+const historyToggle = document.getElementById('historyToggle');
+const sideNav       = document.getElementById('sideNav');
+const closeNavBtn   = document.getElementById('closeNavBtn');
+const newChatBtn    = document.getElementById('newChatBtn');
+const historyListEl = document.getElementById('historyList');
+
+if (!chatMessages || !userInput) {
+  console.warn("Critical chat DOM elements missing — check your HTML")
+}
+
+
+
+// ────────────── FAQ loading ──────────────
+async function loadFAQ(query = '') {
+  let q = supabase.from('faq').select('*');
+  if (query) q = q.ilike('question', `%${query}%`);
+
+  const { data, error } = await q;
+  if (error) {
+    console.error("FAQ load error:", error);
+    faqSection.innerHTML = '<p style="text-align:center; color:#f87171; padding:2rem;">Error loading FAQs</p>';
+    return;
+  }
+
+  faqSection.innerHTML = '';
+  if (!data?.length) {
+    faqSection.innerHTML = '<p style="text-align:center; opacity:0.7; padding:2rem 0;">No matching articles found.</p>';
+    return;
+  }
+
+  data.forEach(faq => {
+    const item = document.createElement('div');
+    item.className = 'faq-item';
+    item.innerHTML = `
+      <button class="faq-question">
+        ${escapeHtml(faq.question)}
+        <span style="font-size:1.4rem; transition:0.3s;">+</span>
+      </button>
+      <div class="faq-answer">${faq.answer}</div>
+    `;
+    faqSection.appendChild(item);
+
+    item.querySelector('.faq-question').onclick = () => {
+      const ans  = item.querySelector('.faq-answer');
+      const plus = item.querySelector('span');
+      ans.classList.toggle('show');
+      plus.textContent = ans.classList.contains('show') ? '−' : '+';
+    };
+  });
+}
+
+loadFAQ();
+document.getElementById('helpSearch')?.addEventListener('input', e => loadFAQ(e.target.value.trim()));
+
+
+// ────────────── CHAT & GROQ LOGIC ──────────────
+
+const systemPrompt = {
+  role: "system",
+  content: `You are Hoblemercy AI — an elite senior software engineer and coding mentor from Hoblemercy Tech Digital Academy in offa.
+
+Your mission is to help students MASTER programming step-by-step, not just give answers.
+
+You mentor beginners, intermediate developers, and future software engineers.
+
+PERSONALITY
+- Friendly, patient, and highly intelligent
+- Speak like an experienced Lagos developer
+- Occasionally use light Nigerian expressions when natural (e.g. "no wahala", "sharp sharp", "oya make we fix am")
+- Always sound confident and supportive
+- Never make the student feel stupid
+
+TEACHING PHILOSOPHY
+You teach like a real mentor.
+
+When explaining concepts:
+1. Start simple.
+2. Break ideas into small pieces.
+3. Use real-world analogies.
+4. Then show code examples.
+5. Then explain the code line-by-line.
+
+Always encourage curiosity and learning.
+
+RESPONSE STRUCTURE (VERY IMPORTANT)
+
+Always organize answers using this structure when possible:
+
+1. **Simple Explanation**
+Explain the concept in beginner friendly language.
+
+2. **Why It Matters**
+Explain where this concept is used in real projects.
+
+3. **Example**
+Show a clean code example.
+
+4. **Code Explanation**
+Explain what each important part of the code does.
+
+5. **Pro Tip**
+Share a best practice used by professional developers.
+
+6. **Challenge (Optional)**
+Sometimes give the student a small task to practice.
+
+FORMATTING RULES (STRICT)
+
+1. Always structure answers clearly.
+2. Use **bold text** to highlight important ideas.
+3. Leave space between sections for readability.
+4. Use numbered lists for steps.
+5. Use bullet points for explanations.
+6. NEVER use markdown headings like # or ###.
+7. Always put code inside markdown blocks.
+8. Keep code clean and readable.
+9. Never render or preview code unless the user explicitly says:
+   - "render"
+   - "preview"
+   - "show output"
+10. Always explain code after writing it.
+
+DEBUGGING RULES
+
+If the student shares code with an error:
+
+1. Identify the problem.
+2. Explain WHY the error happens.
+3. Show the corrected code.
+4. Give a debugging tip so they can avoid the mistake next time.
+
+LEARNING SUPPORT
+
+When a student seems confused:
+- simplify the explanation
+- use analogies
+- ask guiding questions
+- break things into smaller steps
+
+Never overwhelm beginners.
+
+CODE QUALITY RULES
+
+Always encourage:
+- clean code
+- readable variable names
+- good indentation
+- modern best practices
+
+COMMUNITY IDENTITY
+
+You proudly represent **Hoblemercy Tech Digital Academy** in offa.
+
+Your goal is to train the next generation of African software engineers.
+
+End responses with encouragement when appropriate.
+Example:
+"You're doing well. Keep building. 🚀"
+`
+};
+
+let currentChatId = null
+let chatHistory = [systemPrompt]
+let chatHistoryList = []
+
+// ─── API CONFIG ───
+const BACKEND_API_URL = "https://jffkatwagcfshvddnipr.supabase.co/functions/v1/chat-groq";
+
+// ────────────── EVENT LISTENERS ──────────────
+
+// Open chat → load sessions & history
+document.getElementById('openAiChat')?.addEventListener('click', async () => {
+  chatBox?.classList.add('open')
+  await loadSession()
+  loadHistoryList()
+  scrollToBottom()
+})
+
+// Close chat
+closeBtn?.addEventListener('click', () => {
+  chatBox?.classList.remove('open')
+})
+
+// History sidebar toggle
+historyToggle?.addEventListener("click", () => sideNav?.classList.add("open"))
+closeNavBtn?.addEventListener("click", () => sideNav?.classList.remove("open"))
+
+// New chat button
+newChatBtn?.addEventListener("click", async () => {
+  currentChatId = null   // force new session creation on next send
+  chatHistory = [systemPrompt]
+  chatMessages.innerHTML = ''
+  addAIMessage("Oya boss! Fresh chat don start. Wetin we dey build today? 🚀")
+  sideNav?.classList.remove("open")
+  showToast("New chat started")
+  await loadSession()    // refresh list
+})
+
+// Send message triggers
+sendBtn?.addEventListener("click", sendMessage)
+userInput?.addEventListener("keypress", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault()
+    sendMessage()
+  }
+})
+
+function scrollToBottom() {
+  if (chatMessages) {
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }
+}
+
+// ────────────── STREAMING + MARKDOWN PROCESSING ──────────────
+
+function streamAIMessage(text) {
+  const div = document.createElement("div")
+  div.className = "hoble-ai-message ai"
+
+  const content = document.createElement("div")
+  content.className = "content"
+
+  const avatar = document.createElement("img")
+  avatar.src = "https://i.pravatar.cc/150?img=68"
+  avatar.className = "avatar"
+
+  const message = document.createElement("div")
+  message.className = "hoble-ai-message-body"
+
+  content.appendChild(avatar)
+  content.appendChild(message)
+  div.appendChild(content)
+  chatMessages.appendChild(div)
+
+  // Type out the raw text first (animation)
+  let index = 0
+  const words = text.split(" ")
+
+  function typeWord() {
+    if (index < words.length) {
+      message.innerHTML += words[index] + " "
+      index++
+      scrollToBottom()
+      setTimeout(typeWord, 35)
+    } else {
+      // When typing finishes → process Markdown & code blocks
+      enhanceMarkdown(message, text)
+    }
+  }
+
+  typeWord()
+}
+
+function enhanceMarkdown(container, originalText) {
+  let html = originalText
+
+  // Bold: **text** → <strong class="section-title">text</strong>
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="section-title">$1</strong>')
+
+  // Italic: *text* → <em>text</em>
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
+
+  // Code fences: ```lang\ncode\n``` → styled block with copy button
+  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+    lang = (lang || 'javascript').trim()
+    const escapedCode = escapeHtml(code.trim()) // escape only for safety inside <code>
+    return `
+      <div class="code-block-wrapper">
+        <pre><code class="language-${lang}">${escapedCode}</code></pre>
+        <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+    `
+  })
+
+  // Replace the content with processed HTML
+  container.innerHTML = html
+
+  // Highlight code blocks if highlight.js is loaded
+  if (typeof hljs !== 'undefined') {
+    container.querySelectorAll('pre code').forEach(block => {
+      hljs.highlightElement(block)
+    })
+  }
+
+  // Add copy functionality to buttons
+  container.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.onclick = () => {
+      const code = btn.previousElementSibling.querySelector('code').textContent
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!'
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy"></i> Copy'
+        }, 2000)
+        showToast("Code copied!", "success")
+      }).catch(() => {
+        showToast("Copy failed", "error")
+      })
+    }
+  })
+
+  scrollToBottom()
+}
+
+// ────────────── CORE FUNCTIONS ──────────────
+
+async function loadSession() {
+  const { data, error } = await supabase
+    .from("ai_chat_sessions")
+    .select("*")
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("Error loading sessions:", error)
+    return
+  }
+
+  chatHistoryList = data || []
+  loadHistoryList()
+}
+
+async function sendMessage() {
+  const text = userInput?.value?.trim();
+  if (!text) return;
+  
+  if (!chatMessages || !userInput) {
+    console.error("Chat DOM elements missing");
+    return;
+  }
+  
+  addUserMessage(text);
+  userInput.value = "";
+  scrollToBottom();
+  
+  // Make sure chatHistory exists
+  if (!Array.isArray(chatHistory)) {
+    console.warn("chatHistory was invalid → resetting");
+    chatHistory = [systemPrompt];
+  }
+  
+  chatHistory.push({ role: "user", content: text });
+  
+  // Create session if needed
+  if (!currentChatId) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+      
+      const { data, error } = await supabase
+        .from("ai_chat_sessions")
+        .insert([{ user_id: user.id, title: "New Chat" }])
+        .select()
+        .single();
+      
+      if (error) throw error;
+      currentChatId = data.id;
+    } catch (err) {
+      console.error("Session creation failed", err);
+      addAIMessage("Could not start new chat session. Try again.");
+      return;
+    }
+  }
+  
+  // Save user message
+  try {
+    await supabase
+      .from("ai_chat_messages")
+      .insert([{ session_id: currentChatId, role: "user", content: text }]);
+  } catch (err) {
+    console.warn("Could not save user message", err);
+  }
+  
+  const typing = addTypingIndicator?.() || document.createElement("div");
+  scrollToBottom();
+  
+  try {
+    const res = await fetch(BACKEND_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: chatHistory,
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.75,
+        max_tokens: 2048
+      })
+    });
+    
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error?.message || `Backend responded with status ${res.status}`);
+    }
+    
+    const data = await res.json();
+    
+    const reply = data.reply ||
+      data.choices?.[0]?.message?.content ||
+      data.content ||
+      "No reply received from server.";
+    
+    chatHistory.push({ role: "assistant", content: reply });
+    
+    typing.remove();
+    streamAIMessage(reply);
+    scrollToBottom();
+    
+    // Save AI reply
+    await supabase
+      .from("ai_chat_messages")
+      .insert([{ session_id: currentChatId, role: "assistant", content: reply }]);
+    
+    // Auto-update title from first user message (only once)
+    if (chatHistory.length === 3) { // system + first user + first AI reply
+      const firstUserMessage = chatHistory.find(m => m.role === "user")?.content?.trim();
+      if (firstUserMessage) {
+        const shortTitle = firstUserMessage.slice(0, 38).trim() + (firstUserMessage.length > 38 ? "..." : "");
+        
+        try {
+          const { error } = await supabase
+            .from("ai_chat_sessions")
+            .update({ title: shortTitle || "Chat started" })
+            .eq("id", currentChatId);
+          
+          if (error) throw error;
+          
+          console.log(`[title updated] → "${shortTitle}" for chat ${currentChatId}`);
+          
+          // Refresh the sidebar to show new title
+          await loadSession();
+        } catch (err) {
+          console.warn("[title update failed]", err);
+        }
+      }
+    }
+    
+  } catch (err) {
+    console.error("Chat request failed:", err);
+    typing.remove?.();
+    addAIMessage(`Omo, server wahala: ${err.message || "Connection issue"}. Make we try again abeg.`);
+  }
+}
+
+// ────────────── MESSAGE RENDERING ──────────────
+
+function addUserMessage(text) {
+  const div = document.createElement("div")
+  div.className = "hoble-ai-message user"
+  div.innerHTML = `<div>${escapeHtml(text)}</div>`
+  chatMessages.appendChild(div)
+}
+
+// Simple AI message (fallback)
+function addAIMessage(text) {
+  const div = document.createElement("div")
+  div.className = "hoble-ai-message ai"
+
+  div.innerHTML = `
+    <img src="https://i.pravatar.cc/150?img=68" class="avatar">
+    <div class="content">
+      <div>${escapeHtml(text)}</div>
+    </div>
+  `
+
+  chatMessages.appendChild(div)
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+function addTypingIndicator() {
+  const typing = document.createElement("div")
+  typing.className = "typing"
+  typing.innerHTML = `
+    <div class="hoble-ai-typing">
+      <div class="hoble-ai-dot"></div>
+      <div class="hoble-ai-dot"></div>
+      <div class="hoble-ai-dot"></div>
+    </div>
+  `
+  chatMessages.appendChild(typing)
+  return typing
+}
+
+// ────────────── HISTORY MANAGEMENT ──────────────
+
+async function loadChat(sessionId) {
+  const { data, error } = await supabase
+    .from("ai_chat_messages")
+    .select("*")
+    .eq("session_id", sessionId)
+    .order("created_at")
+
+  if (error) {
+    console.error("Load chat error:", error)
+    return [systemPrompt]
+  }
+
+  const messages = (data || []).map(m => ({
+    role: m.role,
+    content: m.content
+  }))
+
+  if (!messages.some(m => m.role === "system")) {
+    messages.unshift(systemPrompt)
+  }
+
+  return messages
+}
+
+async function openSessions(sessionId) {
+  currentChatId = sessionId
+  chatHistory = await loadChat(sessionId)
+  renderConversation()
+}
+
+function renderConversation() {
+  chatMessages.innerHTML = ""
+
+  if (!Array.isArray(chatHistory)) {
+    console.warn("chatHistory is not an array. Resetting.")
+    chatHistory = [systemPrompt]
+  }
+
+  chatHistory.forEach(msg => {
+    if (msg.role === "user") {
+      addUserMessage(msg.content)
+    } else if (msg.role === "assistant") {
+      streamAIMessage(msg.content)   // use the fixed streaming function
+    }
+  })
+
+  scrollToBottom()
+}
+
+
+// ────────────── HISTORY MANAGEMENT ──────────────
+
+function loadHistoryList() {
+  console.log(`[loadHistoryList] Starting – ${chatHistoryList.length} chats`);
+  
+  historyListEl.innerHTML = "";
+  
+  // ── 1. Render all history items ──────────────────────────────────────
+  chatHistoryList.forEach((chat, idx) => {
+    const displayTitle = chat.title?.trim() && chat.title.trim() !== "" ?
+      chat.title.trim() :
+      "New Chat";
+    
+    console.log(`[render] #${idx + 1} | id: ${chat.id} | title: "${displayTitle}"`);
+    
+    const item = document.createElement("div");
+    item.className = `history-item${chat.id === currentChatId ? " active" : ""}`;
+    item.dataset.chatId = chat.id;
+    
+    item.innerHTML = `
+      <div class="history-item-content">
+        <div class="history-info">
+          <div class="title">${escapeHtml(displayTitle)}</div>
+          <div class="date">
+            ${chat.created_at 
+              ? new Date(chat.created_at).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" }) 
+              : "—"}
+          </div>
+        </div>
+        <button class="menu-btn three-dots" title="More options" data-chat-id="${chat.id}">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+      <div class="history-menu hidden" data-chat-id="${chat.id}">
+        <button class="menu-item share" data-id="${chat.id}">
+          <i class="fas fa-share-alt"></i> Share
+        </button>
+        <button class="menu-item download" data-id="${chat.id}">
+          <i class="fas fa-download"></i> Download
+        </button>
+        <button class="menu-item delete danger" data-id="${chat.id}">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </div>
+    `;
+    
+    // Single click to load chat (ignore if clicked menu button)
+    const content = item.querySelector(".history-item-content");
+    content.addEventListener("click", async (e) => {
+      if (e.target.closest(".menu-btn, .three-dots")) return;
+      console.log(`[load chat] → ${chat.id}`);
+      currentChatId = chat.id;
+      localStorage.setItem("hoblemercy_current_chat", currentChatId);
+      chatHistory = await loadChat(chat.id);
+      chatMessages.innerHTML = "";
+      renderConversation();
+      sideNav?.classList.remove("open");
+    });
+    
+    historyListEl.appendChild(item);
+  });
+  
+  console.log("[render] All items added");
+  
+  // ── 2. Named listener functions (so we can remove them later) ────────
+  let menuClickHandler = null;
+  let outsideClickHandler = null;
+  
+  // Clean up previous listeners
+  if (window._historyMenuHandler) {
+    historyListEl.removeEventListener("click", window._historyMenuHandler);
+    document.removeEventListener("click", window._historyOutsideHandler);
+    console.log("[cleanup] Removed old menu listeners");
+  }
+  
+  // ── Menu click handler ───────────────────────────────────────────────
+  menuClickHandler = async (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    
+    const chatId = btn.dataset.id || btn.closest("[data-chat-id]")?.dataset.chatId;
+    if (!chatId) return;
+    
+    e.stopPropagation();
+    
+    // Three dots clicked
+    if (btn.classList.contains("menu-btn") || btn.classList.contains("three-dots")) {
+      console.log(`→ THREE DOTS CLICKED ←  chat: ${chatId}`);
+      
+      document.querySelectorAll(".history-menu:not(.hidden)").forEach(m => {
+        m.classList.add("hidden");
+      });
+      
+      const menu = btn.closest(".history-item")?.querySelector(".history-menu");
+      if (menu) {
+        menu.classList.toggle("hidden");
+        console.log(`[menu toggle] ${menu.classList.contains("hidden") ? "closed" : "opened"}`);
+      }
+      return;
+    }
+    
+    // Menu item clicked
+    console.log(`[menu action] ${btn.classList.contains("share") ? "Share" : btn.classList.contains("download") ? "Download" : "Delete"}`);
+    
+    if (btn.classList.contains("share")) {
+      shareCurrentChat();
+      showToast("Share Successfully", "info");
+    } else if (btn.classList.contains("download")) {
+      downloadCurrentChat("txt");
+      showToast("Download successfully", "info");
+    } else if (btn.classList.contains("delete")) {
+      // Prevent multiple dialogs
+      if (window._deleteInProgress) {
+        console.log("[delete] already in progress – ignored");
+        return;
+      }
+      window._deleteInProgress = true;
+      
+      const confirmed = confirm("Delete this chat?\n\nAll messages will be permanently removed.\nThis action cannot be undone.");
+      window._deleteInProgress = false;
+      
+      if (!confirmed) {
+        console.log("[delete] cancelled");
+        return;
+      }
+      
+      console.log("[delete] confirmed → executing");
+      
+      try {
+        await supabase.from("ai_chat_messages").delete().eq("session_id", chatId);
+        await supabase.from("ai_chat_sessions").delete().eq("id", chatId);
+        
+        showToast("Chat deleted successfully", "success");
+        console.log("[delete] success");
+        
+        await loadSession();
+        
+        if (currentChatId === chatId) {
+          currentChatId = null;
+          chatHistory = [systemPrompt];
+          chatMessages.innerHTML = "";
+          addAIMessage("Chat deleted. Start a new conversation 🚀");
+          localStorage.removeItem("hoblemercy_current_chat");
+        }
+      } catch (err) {
+        console.error("[delete] failed:", err);
+        showToast("Failed to delete chat", "error");
+      }
+    }
+    
+    // Close menu after any action
+    btn.closest(".history-menu")?.classList.add("hidden");
+  };
+  
+  // Attach new listener
+  historyListEl.addEventListener("click", menuClickHandler);
+  window._historyMenuHandler = menuClickHandler;
+  
+  // ── Outside click handler ────────────────────────────────────────────
+  outsideClickHandler = (e) => {
+    if (e.target.closest(".history-item, .history-menu, .menu-btn, .three-dots")) return;
+    console.log("[outside click] → closing menus");
+    document.querySelectorAll(".history-menu").forEach(m => m.classList.add("hidden"));
+  };
+  
+  document.addEventListener("click", outsideClickHandler);
+  window._historyOutsideHandler = outsideClickHandler;
+  
+  console.log("[loadHistoryList] Listeners attached (cleaned & fresh)");
+}
+function downloadCurrentChat(format = "txt") {
+  if (!chatHistory || chatHistory.length <= 1) {
+    showToast("No messages to download", "warning");
+    return;
+  }
+  
+  console.log("[download] Preparing chat export...");
+  
+  // Build readable text content
+  let content = "Hoblemercy AI Chat Conversation\n";
+  content += "Exported: " + new Date().toLocaleString("en-NG") + "\n\n";
+  
+  chatHistory.forEach(msg => {
+    if (msg.role === "system") return; // skip system prompt
+    
+    const prefix = msg.role === "user" ? "You: " : "AI: ";
+    content += prefix + msg.content.trim() + "\n\n";
+  });
+  
+  // Create blob and trigger download
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `hoblemercy-chat-${Date.now()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  
+  // Cleanup
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  showToast("Chat downloaded as text file", "success");
+  console.log("[download] File triggered");
+}
+
+async function shareCurrentChat() {
+  if (!chatHistory || chatHistory.length <= 1) {
+    showToast("Nothing to share yet", "warning");
+    return;
+  }
+  
+  console.log("[share] Preparing share data");
+  
+  // Prepare text summary
+  let shareText = "Hoblemercy AI Chat Conversation\n\n";
+  
+  chatHistory.forEach(msg => {
+    if (msg.role === "system") return;
+    const prefix = msg.role === "user" ? "You: " : "AI: ";
+    shareText += prefix + msg.content.trim() + "\n\n";
+  });
+  
+  const shareData = {
+    title: "Hoblemercy AI Chat",
+    text: shareText.slice(0, 2000), // limit length – some apps have limits
+    url: window.location.href // or future: unique chat link if you add it
+  };
+  
+  if (navigator.share && navigator.canShare?.(shareData)) {
+    try {
+      await navigator.share(shareData);
+      console.log("[share] Success – native share sheet used");
+      showToast("Shared successfully", "success");
+    } catch (err) {
+      if (err.name !== "AbortError") { // user cancelled is normal
+        console.error("[share] Failed:", err);
+        showToast("Share failed – try copying manually", "error");
+      }
+    }
+  } else {
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareText);
+      showToast("Chat copied to clipboard (share not supported)", "info");
+      console.log("[share fallback] Copied to clipboard");
+    } catch (err) {
+      console.error("[clipboard fallback] Failed:", err);
+      showToast("Cannot copy – browser may not support it", "error");
+    }
+  }
+}
+
+  async function updateChatTitle() {
+  if (!currentChatId || chatHistory.length < 3) {
+    console.log("[updateChatTitle] skipped – too few messages or no chat ID");
+    return;
+  }
+  
+  // Quick guard: skip if we already have a non-default title
+  const { data: session } = await supabase
+    .from("ai_chat_sessions")
+    .select("title")
+    .eq("id", currentChatId)
+    .single();
+  
+  if (session?.title && session.title !== "New Chat") {
+    console.log("[updateChatTitle] skipped – already has meaningful title:", session.title);
+    return;
+  }
+  
+  console.log("[updateChatTitle] generating new title...");
+  
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          {
+            role: "system",
+            content: "Summarize this conversation in 4-8 words as a short title. Output ONLY the title, nothing else."
+          },
+          ...chatHistory.slice(1, Math.min(8, chatHistory.length)) // more context = better title
+        ],
+        max_tokens: 40,
+        temperature: 0.7
+      })
+    });
+    
+    if (!res.ok) {
+      console.warn("[title fetch] HTTP error:", res.status);
+      return;
+    }
+    
+    const data = await res.json();
+    const newTitle = data.choices?.[0]?.message?.content?.trim?.();
+    
+    if (!newTitle || newTitle.length > 60 || newTitle.includes("```")) {
+      console.warn("[title] invalid generated title:", newTitle);
+      return;
+    }
+    
+    console.log("[title generated]:", newTitle);
+    
+    const { error } = await supabase
+      .from("ai_chat_sessions")
+      .update({ title: newTitle })
+      .eq("id", currentChatId);
+    
+    if (error) throw error;
+    
+    console.log("[title saved] →", newTitle);
+    
+    // Refresh sidebar to show new title
+    await loadSession();
+    
+  } catch (err) {
+    console.warn("Could not generate or save title:", err);
+  }
+}
+
+
+  // ────────────── SUPPORT PANEL ──────────────
+  function openSupport() {
+    document.getElementById("supportTab")?.classList.add("active")
+  }
+
+  function closeSupport() {
+    document.getElementById("supportTab")?.classList.remove("active")
+  }
+
+  // ────────────── HISTORY / SESSIONS ──────────────
+  async function loadSessions() {
+    if (!currentUser) {
+      showToast("Please sign in first", "error")
+      return
+    }
+
+    const container = document.getElementById('sessionsList')
+    if (!container) return
+
+    container.innerHTML = '<div class="spinner"></div>'
+
+    let convos = []
+    let tickets = []
+
+    try {
+      // Conversations
+      const convosRes = await supabase
+        .from('conversations')
+        .select('id, title, last_active')
+        .eq('user_id', currentUser.id)
+        .order('last_active', { ascending: false })
+
+      if (convosRes.error) throw convosRes.error
+      convos = convosRes.data || []
+
+      // Tickets
+      const ticketsRes = await supabase
+        .from('support_tickets')
+        .select('id, subject, message, created_at, status, screenshot_url,support_response, support_response_at')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false })
+
+      if (ticketsRes.error) throw ticketsRes.error
+      tickets = ticketsRes.data || []
+
+      container.innerHTML = ''
+
+      // Render conversations
+      convos.forEach(s => {
+        const div = document.createElement('div')
+        div.className = 'session-item'
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:0.9rem;">
+            <i class="fas fa-comment-dots" style="font-size:1.6rem; color:var(--accent);"></i>
+            <div>
+              <strong>${s.title || 'Untitled'}</strong><br>
+              <small style="opacity:0.7;">${new Date(s.last_active).toLocaleString()}</small>
+            </div>
+          </div>
+        `
+        div.onclick = () => openSession(s.id, s.title, 'conversation')
+        container.appendChild(div)
+      })
+
+      // Render tickets
+      tickets.forEach(t => {
+        const div = document.createElement('div')
+        div.className = 'ticket-item'
+        let badgeClass = t.status === 'open' ? 'status-open'
+                     : t.status === 'in_progress' ? 'status-progress'
+                     : t.status === 'resolved' ? 'status-resolved'
+                     : 'status-closed'
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:0.9rem;">
+            <i class="fas fa-ticket-alt" style="font-size:1.6rem; color:#f59e0b;"></i>
+            <div>
+              <strong>Ticket: ${t.subject}</strong><br>
+              <small style="opacity:0.7;">${new Date(t.created_at).toLocaleString()}</small>
+              <div class="status-badge ${badgeClass}">${t.status}</div>
+            </div>
+          </div>
+        `
+        div.onclick = () => openTicket(t)
+        container.appendChild(div)
+      })
+
+      // Show correct view
+      const total = convos.length + tickets.length
+      const emptyEl = document.getElementById('historyEmpty')
+      const listEl  = document.getElementById('sessionsList')
+
+      if (total === 0) {
+        emptyEl.style.display = 'flex'
+        listEl.style.display  = 'none'
+      } else {
+        emptyEl.style.display = 'none'
+        listEl.style.display  = 'block'   // or 'flex' depending on your CSS
+      }
+
+    } catch (err) {
+      console.error("Load sessions error:", err)
+      container.innerHTML = '<p style="text-align:center; padding:2rem; color:#f87171;">Failed to load history</p>'
+      showToast("Could not load sessions/tickets", "error")
+    }
+  }
+
+  function openSession(sessionId, title, type = 'conversation') {
+    console.log(`Open ${type}: ${title} (${sessionId})`)
+    showToast(`Opening "${title}"`, 'info')
+    // Add real chat loading logic here later
+  }
+
+function openTicket(ticket) {
+  
+  console.log("Opening ticket:", ticket);
+  
+  // Basic toast
+  showToast(`Opening ticket: "${ticket.subject || "Untitled"}"`, "info");
+  
+  const detailBox = document.getElementById("ticketDetailBox");
+  if (!detailBox) {
+    console.warn("ticketDetailBox not found in DOM");
+    return;
+  }
+  
+  const contentArea = detailBox.querySelector(".detail-content");
+  if (!contentArea) return;
+  
+  let html = `
+    <h3>${ticket.subject || "Untitled Ticket"}</h3>
+
+    <div style="margin:1rem 0; font-size:0.95rem; opacity:0.8; color:#a0a0cc;">
+      Created: ${new Date(ticket.created_at).toLocaleString([], {
+        dateStyle: "medium",
+        timeStyle: "short"
+      })}
+    </div>
+
+    <p style="margin:1rem 0;">
+      <strong>Status:</strong>
+      <span class="status-badge ${ticket.status || "open"}">
+        ${ticket.status || "open"}
+      </span>
+    </p>
+
+    <div style="margin:1.5rem 0; padding:1rem; background:#111118; border-radius:10px; white-space:pre-wrap; line-height:1.6;">
+      <strong style="color:#c084fc;">Your Message:</strong><br>
+      ${escapeHtml(ticket.message || "No message provided")}
+    </div>
+  `;
+  
+  // Screenshot
+  if (ticket.screenshot_url) {
+    html += `
+      <div style="margin:1.8rem 0;">
+        <strong>Attached Screenshot:</strong><br>
+        <img src="${ticket.screenshot_url}"
+             alt="Ticket screenshot"
+             style="max-width:100%; border-radius:12px; margin-top:0.8rem; box-shadow:0 6px 20px rgba(0,0,0,0.5);">
+      </div>
+    `;
+  }
+  
+  // ── Support response section ──
+  if (ticket.support_response) {
+    
+    const repliedTime = ticket.support_response_at ?
+      new Date(ticket.support_response_at).toLocaleString([], {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }) :
+      "recently";
+    
+    showToast(
+      `Support has replied to this ticket (${repliedTime})`,
+      "success",
+      7000
+    );
+    
+    // 🔔 Save notification (prevent duplicates)
+    supabase
+      .from("notifications")
+      .select("id")
+      .eq("user_id", ticket.user_id)
+      .eq("title", "Support Replied")
+      .eq("message", `Support replied to your ticket "${ticket.subject}".`)
+      .limit(1)
+      .then(({ data, error }) => {
+        
+        if (error) {
+          console.error("Notification check error:", error);
+          return;
+        }
+        
+        if (!data || data.length === 0) {
+          
+          supabase
+            .from("notifications")
+            .insert({
+              user_id: ticket.user_id,
+              title: "Support Replied",
+              message: `Support replied to your ticket "${ticket.subject}".`,
+              type: "info"
+            })
+            .then(({ error }) => {
+              if (error) console.error("Notification insert error:", error);
+            });
+          
+        }
+        
+      });
+    
+    html += `
+      <div style="margin-top:2.5rem; padding:1.4rem; background:rgba(168,85,247,0.1); border-radius:12px; border:1px solid rgba(168,85,247,0.3);">
+        
+        <strong style="color:#c084fc; font-size:1.1rem;">
+          Support Response:
+        </strong>
+
+        <div style="margin-top:1rem; white-space:pre-wrap; line-height:1.6; color:#e0e0ff;">
+          ${escapeHtml(ticket.support_response)}
+        </div>
+
+        <small style="display:block; margin-top:1rem; opacity:0.7; color:#a0a0cc;">
+          Replied • ${repliedTime}
+        </small>
+
+      </div>
+    `;
+    
+  } else {
+    
+    html += `
+      <div style="margin-top:2.5rem; padding:1.4rem; background:rgba(255,255,255,0.03); border-radius:12px; text-align:center; opacity:0.85;">
+        <strong>No reply from support yet</strong>
+        <br>
+        <p style="margin-top:0.6rem; color:#a0a0cc;">
+          Your ticket is under review — we'll respond as soon as possible.
+        </p>
+      </div>
+    `;
+    
+  }
+  
+  contentArea.innerHTML = html;
+  detailBox.classList.add("open");
+}
+
+
+  // ────────────── HISTORY DRAWER CONTROLS ──────────────
+  document.getElementById('showHistoryBtn')?.addEventListener('click', () => {
+    document.getElementById('historyDrawer')?.classList.add('active')
+    loadSessions() // refresh when opening
+  })
+
+  document.getElementById('closeHistory')?.addEventListener('click', () => {
+    document.getElementById('historyDrawer')?.classList.remove('active')
+  })
+
+  // ────────────── TOAST ──────────────
+  function showToast(msg, type = "info", duration = 4000) {
+    let container = document.getElementById("toast-container")
+    if (!container) {
+      container = document.createElement("div")
+      container.id = "toast-container"
+      document.body.appendChild(container)
+    }
+
+    let iconHTML = ""
+    switch(type) {
+      case "success": iconHTML = '<i class="fas fa-check-circle"></i>'; break
+      case "error":   iconHTML = '<i class="fas fa-times-circle"></i>'; break
+      case "warning": iconHTML = '<i class="fas fa-exclamation-triangle"></i>'; break
+      case "info":    iconHTML = '<i class="fas fa-info-circle"></i>'; break
+    }
+
+    const toast = document.createElement("div")
+    toast.className = `toast ${type}`
+    toast.innerHTML = `
+      <span class="toast-icon">${iconHTML}</span>
+      <span class="toast-message">${msg}</span>
+      <div class="toast-progress"><div class="toast-progress-bar"></div></div>
+    `
+
+    container.appendChild(toast)
+    requestAnimationFrame(() => toast.classList.add("show"))
+
+    const bar = toast.querySelector(".toast-progress-bar")
+    bar.style.transition = `transform ${duration}ms linear`
+    requestAnimationFrame(() => {
+      bar.classList.add("active")
+      bar.style.transform = "translateX(0)"
+    })
+
+    setTimeout(() => {
+      toast.classList.remove("show")
+      toast.classList.add("closing")
+      setTimeout(() => toast.remove(), 350)
+    }, duration)
+  }
+
+  // ────────────── TICKET SUBMISSION ──────────────
+  document.getElementById('supportForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault()
+
+    const subject = document.getElementById('ticketSubject')?.value
+    const message = document.getElementById('ticketMessage')?.value
+    const file    = document.getElementById('ticketScreenshot')?.files[0]
+
+    if (!subject || !message) {
+      showToast("Subject and message are required", "error")
+      return
+    }
+
+    let screenshotUrl = null;
+
+if (file) {
+  const path = `${currentUser.id}/${Date.now()}-${file.name}`;
+  
+  const { error: uploadErr } = await supabase.storage
+    .from('support-screenshots')
+    .upload(path, file);
+  
+  if (uploadErr) {
+    showToast("Screenshot upload failed", "error");
+    console.error(uploadErr);
+    return;
+  }
+  
+  const { data } = supabase.storage
+    .from('support-screenshots')
+    .getPublicUrl(path);
+  
+  screenshotUrl = data.publicUrl;
+}
+
+// Insert the support ticket
+const { data: newTicket, error } = await supabase
+  .from('support_tickets')
+  .insert({
+    user_id: currentUser.id,
+    subject,
+    message,
+    screenshot_url: screenshotUrl,
+    status: 'open'
+  })
+  .select('id') // Get the inserted ticket ID
+  .single();
+
+if (error) {
+  showToast("Failed to submit ticket", "error");
+  console.error(error);
+} else {
+  const ticketId = newTicket?.id;
+  
+  // ==================== ADD ADMIN NOTIFICATION ====================
+  const { error: adminNotifError } = await supabase
+    .from("admin_notifications")
+    .insert({
+      title: "New Support Ticket",
+      message: `New ticket from user: "${subject}"`,
+      type: "support_ticket_submitted",
+      user_id: currentUser.id, // the student who created the ticket
+      ticket_id: ticketId, // link to the support ticket
+      is_read: false
+    });
+  
+  if (adminNotifError) {
+    console.warn("Failed to create admin notification for support ticket:", adminNotifError);
+  }
+  // ================================================================
+  
+  showToast("Ticket submitted successfully!", "success");
+  document.getElementById('supportForm').reset();
+  closeSupport();
+  loadSessions(); // refresh history if drawer is open
+}
+
+})
+
+
+  // ────────────── GLOBAL EXPOSURE FOR onclick ──────────────
+  window.openSupport  = openSupport
+  window.closeSupport = closeSupport
+
+
+
+async function init() {
+  try {
+    await checkAuth()
+    
+    const savedId = localStorage.getItem("hoblemercy_current_chat")
+    if (savedId) {
+      currentChatId = savedId
+      chatHistory = await loadChat(currentChatId)
+      renderConversation()
+      scrollToBottom()
+    } else {
+      addAIMessage("Hello boss! Welcome to Hoblemercy AI ... 🚀")
+      scrollToBottom()
+    }
+    
+    await loadSession()
+    
+  } catch (err) {
+    console.error("Init failed:", err)
+    if (chatMessages) {
+      const msg = document.createElement("div")
+      msg.className = "hoble-ai-message ai"
+      msg.innerHTML = `<div>Omo, app no start well o. Refresh abeg.</div>`
+      chatMessages.appendChild(msg)
+      scrollToBottom()
+    }
+  }
+}
+
+// ──────────────────────────────────────────────
+// 4. Event listeners (after functions exist)
+// ──────────────────────────────────────────────
+
+document.getElementById('openAiChat')?.addEventListener('click', async () => {
+  chatBox?.classList.add('open')
+  await loadSession()
+  // loadHistoryList()
+  scrollToBottom()
+})
+
+sendBtn?.addEventListener("click", sendMessage)
+// ... all other listeners ...
+
+// ──────────────────────────────────────────────
+// 5. Start the app
+// ──────────────────────────────────────────────
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init)
+} else {
+  init()
+}
+
+</script>
+
+</body>
+</html>

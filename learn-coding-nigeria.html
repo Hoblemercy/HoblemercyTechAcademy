@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>How to Learn Coding in Nigeria (2026 Complete Beginner Guide)</title>
+    
+    <meta name="description" content="Complete beginner guide on how to learn coding in Nigeria in 2026. Step-by-step roadmap, best affordable courses, tools needed, and real student success stories.">
+    <meta name="keywords" content="learn coding in Nigeria, how to learn coding in Nigeria, coding courses Nigeria, programming for beginners Nigeria, best coding academy Nigeria 2026">
+    <meta name="author" content="Hoblemercy Tech Academy">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://hoblemercytechacademy.vercel.app/learn-coding-nigeria.html">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="How to Learn Coding in Nigeria (2026 Complete Beginner Guide)" />
+    <meta property="og:description" content="Real stories from Nigerians who learned coding and started earning with Hoblemercy Tech Academy." />
+    <meta property="og:image" content="https://hoblemercytechacademy.vercel.app/og-learn-coding-nigeria.png" />
+    <meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://hoblemercytechacademy.vercel.app/learn-coding-nigeria.html" />
+    <meta property="og:type" content="article" />
+
+    <!-- Fonts & Icons -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@200,300,400,500,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Your Main CSS -->
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a0033 100%);
+        }
+        .testimonial-card {
+            transition: all 0.4s ease;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+        }
+
+        /* Premium Courses Styles */
+        .courses-section {
+            padding: 100px 20px;
+            background: radial-gradient(circle at top, #1a1a2e, #0a0a0a);
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #aaa;
+            max-width: 600px;
+            margin: 10px auto 60px;
+        }
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .course-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+            animation: fadeUp 0.8s ease forwards;
+        }
+        .course-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(270deg, #8b5cf6, #c026d3, #8b5cf6);
+            background-size: 400% 400%;
+            animation: borderMove 6s linear infinite;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            pointer-events: none;
+        }
+        @keyframes borderMove {
+            0% {background-position: 0%}
+            100% {background-position: 400%}
+        }
+        .course-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 70px rgba(139, 92, 246, 0.35);
+        }
+        .course-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 25px;
+        }
+        .card-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        .card-content p {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .icon {
+            margin-right: 10px;
+            background: linear-gradient(135deg, #8b5cf6, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .top-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            animation: float 3s ease-in-out infinite;
+        }
+        .top-icon i {
+            color: #c026d3;
+        }
+        .course-card:hover .top-icon i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .price {
+            font-size: 1.7rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            position: relative;
+            padding: 10px 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            background: linear-gradient(135deg, #8b5cf6, #c026d3);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: 0.5s;
+        }
+        .btn:hover::after {
+            left: 100%;
+        }
+        .btn:hover {
+            transform: scale(1.08);
+        }
+        .btn.secondary {
+            background: transparent;
+            border: 1px solid #8b5cf6;
+        }
+        .badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #8b5cf6, #c026d3);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDE NAV -->
+<div class="side-nav" id="side">
+    <button class="close-btn" onclick="closeNav()">
+        <i class="fa fa-times"></i>
+    </button>
+    <a href="index.html"><i class="fa fa-home"></i> Home</a>
+    <a href="learn-coding-nigeria.html"><i class="fa fa-book"></i> Learn Coding</a>
+    <a href="#courses"><i class="fa fa-book"></i> Courses</a>
+    <a href="#projects"><i class="fa fa-graduation-cap"></i> Learning</a>
+    <a href="https://chat.whatsapp.com/F2RC2XwnswBErWT2unsQFb?mode=gi_t"><i class="fa fa-users"></i> Community</a>
+    <a href="#contact"><i class="fa fa-envelope"></i> Contact</a>
+    <a href="dashboard.html"><i class="fa fa-chart-line"></i> Dashboard</a>
+    <a href="auth.html"><i class="fa fa-user-plus"></i> Sign Up</a>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+<div class="container nav-inner">
+    <div class="logo">
+        <img src="logo.png" alt="Learn coding in Nigeria" loading="lazy">HoblemercyTech
+    </div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="learn-coding-nigeria.html">Learn Coding</a>
+        <a href="#courses">Courses</a>
+        <a href="auth.html">Sign in</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="https://chat.whatsapp.com/F2RC2XwnswBErWT2unsQFb?mode=gi_t">Community</a>
+    </div>
+    <div class="nav-icons">
+        <i class="fa fa-moon" id="mode"></i>
+        <i class="fa fa-bars hamburger" id="menu"></i>
+    </div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero hero-bg" style="padding: 100px 20px 90px; color: white; text-align: center; position: relative;">
+    <div class="hero-container" style="max-width: 1100px; margin: 0 auto;">
+        <h1 style="font-size: 2.85rem; line-height: 1.12; margin-bottom: 25px; font-weight: 700;">
+            How to Learn Coding in Nigeria<br>
+            <span style="color: #a855f7;">2026 Complete Beginner Guide</span>
+        </h1>
+        
+        <p style="font-size: 1.25rem; color: #ddd; max-width: 740px; margin: 0 auto 45px; line-height: 1.65;">
+            The most practical roadmap for Nigerians who want to learn coding from scratch and start earning high income in 2026 — even with zero experience.
+        </p>
+
+        <a href="auth.html" style="display: inline-block; background: #8a2be2; color: white; padding: 18px 48px; font-size: 1.25rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 10px 30px rgba(138,43,226,0.4);">
+            <i class="fa fa-rocket mr-3"></i> Start Your Coding Journey Today
+        </a>
+    </div>
+</section>
+
+<!-- WHY SECTION -->
+<section class="features-section" id="why">
+    <div class="container">
+        <h2 class="section-title">Why Learn Coding in Nigeria Right Now?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
+                <h3 class="feature-title">Earn in Dollars</h3>
+                <p class="feature-desc">Freelance for international clients and get paid in USD while living in Nigeria.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-laptop-house"></i></div>
+                <h3 class="feature-title">Work Remotely</h3>
+                <p class="feature-desc">Build your career from Ibadan, Lagos, Abuja or any part of Nigeria.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                <h3 class="feature-title">Quick Results</h3>
+                <p class="feature-desc">Go from beginner to building real projects in just 4–8 weeks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h3 class="feature-title">Local Support</h3>
+                <p class="feature-desc">Learn with fellow Nigerians and get mentorship that understands our reality.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STEP-BY-STEP ROADMAP -->
+<section style="padding: 90px 20px; background: #0a0a0a;">
+    <div class="container">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 60px;">Your 2026 Coding Success Roadmap</h2>
+        
+        <div style="max-width: 1000px; margin: 0 auto; display: grid; gap: 35px;">
+            <div style="background: rgba(20,20,30,0.95); padding: 35px; border-radius: 20px; border-left: 5px solid #a855f7;">
+                <h3 style="color:#a855f7; font-size: 1.55rem;">1. Master the Fundamentals</h3>
+                <p style="color: #ccc; line-height: 1.7;">Start with HTML, CSS, and JavaScript. Build beautiful, responsive websites.</p>
+            </div>
+            <div style="background: rgba(20,20,30,0.95); padding: 35px; border-radius: 20px; border-left: 5px solid #a855f7;">
+                <h3 style="color:#a855f7; font-size: 1.55rem;">2. Build Real-World Projects</h3>
+                <p style="color: #ccc; line-height: 1.7;">Create portfolio, admin dashboard, e-commerce sites — your proof of skill.</p>
+            </div>
+            <div style="background: rgba(20,20,30,0.95); padding: 35px; border-radius: 20px; border-left: 5px solid #a855f7;">
+                <h3 style="color:#a855f7; font-size: 1.55rem;">3. Get Mentorship & Community</h3>
+                <p style="color: #ccc; line-height: 1.7;">Learn faster with experienced developers and Nigerian peers.</p>
+            </div>
+            <div style="background: rgba(20,20,30,0.95); padding: 35px; border-radius: 20px; border-left: 5px solid #a855f7;">
+                <h3 style="color:#a855f7; font-size: 1.55rem;">4. Start Earning Money</h3>
+                <p style="color: #ccc; line-height: 1.7;">Freelance locally or globally. Many students earn ₦150k–₦500k+ per project.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PREMIUM COURSES SECTION -->
+<section class="courses-section" id="courses">
+    <div class="container">
+        <h2 class="section-title">Elite Tech Programs</h2>
+        <p class="section-subtitle">
+            Designed for real-world success — build projects, gain mentorship, and start earning
+        </p>
+        
+        <div class="courses-grid">
+            <!-- CARD 1 -->
+            <div class="course-card">
+                <div class="badge">🔥 Most Popular</div>
+                <div class="top-icon"><i class="fas fa-code"></i></div>
+                
+                <img src="./frontend.png" alt="Frontend">
+                
+                <div class="card-content">
+                    <h3><i class="fas fa-code icon"></i> Frontend Web Mastery</h3>
+                    <p>HTML, CSS, JavaScript, React — Build stunning, client-ready websites.</p>
+                    
+                    <div class="price-row">
+                        <span class="price">₦40,000</span>
+                        <a href="frontend.html" class="btn">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 2 -->
+            <div class="course-card highlight">
+                <div class="badge">🚀 Advanced</div>
+                <div class="top-icon"><i class="fas fa-layer-group"></i></div>
+                
+                <img src="./fullstack.png" alt="Fullstack">
+                
+                <div class="card-content">
+                    <h3><i class="fas fa-layer-group icon"></i> Full-Stack Developer Program</h3>
+                    <p>Frontend + Backend (Node.js, Express, MongoDB). Build powerful apps.</p>
+                    
+                    <div class="price-row">
+                        <span class="price">₦100,000</span>
+                        <a href="fullstack.html" class="btn secondary">Join Waitlist</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 3 -->
+            <div class="course-card">
+                <div class="badge">✨ Trending</div>
+                <div class="top-icon"><i class="fas fa-robot"></i></div>
+                
+                <img src="./ai.jpg" alt="AI">
+                
+                <div class="card-content">
+                    <h3><i class="fas fa-robot icon"></i> AI Automation Mastery</h3>
+                    <p>Leverage AI tools + automation to boost productivity and income.</p>
+                    
+                    <div class="price-row">
+                        <span class="price">₦40,000</span>
+                        <a href="ai.html" class="btn">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="seo-courses" style="padding:60px 20px; background:#0f0f0f; color:white;">
+    <div style="max-width:1000px; margin:auto;">
+        <h2 style="text-align:center; font-size:2rem; margin-bottom:30px;">
+            Explore Our Tech Courses in Nigeria
+        </h2>
+        <p style="text-align:center; max-width:700px; margin:auto; color:#ccc;">
+            Start learning high-income digital skills like web development, AI, and software engineering with Hoblemercy Tech Academy.
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:40px;">
+            <div style="background:#1a1a1a; padding:20px; border-radius:12px;">
+                <h3>Frontend Development Course</h3>
+                <p>Learn HTML, CSS, JavaScript and React to build modern websites.</p>
+                <a href="frontend.html" style="color:#a855f7;">Enroll Now</a>
+            </div>
+            <div style="background:#1a1a1a; padding:20px; border-radius:12px;">
+                <h3>Full Stack Development Program</h3>
+                <p>Become a professional developer using Node.js, databases and APIs.</p>
+                <a href="fullstack.html" style="color:#a855f7;">Join Waiting List</a>
+            </div>
+            <div style="background:#1a1a1a; padding:20px; border-radius:12px;">
+                <h3>AI & Digital Skills Course</h3>
+                <p>Learn how to use AI tools and build smart applications.</p>
+                <a href="ai.html" style="color:#a855f7;">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS SECTION -->
+<section class="projects-section" id="projects">
+    <div class="container">
+        <h2 class="section-title" style="text-align:center;margin-bottom:30px;">Build & Learn Large Projects With Me</h2>
+        
+        <p style="text-align:center; color:#a855f7; font-weight:600; margin-bottom:30px;">
+            These projects are fully ready. Buy and you will be taught how to build this project step-by-step.
+        </p>
+        
+        <!-- Currency Selector -->
+        <div style="text-align:center;margin-bottom:20px;">
+            <select class="currency-selector" style="padding:8px 12px;border-radius:8px;border:none;background:rgba(255,255,255,.1);color:white;">
+                <option value="NGN">🇳🇬 Nigeria (₦)</option>
+                <option value="USD">🇺🇸 United States ($)</option>
+                <option value="EUR">🇪🇺 Europe (€)</option>
+                <option value="GBP">🇬🇧 United Kingdom (£)</option>
+                <option value="GHS">🇬🇭 Ghana (₵)</option>
+                <option value="KES">🇰🇪 Kenya (KSh)</option>
+                <option value="ZAR">🇿🇦 South Africa (R)</option>
+                <option value="INR">🇮🇳 India (₹)</option>
+                <option value="PKR">🇵🇰 Pakistan (₨)</option>
+            </select>
+        </div>
+        
+        <!-- Projects -->
+        <div class="projects-carousel" style="display:flex;overflow:hidden;gap:30px;cursor:grab;position:relative;">
+            <div class="project-card" data-price-ngn="30000" data-project="Responsive Portfolio Website">
+                <img src="./portfolio.jpg" alt="Portfolio Website" style="width:100%;">
+                <div class="project-content" style="padding:20px;">
+                    <h3>CREATE A FULLY RESPONSIVE PORTFOLIO WEBSITE</h3>
+                    <p class="price">₦30,000</p>
+                    <button class="btn btn-primary" onclick="buyProject(this)">Buy Now</button>
+                </div>
+            </div>
+
+            <div class="project-card" data-price-ngn="30000" data-project="Professional Admin Dashboard">
+                <img src="./admin-dashboard.jpg" alt="Admin Dashboard" style="width:100%;">
+                <div class="project-content" style="padding:20px;">
+                    <h3>Create a professional admin dashboard</h3>
+                    <p class="price">₦30,000</p>
+                    <button class="btn btn-primary" onclick="buyProject(this)">Buy Now</button>
+                </div>
+            </div>
+
+            <div class="project-card" data-price-ngn="30000" data-project="Modern E-Commerce Website">
+                <img src="./ecommerce.jpg" alt="E-Commerce Website" style="width:100%;">
+                <div class="project-content" style="padding:20px;">
+                    <h3>BUILD A MODERN E-COMMERCE WEBSITE & SHOPPING APP</h3>
+                    <p class="price">₦30,000</p>
+                    <button class="btn btn-primary" onclick="buyProject(this)">Buy Now</button>
+                </div>
+            </div>
+
+            <div class="project-card" data-price-ngn="30000" data-project="Bitcoin App and Crypto Wallet">
+                <img src="./bitcoin.jpg" alt="Bitcoin App" style="width:100%;">
+                <div class="project-content" style="padding:20px;">
+                    <h3>Build a bitcoin app and crypto wallet</h3>
+                    <p class="price">₦30,000</p>
+                    <button class="btn btn-primary" onclick="buyProject(this)">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials-section" style="padding: 90px 20px; background: #0f0f0f;">
+    <div class="container">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 20px;">What Our Nigerian Students Say</h2>
+        <p style="text-align: center; color: #aaa; max-width: 700px; margin: 0 auto 50px; font-size: 1.1rem;">
+            Real stories from beginners who transformed their lives through coding with Hoblemercy Tech
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+            <div class="testimonial-card" style="background: #1a1a2e; padding: 32px; border-radius: 20px; border: 1px solid #4f46e5;">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #a855f7; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">👨‍💻</div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.2rem;">Adebayo Oladimeji</h4>
+                        <p style="color: #888; margin: 4px 0 0;">Ibadan, Nigeria</p>
+                    </div>
+                </div>
+                <p style="color: #ddd; line-height: 1.75; font-style: italic;">
+                    "I started with zero knowledge. After 6 weeks in the Frontend course, I built my first portfolio and got my first client paying ₦180,000. Hoblemercy Tech made it practical and easy."
+                </p>
+                <div style="margin-top: 20px; color: #a855f7;">
+                    ★★★★☆ <span style="color:#666; font-size: 0.9rem;">(4.8)</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card" style="background: #1a1a2e; padding: 32px; border-radius: 20px; border: 1px solid #4f46e5;">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #c026d3; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">👩‍💻</div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.2rem;">Fatima Yusuf</h4>
+                        <p style="color: #888; margin: 4px 0 0;">Lagos, Nigeria</p>
+                    </div>
+                </div>
+                <p style="color: #ddd; line-height: 1.75; font-style: italic;">
+                    "The mentorship is the best part. My mentor reviewed my projects and helped me fix real issues. Now I'm working remotely for a UK client earning in pounds. Thank you Hoblemercy!"
+                </p>
+                <div style="margin-top: 20px; color: #a855f7;">
+                    ★★★★★ <span style="color:#666; font-size: 0.9rem;">(5.0)</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card" style="background: #1a1a2e; padding: 32px; border-radius: 20px; border: 1px solid #4f46e5;">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #7e22ce; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">🧔</div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.2rem;">Chukwudi Eze</h4>
+                        <p style="color: #888; margin: 4px 0 0;">Abuja, Nigeria</p>
+                    </div>
+                </div>
+                <p style="color: #ddd; line-height: 1.75; font-style: italic;">
+                    "I was a graduate with no job. Joined the Full-Stack program and within 3 months I built an e-commerce site for a local business. This academy actually delivers results."
+                </p>
+                <div style="margin-top: 20px; color: #a855f7;">
+                    ★★★★☆ <span style="color:#666; font-size: 0.9rem;">(4.7)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+    <canvas id="faq-particles-canvas"></canvas>
+    <div class="container faq">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">Do I need any prior experience?</div>
+            <div class="faq-answer">No. Our courses are designed for complete beginners with zero coding knowledge.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">How long does it take to learn coding?</div>
+            <div class="faq-answer">Most students complete the beginner track in 4–8 weeks with consistent effort.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Can I learn with limited internet or electricity?</div>
+            <div class="faq-answer">Yes. Lessons can be downloaded. We understand the Nigerian environment and design accordingly.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Will I get a certificate?</div>
+            <div class="faq-answer">Yes. You receive a professional certificate upon completion.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+    <div class="container">
+        <h2 class="section-title">Have Questions About Learning Coding?</h2>
+        <p class="contact-subtitle">Speak with us. We’re here to help you start your tech journey in Nigeria.</p>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-item"><i class="fas fa-map-marker-alt"></i><p>Offa, Nigeria</p></div>
+                <div class="info-item"><i class="fas fa-envelope"></i><p>hobletech@gmail.com</p></div>
+                <div class="info-item"><i class="fas fa-phone-alt"></i><p>+234 906 474 8799</p></div>
+            </div>
+            
+            <section class="contact-section">
+                <canvas id="contact-particles"></canvas>
+                <div class="contact-card">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" required>
+                            <label>Your Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" required>
+                            <label>Your Email</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" rows="5" required></textarea>
+                            <label>Your Message</label>
+                        </div>
+                        <button type="submit" id="sendBtn">
+                            <span class="btn-text">Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+                <div id="success-check">
+                    <div class="checkmark"></div>
+                    <p>Message Sent Successfully</p>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-grid">
+        <div class="footer-logo">
+            <img src="./logo.png" alt="logo" width="300px" height="200px" loading="lazy">
+            <h2>HoblemercyTech</h2>
+            <p>Empowering the next generation of Nigerian developers with practical skills and real opportunities.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="learn-coding-nigeria.html">Coding Guide 2026</a></li>
+                <li><a href="#courses">Our Programs</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-social">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.tiktok.com/@hobletech" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://wa.me/2349064748799" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div style="margin-top: 20px;">
+                <a href="privacy.html" style="color:#a855f7; margin-right: 25px;">Privacy Policy</a>
+                <a href="terms.html" style="color:#a855f7;">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 HoblemercyTech Academy. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <i class="toast-icon fas fa-check-circle"></i>
+    <div class="toast-content">
+        <strong class="toast-title"></strong>
+        <span class="toast-message"></span>
+    </div>
+    <div class="toast-progress"></div>
+</div>
+
+<script>
+/* ======================================================
+   PROJECT BUY FUNCTION - WHATSAPP
+====================================================== */
+function buyProject(btn) {
+    const card = btn.closest('.project-card');
+    const projectName = card.getAttribute('data-project') || "this project";
+    
+    const message = `Hello Hoblemercy Tech,\n\nI want to buy and study the **${projectName}**.\nHow do I make payment and when can we start learning it?`;
+    
+    const whatsappURL = `https://wa.me/2349064748799?text=${encodeURIComponent(message)}`;
+    
+    showToast(`Opening WhatsApp for ${projectName}...`, "success", "Buy Project");
+    
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.location.href = whatsappURL;
+    } else {
+        window.open(whatsappURL, "_blank");
+    }
+}
+
+/* ======================================================
+   YOUR ORIGINAL SCRIPT (kept completely)
+====================================================== */
+
+/* GLOBAL CURRENCY SYSTEM */
+let selectedCurrency = localStorage.getItem("currency") || "NGN";
+
+const currencySymbols = {
+  NGN:"₦", USD:"$", EUR:"€", GBP:"£",
+  GHS:"₵", KES:"KSh", ZAR:"R", INR:"₹", PKR:"₨"
+};
+
+let exchangeRates = {};
+
+async function loadRates(){
+  try{
+    const res = await fetch("https://open.er-api.com/v6/latest/NGN");
+    const data = await res.json();
+    exchangeRates = data.rates;
+    updatePrices();
+  } catch(e){
+    console.log("Currency API failed", e);
+  }
+}
+
+function convertPrice(naira){
+  if(selectedCurrency==="NGN") return naira;
+  const rate = exchangeRates[selectedCurrency];
+  if(!rate) return naira;
+  return (naira * rate).toFixed(2);
+}
+
+function updatePrices(){
+  document.querySelectorAll(".project-card").forEach(card=>{
+    const base = Number(card.dataset.priceNgn || 0);
+    const priceEl = card.querySelector(".price");
+    if(priceEl){
+      priceEl.textContent = currencySymbols[selectedCurrency] + " " + Number(convertPrice(base)).toLocaleString();
+    }
+  });
+}
+
+document.querySelectorAll(".currency-selector").forEach(sel=>{
+  sel.value = selectedCurrency;
+  sel.addEventListener("change", ()=>{
+    selectedCurrency = sel.value;
+    localStorage.setItem("currency", selectedCurrency);
+    document.querySelectorAll(".currency-selector").forEach(s=>s.value=selectedCurrency);
+    updatePrices();
+  });
+});
+
+/* SIDE NAV */
+function initSideNav() {
+    const menu = document.getElementById("menu");
+    const side = document.getElementById("side");
+    if (menu && side) {
+        menu.addEventListener("click", () => side.classList.toggle("active"));
+    }
+}
+function closeNav() {
+    document.getElementById("side")?.classList.remove("active");
+}
+
+/* DARK MODE */
+function initDarkMode() {
+    const mode = document.getElementById("mode");
+    if (mode) {
+        mode.addEventListener("click", () => document.body.classList.toggle("light"));
+    }
+}
+
+/* CONTACT FORM */
+function initContactForm() {
+    const form = document.getElementById("contactForm");
+    if (!form) return;
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const message = document.getElementById("message");
+        const button = document.getElementById("sendBtn");
+
+        if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
+            showToast("Please fill all fields", "warning", "Incomplete Form");
+            return;
+        }
+
+        if (button) button.classList.add("loading");
+        showToast("Preparing your message...", "info", "Please wait");
+
+        const phone = "2349064748799";
+        const text = `New Website Message 🚀\n\nName: ${name.value}\nEmail: ${email.value}\n\nMessage:\n${message.value}\n\nSource: Learn Coding Nigeria Guide`;
+
+        const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location.href = whatsappURL;
+        } else {
+            window.open(whatsappURL, "_blank");
+        }
+
+        showToast("Opening WhatsApp...", "success", "Message Ready");
+
+        const success = document.getElementById("success-check");
+        if (success) {
+            success.classList.add("show");
+            setTimeout(() => success.classList.remove("show"), 2500);
+        }
+
+        setTimeout(() => {
+            form.reset();
+            if (button) button.classList.remove("loading");
+        }, 800);
+    });
+}
+
+/* TOAST */
+function showToast(message, type = "success", title = "") {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    const icon = toast.querySelector(".toast-icon");
+    const msg = toast.querySelector(".toast-message");
+    const ttl = toast.querySelector(".toast-title");
+    const progress = toast.querySelector(".toast-progress");
+
+    msg.textContent = message;
+    ttl.textContent = title || "";
+
+    toast.className = `toast ${type}`;
+    if (type === "success") icon.className = "toast-icon fas fa-circle-check";
+    else if (type === "error") icon.className = "toast-icon fas fa-circle-xmark";
+    else if (type === "warning") icon.className = "toast-icon fas fa-triangle-exclamation";
+    else if (type === "info") icon.className = "toast-icon fas fa-circle-info";
+
+    toast.classList.add("show");
+
+    progress.style.transition = "transform 4s linear";
+    progress.style.transform = "scaleX(0)";
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+        progress.style.transition = "none";
+        progress.style.transform = "scaleX(1)";
+    }, 4000);
+}
+
+/* FAQ Toggle */
+function initFAQ() {
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', () => {
+            const parent = item.parentElement;
+            parent.classList.toggle('open');
+        });
+    });
+}
+
+function initCarousel() {
+    const carousel = document.querySelector(".projects-carousel");
+    if (!carousel) return;
+    
+    // Duplicate cards for seamless loop
+    const cards = Array.from(carousel.children);
+    cards.forEach(card => carousel.appendChild(card.cloneNode(true)));
+    
+    let scrollPos = 0;
+    const speed = 0.8; // Adjust speed here (lower = slower)
+    
+    function infiniteScroll() {
+        scrollPos += speed;
+        if (scrollPos >= carousel.scrollWidth / 2) scrollPos = 0;
+        carousel.scrollLeft = scrollPos;
+        requestAnimationFrame(infiniteScroll);
+    }
+    infiniteScroll();
+}
+
+
+
+/* Initialize everything */
+window.onload = function() {
+    initSideNav();
+    initCarousel();
+    initDarkMode();
+    initContactForm();
+    initFAQ();
+    loadRates();   // currency rates
+    showToast("Welcome to the 2026 Coding Guide", "info", "Hoblemercy Tech");
+};
+</script>
+
+</body>
+</html>

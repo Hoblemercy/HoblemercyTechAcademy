@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Your Plan – Himiko Tech Academy</title>
+
+  <!-- Remixicon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+
+  <!-- Notyf -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+
+  <style>
+    :root {
+      --bg: #0a0716;
+      --card: linear-gradient(145deg, #0f0b1e, #140f24);
+      --accent: #a78bfa;
+      --accent-dark: #7c3aed;
+      --text: #f8f9ff;
+      --text-dim: #c9b8e8;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .lux-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .lux-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .lux-title {
+      font-size: 2.8rem;
+      background: linear-gradient(90deg, #e9d5ff, #c4a1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .lux-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .lux-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .lux-plan-card {
+      background: var(--card);
+      border: 1px solid rgba(167,139,250,0.18);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lux-plan-card:hover,
+    .lux-featured {
+      transform: translateY(-12px);
+      border-color: var(--accent);
+      box-shadow: 0 28px 60px -18px rgba(167,139,250,0.35);
+    }
+
+    .lux-plan-icon {
+      font-size: 3.5rem;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    .lux-price-block {
+      margin: 1.5rem 0;
+    }
+
+    .lux-price-main {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #d5b9ff, #c4a1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lux-price-old {
+      color: #8a7ab3;
+      text-decoration: line-through;
+      font-size: 1.2rem;
+    }
+
+    .lux-badge-recommended {
+      position: absolute;
+      top: -14px;
+      right: 28px;
+      background: linear-gradient(90deg, #7c3aed, #a78bfa);
+      color: white;
+      font-size: 0.9rem;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      box-shadow: 0 6px 16px rgba(124,58,237,0.4);
+    }
+
+    .lux-btn-select {
+      background: linear-gradient(90deg, #6d28d9, #a855f7, #c084fc);
+      background-size: 200%;
+      color: white;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 0.4s;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .lux-btn-select:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(109,40,217,0.5);
+      background-position: right center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="lux-container">
+  <div class="lux-header">
+    <h1 class="lux-title">Choose Your Plan</h1>
+    <p class="lux-subtitle">
+      <i class="ri-sparkling-line"></i>
+      Early bird access — claim your spot now
+    </p>
+  </div>
+
+  <div class="lux-plan-grid" id="pricingGrid">
+    <!-- Cards populated by JS -->
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+<script type="module">
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+// ────────────────────────────────────────────────
+// Supabase (for user currency preference)
+// ────────────────────────────────────────────────
+const supabase = createClient(
+  "https://jffkatwagcfshvddnipr.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8"
+);
+
+// ────────────────────────────────────────────────
+// Course Pricing Data (full & correct per course/stage)
+// ────────────────────────────────────────────────
+const coursePricing = {
+  frontend: {
+    name: "Frontend Development",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 15000, icon: "ri-layout-2-line" },
+      { name: "Stage 3", price: 20000, icon: "ri-vip-crown-fill" }
+    ]
+  },
+  backend: {
+    name: "Backend Development",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 20000, icon: "ri-server-line" },
+      { name: "Stage 3", price: 25000, icon: "ri-vip-crown-fill" }
+    ]
+  },
+  fullstack: {
+    name: "Fullstack Development",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 30000, icon: "ri-code-box-line" },
+      { name: "Stage 3", price: 40000, icon: "ri-vip-crown-fill" }
+    ]
+  },
+  data: {
+    name: "Data Analysis",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 15000, icon: "ri-bar-chart-line" },
+      { name: "Stage 3", price: 25000, icon: "ri-vip-crown-fill" }
+    ]
+  },
+  ai: {
+    name: "AI tools & Automation",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 15000, icon: "ri-brain-line" },
+      { name: "Stage 3", price: 20000, icon: "ri-vip-crown-fill" }
+    ]
+  },
+  seo: {
+    name: "SEO & Digital Optimization",
+    stages: [
+      { name: "Stage 1 (promo)", from: 10000, to: 2000, icon: "ri-rocket-line" },
+      { name: "Stage 2", price: 15000, icon: "ri-search-eye-line" },
+      { name: "Stage 3", price: 25000, icon: "ri-vip-crown-fill" }
+    ]
+  }
+};
+
+// ────────────────────────────────────────────────
+// Currency Helpers
+// ────────────────────────────────────────────────
+function getSymbolFromCurrency(c) {
+  const map = {
+    NGN: "₦", GHS: "₵", GMD: "D", INR: "₹", AFN: "؋",
+    GBP: "£", USD: "$", CAD: "$", EUR: "€", KES: "KES",
+    RWF: "RWF", UGX: "UGX", ZAR: "ZAR", TZS: "TZS",
+    ZMW: "ZMW", PKR: "PKR", XOF: "XOF",
+  };
+  return map[c] || c;
+}
+
+const fallbackRates = {
+  NGN: 1, GHS: 125, GMD: 18, INR: 14.6, AFN: 19.2,
+  GBP: 1810, USD: 1356, CAD: 990, EUR: 1560,
+  KES: 10.5, RWF: 1.05, UGX: 3700, ZAR: 80,
+  TZS: 2700, ZMW: 69, PKR: 4.85, XOF: 2.37,
+};
+
+async function fetchLiveRates() {
+  try {
+    const res = await fetch("https://v6.exchangerate-api.com/v6/990a7b4f58303b8dc1270ce1/latest/NGN");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.result !== "success") throw new Error(data['error-type'] || 'API error');
+    return data.conversion_rates;
+  } catch (err) {
+    console.error("Rate fetch failed:", err);
+    return fallbackRates;
+  }
+}
+
+async function getUserCurrencyAndRates() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { currency: 'NGN', symbol: '₦', rate: 1 };
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('currency')
+    .eq('id', user.id)
+    .single();
+
+  let currency = 'NGN';
+  if (!error && data?.currency) currency = data.currency;
+
+  let rate = fallbackRates[currency] || 1;
+  if (currency !== 'NGN') {
+    const rates = await fetchLiveRates();
+    const inverse = rates[currency] || 0;
+    if (inverse > 0) rate = 1 / inverse;
+  }
+
+  return { currency, symbol: getSymbolFromCurrency(currency), rate };
+}
+
+async function updatePricesToUserCurrency() {
+  try {
+    const { currency, symbol, rate: ngnPerUnit } = await getUserCurrencyAndRates();
+
+    const els = document.querySelectorAll('[data-price-base]');
+    if (els.length === 0) {
+      console.warn('[PRICING] No price elements found');
+      return;
+    }
+
+    els.forEach(el => {
+      const base = parseFloat(el.dataset.priceBase) || 0;
+      let display = `₦${base.toLocaleString()}`;
+      let value = base;
+
+      if (currency !== 'NGN' && ngnPerUnit > 1) {
+        const conv = base / ngnPerUnit;
+        value = Math.round(conv * 100) / 100;
+        display = `${symbol}${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      el.textContent = display;
+      el.dataset.price = value;
+    });
+  } catch (err) {
+    console.error('[PRICING] Currency update failed:', err);
+  }
+}
+
+// ────────────────────────────────────────────────
+// Render Pricing Page
+// ────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// Load & Render Pricing – FIXED COURSE SELECTION
+// ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Get course from URL first (priority), then sessionStorage
+  const params = new URLSearchParams(window.location.search);
+  let courseCode = params.get('course');
+  
+  // Normalize: trim, lowercase, remove spaces/dashes
+  if (courseCode) {
+    courseCode = courseCode.trim().toLowerCase().replace(/[\s-]+/g, '');
+  } else {
+    courseCode = sessionStorage.getItem('enrolled_course_code')?.trim().toLowerCase() || 'frontend';
+  }
+  
+  console.log('[PRICING] Selected course code:', courseCode); // debug
+  
+  // 2. Get config – fallback to frontend if not found
+  const config = coursePricing[courseCode] || coursePricing.frontend;
+  
+  if (!config) {
+    console.error('[PRICING] No config found for course:', courseCode);
+    notyf.error("Invalid course selected");
+    return;
+  }
+  
+  // Update title
+  document.title = `Choose Plan – ${config.name}`;
+  const titleEl = document.querySelector('.lux-title') || document.querySelector('h1');
+  if (titleEl) titleEl.textContent = `Choose Your ${config.name} Plan`;
+  
+  // 3. Clear and populate grid
+  const grid = document.getElementById('pricingGrid');
+  if (!grid) {
+    console.error('[PRICING] #pricingGrid not found');
+    return;
+  }
+  
+  grid.innerHTML = '';
+  
+  config.stages.forEach((stage, index) => {
+    const isRecommended = index === 2;
+    let priceHTML = '';
+    let baseAmount = stage.from !== undefined ? stage.to : stage.price;
+    
+    if (stage.from !== undefined) {
+      priceHTML = `
+        <span class="lux-price-main promo" data-price-base="${stage.to}" data-price="${stage.to}">
+          ₦${stage.to.toLocaleString()}
+        </span>
+        <span class="lux-price-old">from ₦${stage.from.toLocaleString()}</span>
+      `;
+    } else {
+      priceHTML = `
+        <span class="lux-price-main" data-price-base="${stage.price}" data-price="${stage.price}">
+          ₦${stage.price.toLocaleString()}
+        </span>
+      `;
+    }
+    
+    const card = document.createElement('div');
+    card.className = `lux-plan-card ${isRecommended ? 'lux-featured' : ''}`;
+    
+    card.innerHTML = `
+      <div class="lux-plan-icon">
+        <i class="${stage.icon || 'ri-question-line'}"></i>
+      </div>
+      <h3>${stage.name}</h3>
+      <div class="lux-price-block">${priceHTML}</div>
+      ${isRecommended ? '<span class="lux-badge-recommended">Recommended</span>' : ''}
+      <a href="payment.html?stage=${index + 1}&amount=${baseAmount}&course=${encodeURIComponent(courseCode)}"
+         class="lux-btn-select">
+        Select Plan
+      </a>
+    `;
+    
+    grid.appendChild(card);
+  });
+  
+  // Apply currency conversion
+  updatePricesToUserCurrency().catch(err => console.error('[PRICING] Currency error:', err));
+});
+</script>
+
+</body>
+</html>

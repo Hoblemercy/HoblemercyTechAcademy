@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ─── Basic Meta ──────────────────────────────── -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hoblemercy Tech Digital Academy • Admin Control</title>
+  <meta name="description" content="Admin & Student Dashboard for Hoblemercy Tech Digital Academy. Manage users, enrollments, assessments, tickets, and push notifications.">
+
+  <!-- ─── Favicon & PWA ──────────────────────────── -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./logo.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="./logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="blueviolet">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Hoblemercy Tech Dashboard">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- ─── Fonts ─────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- ─── Icons ─────────────────────────────────── -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-S..." crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ─── Notyf (Notifications) ─────────────────── -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" defer></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker registered for PWA'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    });
+  }
+</script>
+
+  <style>
+    :root {
+      --bg: #05050a;
+      --bg-card: #0d0d14;
+      --bg-modal: #0f0f1a;
+      --text: #e0e0ff;
+      --text-dim: #c9b8e8;
+      --accent: #a78bfa;
+      --accent-glow: #a855f7;
+      --neon-blue: #5eead4;
+      --danger: #f87171;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --glow: rgba(167,139,250,0.35);
+      --transition: all 0.25s ease;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content:"";
+      position: fixed; inset:0;
+      background: 
+        radial-gradient(circle at 10% 15%, rgba(167,139,250,0.12), transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(94,234,212,0.08), transparent 60%),
+        var(--bg);
+      z-index: -2;
+    }
+
+    .stars { position:fixed; inset:0; z-index:-1; pointer-events:none; }
+    .star {
+      position:absolute;
+      background:#fff;
+      border-radius:50%;
+      opacity:0.4;
+      animation: twinkle 7s infinite alternate;
+      box-shadow:0 0 6px #fff;
+    }
+    @keyframes twinkle { 0%,100%{opacity:0.3;transform:scale(0.8);} 50%{opacity:0.8;transform:scale(1.1);} }
+
+    .layout { display:flex; min-height:100vh; }
+
+    .sidebar {
+      width:260px;
+      background:#0f0b1e;
+      border-right:1px solid rgba(167,139,250,0.18);
+      padding:2rem 1.5rem;
+      position:fixed;
+      height:100vh;
+      overflow-y:auto;
+      z-index:999;
+      transition: transform 0.3s ease;
+    }
+
+    .logo {
+      font-family:'Orbitron',monospace;
+      font-size:1.9rem;
+      font-weight:700;
+      background:linear-gradient(90deg,var(--accent),var(--neon-blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      margin-bottom:2.8rem;
+      display:flex;
+      align-items:center;
+      gap:0.7rem;
+    }
+
+    .nav-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:0.9rem 1.3rem;
+      color:var(--text-dim);
+      text-decoration:none;
+      border-radius:10px;
+      margin:0.35rem 0;
+      transition:var(--transition);
+      cursor:pointer;
+    }
+    .nav-item:hover, .nav-item.active {
+      background:rgba(167,139,250,0.15);
+      color:#fff;
+      box-shadow:0 0 14px rgba(167,139,250,0.2);
+    }
+
+    .main-content {
+      margin-left:260px;
+      flex:1;
+      padding:2.2rem 2.8rem;
+    }
+
+    h1, h2 {
+      font-family:'Orbitron',monospace;
+      background:linear-gradient(90deg,#e0e7ff,var(--accent));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      margin-bottom:0.8rem;
+    }
+
+    .section-title {
+      font-size:1.5rem;
+      margin:1.8rem 0 1.2rem;
+      display:flex;
+      align-items:center;
+      gap:0.8rem;
+      color:var(--accent);
+    }
+
+    .search-input, select, input[type="number"] {
+      padding:11px 15px;
+      background:#111118;
+      border:1px solid rgba(167,139,250,0.25);
+      border-radius:10px;
+      color:var(--text);
+      font-size:16px;
+    }
+    .search-input:focus {
+      border-color:var(--accent);
+      box-shadow:0 0 10px rgba(167,139,250,0.25);
+    }
+
+    .table-container {
+      background:var(--bg-card);
+      border-radius:14px;
+      border:1px solid rgba(167,139,250,0.12);
+      overflow:hidden;
+      box-shadow:0 12px 40px rgba(0,0,0,0.65);
+      
+    overflow-x: auto;               /* ← this enables horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  max-width: 100%;                /* prevents it from expanding beyond screen */
+}
+
+
+    table { width:100%; border-collapse:collapse; min-width:1000px; }
+    th, td { padding:13px 15px; text-align:left; }
+    th {
+      background:rgba(167,139,250,0.09);
+      color:var(--accent);
+      font-weight:600;
+      text-transform:uppercase;
+      font-size:0.82rem;
+      letter-spacing:0.5px;
+    }
+    tr:hover { background:rgba(167,139,250,0.06); }
+
+    .status {
+      padding:0.35rem 0.9rem;
+      border-radius:999px;
+      font-size:0.84rem;
+      font-weight:600;
+    }
+    .status-pending, .status-open, .status-in_progress  { background:var(--warning); color:#fff; }
+    .status-verified, .status-approved, .status-resolved { background:var(--success); color:#fff; }
+    .status-rejected, .status-closed { background:var(--danger); color:#fff; }
+
+    .btn-action, .btn {
+      padding:0.55rem 1.1rem;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      transition:var(--transition);
+      margin:0.3rem;
+    }
+    .btn-primary   { background:var(--accent); color:#000; border-radius: 12px; padding: 3px 10px; }
+    .btn-success   { background:var(--success); color:#000; }
+    .btn-danger    { background:var(--danger); color:white; }
+    .btn:hover     { transform:translateY(-1px); }
+
+    .modal-overlay {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 0.3s ease;
+    }
+    .modal-overlay.show { opacity:1; visibility:visible; }
+    .modal {
+      background:var(--bg-modal);
+      border:1px solid rgba(167,139,250,0.25);
+      border-radius:16px;
+      width:90%;
+      max-width:820px;
+      max-height:92vh;
+      overflow-y:auto;
+      box-shadow:0 20px 70px rgba(0,0,0,0.6);
+    }
+    .modal-header {
+      padding:1.4rem 2rem;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .hamburger { display:none; background:none; border:none; color:var(--text); font-size:2.1rem; cursor:pointer; }
+    
+    .admin-announcement-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-announcement-card input,
+.admin-announcement-card select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  font-size: 16px;
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+.admin-announcement-card button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.confirm-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.confirm-dialog {
+  background: #ffffff;
+  padding: 28px 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: confirmPop 0.3s ease;
+}
+
+@keyframes confirmPop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.confirm-dialog h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.confirm-dialog p {
+  margin: 0 0 28px 0;
+  color: #4b5563;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 110px;
+}
+
+.confirm-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.confirm-btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.confirm-btn-proceed {
+  background: #2563eb;
+  color: white;
+}
+
+.confirm-btn-proceed:hover {
+  background: #1d4ed8;
+}
+
+/* Danger style for Resolve action */
+.confirm-btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.confirm-btn-danger:hover {
+  background: #dc2626;
+}
+
+    @media (max-width: 992px) {
+      .sidebar { width:240px; }
+      .main-content { margin-left:240px; padding:1.8rem 2rem; }
+    }
+
+    @media (max-width: 768px) {
+      .layout { flex-direction:column; }
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        z-index: 1001;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left:0; padding:1.4rem 1.2rem; }
+      .hamburger { display:block; position:fixed; top:1.1rem; left:1.1rem; z-index:1002; }
+      table { min-width:900px; }
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <i class="ri-graduation-cap-line"></i> Himiko Control
+      </div>
+      
+
+      <div class="nav-item active" data-section="users">
+        <i class="ri-group-line"></i> Users
+      </div>
+      <div class="nav-item" data-section="assessments">
+        <i class="ri-file-check-line"></i> Assessments
+      </div>
+      <div class="nav-item" data-section="tickets">
+        <i class="ri-customer-service-2-line"></i> Support Tickets
+      </div>
+      <div class="nav-item" data-section="enrollments">
+        <i class="ri-money-dollar-circle-line"></i> Enrollments
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+      <div class="header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <button id="menuToggle" class="hamburger"><i class="ri-menu-line"></i></button>
+        <h1>Admin Dashboard</h1>
+
+        <div>
+          
+          <button onclick="refreshAll()" class="btn-action" style="background:rgba(167,139,250,0.15);">
+            <i class="ri-refresh-line"></i> Refresh
+          </button>
+        </div>
+      </div>
+   
+      <div id="dashboard-content">
+
+        <!-- Users -->
+     <!-- Users Section -->
+<div id="section-users">
+  <div class="section-title"><i class="ri-group-line"></i> Users</div>
+  
+  <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+    <input type="text" id="user-search" class="search-input" placeholder="Search users..." style="flex:1; max-width:420px;">
+    
+    <select id="user-sort" class="search-input" onchange="loadUsers()">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="alpha">Alphabetical (A-Z)</option>
+    </select>
+  </div>
+  
+  <div class="table-container">
+    <table id="users-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">S/N</th>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Institution</th>
+          <th>Department</th>
+          <th>Level</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+     <!-- Assessments -->
+<div id="section-assessments" class="hidden">
+  <div class="section-title"><i class="ri-file-check-line"></i> Assessments</div>
+  
+  <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+    <select id="assessment-filter" class="search-input" onchange="filterAssessments()" style="max-width:200px;">
+      <option value="All">All Assessments</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+    
+    <button class="btn-action" onclick="loadAssessments()">Refresh All</button>
+  </div>
+  
+  <div class="table-container">
+    <table id="assessments-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">S/N</th>
+          <th>User</th>
+          <th>Type</th>
+          <th>Filename</th>
+          <th>Submitted</th>
+          <th>Status</th>
+          <th>Points</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+        <!-- Tickets -->
+        <div id="section-tickets" class="hidden">
+          <div class="section-title"><i class="ri-customer-service-2-line"></i> Support Tickets</div>
+          <div style="display:flex; gap:1rem; margin:1.5rem 0; flex-wrap:wrap;">
+            <select id="ticketStatusFilter" class="search-input" style="max-width:180px;">
+              <option value="">All Statuses</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+            </select>
+            <input type="text" id="ticketSearch" class="search-input" placeholder="Search subject / message..." style="flex:1; max-width:420px;">
+          </div>
+          <div class="table-container">
+            <table id="tickets-table">
+              <thead>
+                <tr>
+                  <th>Subject</th><th>User ID</th><th>Submitted</th><th>Status</th><th>Response</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Enrollments -->
+        <div id="section-enrollments" class="hidden">
+          <div class="section-title"><i class="ri-money-dollar-circle-line"></i> Course Enrollments</div>
+
+          <div style="margin:1.5rem 0; display:flex; gap:1rem;">
+            <button class="btn-action" onclick="switchEnrollmentTab(0)">All Enrollments</button>
+            <button class="btn-action" onclick="switchEnrollmentTab(1)">Pending Payments</button>
+          </div>
+
+          <div id="enroll-all">
+            <div class="table-container">
+              <table id="allEnrollTable">
+                <thead>
+                  <tr>
+                    <th>User ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>Stage</th><th>Amount</th><th>Status</th><th>Date</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="enroll-pending" style="display:none;">
+            <div class="table-container">
+              <table id="pendingEnrollTable">
+                <thead>
+                  <tr>
+                    <th>Name</th><th>Phone</th><th>Course</th><th>Stage</th><th>Amount Paid</th><th style="text-align:center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="user-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="user-modal-title">User Profile</h2>
+        <button onclick="closeUserModal()" style="background:none;border:none;color:var(--text-dim);font-size:1.8rem;cursor:pointer;">×</button>
+      </div>
+      <div class="modal-body" id="user-modal-body"></div>
+    </div>
+  </div>
+  
+  <div id="assessment-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">Assessment Detail</h2>
+        <button onclick="closeModal()" style="background:none;border:none;color:var(--text-dim);font-size:1.8rem;cursor:pointer;">×</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+  
+  <div id="ticket-modal" class="modal-overlay">
+    <div class="modal" style="max-width:720px;">
+      <div class="modal-header">
+        <h2 id="ticket-modal-title">Ticket Detail</h2>
+        <button onclick="closeTicketModal()" style="background:none;border:none;color:var(--text-dim);font-size:1.8rem;cursor:pointer;">×</button>
+      </div>
+      <div class="modal-body" style="padding:1.8rem;">
+        <div id="ticket-detail-content"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="admin-notifications-section">
+  <h2>Admin Notifications</h2>
+  
+  <div id="notifications-table-container" class="table-container">
+    <table id="notifications-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Title</th>
+          <th>Message</th>
+          <th>Type</th>
+          <th>Assessment ID</th>
+          <th>Ticket ID</th>
+          <th>Created At</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="notifications-tbody">
+        <!-- Rows will be populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="no-notifications" style="display:none; text-align:center; padding:40px; color:#888;">
+    No notifications found.
+  </div>
+</div>
+  
+  <div class="admin-announcement-card">
+  <h3>Post Announcement</h3>
+  
+  <input id="annMsg" placeholder="Write announcement..." />
+  
+  <select id="annTarget">
+    <option value="all">All Users</option>
+    <option value="students">Students</option>
+    <option value="non_students">Non Students</option>
+  </select>
+  
+  <button onclick="postAnnouncement()">Send</button>
+</div>
+
+<!-- Custom Confirmation Dialog -->
+<div id="custom-confirm-modal" class="confirm-overlay" style="display: none;">
+  <div class="confirm-dialog">
+    <h3 id="confirm-title">Confirm Action</h3>
+    <p id="confirm-message">Are you sure you want to continue?</p>
+    
+    <div class="confirm-actions">
+      <button id="confirm-cancel" class="confirm-btn confirm-btn-cancel">Cancel</button>
+      <button id="confirm-proceed" class="confirm-btn confirm-btn-proceed">Yes, Proceed</button>
+    </div>
+  </div>
+</div>
+  
+  <!-- Loading & Toast -->
+  <div id="loading-spinner" class="hidden">
+    <div class="spinner"></div>
+  </div>
+  <div id="toast-container" style=" background-color: blueviolet;color-scheme: white; padding: 10px;font-weight: 600; border-radius: 12px; position:fixed;bottom:40px;right:24px;z-index:2000;max-width:360px;"></div>
+  
+  
+  
+  
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  const supabase = createClient(
+    'https://jffkatwagcfshvddnipr.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8'
+  )
+
+  const notyf = new Notyf({ duration: 4500, position: { x: 'right', y: 'top' } })
+const ADMIN_EMAIL = 'hobletech@gmail.com'
+
+
+
+// ─── Init Function ────────────────────────────────────────
+async function init() {
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user || user.email !== ADMIN_EMAIL) {
+    notyf.error("Admin access only");
+    return;
+  }
+  
+  createStars();
+  loadUsers();
+  loadAssessments();
+  loadTickets();
+  loadAllEnrollments();
+  loadPendingEnrollments();
+  loadAdminNotifications();
+  
+  
+
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'))
+        item.classList.add('active')
+
+        const sec = item.dataset.section
+        document.querySelectorAll('#dashboard-content > div').forEach(d => {
+          d.classList.toggle('hidden', d.id !== `section-${sec}`)
+        })
+
+        if (window.innerWidth <= 768) toggleSidebar()
+      })
+    })
+
+    // Mobile menu
+    document.getElementById('menuToggle')?.addEventListener('click', toggleSidebar)
+    document.getElementById('sidebarOverlay')?.addEventListener('click', toggleSidebar)
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open')
+    document.getElementById('sidebarOverlay')?.classList.toggle('active')
+  }
+
+  function createStars() {
+    const container = document.createElement('div')
+    container.className = 'stars'
+    document.body.appendChild(container)
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div')
+      s.className = 'star'
+      const size = Math.random() * 2.2 + 0.6
+      s.style.width = s.style.height = size + 'px'
+      s.style.left = Math.random()*100 + '%'
+      s.style.top  = Math.random()*100 + '%'
+      s.style.animationDelay = Math.random()*6 + 's'
+      container.appendChild(s)
+    }
+  }
+  
+  
+  
+let notificationsChannel = null; // Global reference to unsubscribe later
+
+// Load notifications + Set up Real-time subscription
+async function loadAdminNotifications() {
+  const tbody = document.getElementById('notifications-tbody');
+  const noNotifications = document.getElementById('no-notifications');
+  
+  if (!tbody) return;
+  
+  // Show loading state
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="10" style="text-align:center; padding:40px;">
+        Loading notifications...
+      </td>
+    </tr>`;
+  
+  try {
+    // Initial load
+    const { data, error } = await supabase
+      .from('admin_notifications')
+      .select(`
+        id,
+        user_id,
+        title,
+        message,
+        type,
+        assessment_id,
+        ticket_id,
+        created_at,
+        is_read
+      `)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    renderNotificationsTable(data);
+    
+    // === REAL-TIME SUBSCRIPTION ===
+    if (notificationsChannel) {
+      notificationsChannel.unsubscribe(); // Clean up previous subscription
+    }
+    
+    notificationsChannel = supabase
+      .channel('admin_notifications_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT', // Only listen for new notifications
+          schema: 'public',
+          table: 'admin_notifications'
+        },
+        (payload) => {
+          console.log('New admin notification received:', payload.new);
+          
+          // Show a nice toast for admin
+          notyf.success(`New notification: ${payload.new.title}`);
+          
+          // Refresh the entire table (simple & reliable)
+          loadAdminNotifications(); // Re-fetch and re-render
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+      });
+    
+  } catch (err) {
+    console.error("Error loading admin notifications:", err);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="10" style="color:#f87171; text-align:center; padding:40px;">
+          Failed to load notifications
+        </td>
+      </tr>`;
+  }
+}
+
+// Render the table (extracted for reuse)
+function renderNotificationsTable(data) {
+  const tbody = document.getElementById('notifications-tbody');
+  const noNotifications = document.getElementById('no-notifications');
+  
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '';
+    if (noNotifications) noNotifications.style.display = 'block';
+    return;
+  }
+  
+  if (noNotifications) noNotifications.style.display = 'none';
+  
+  let html = '';
+  
+  data.forEach(notif => {
+    const date = new Date(notif.created_at).toLocaleString();
+    const status = notif.is_read ?
+      `<span style="color:#22c55e;">Read</span>` :
+      `<span style="color:#f59e0b; font-weight:600;">Unread</span>`;
+    
+    const assessmentLink = notif.assessment_id ?
+      `<a href="#" onclick="showAssessmentDetail('${notif.assessment_id}'); return false;" style="color:#58a6ff;">${notif.assessment_id}</a>` :
+      '—';
+    
+    const ticketLink = notif.ticket_id ?
+      `<a href="#" onclick="viewSupportTicket('${notif.ticket_id}'); return false;" style="color:#58a6ff;">${notif.ticket_id}</a>` :
+      '—';
+    
+    html += `
+      <tr style="${notif.is_read ? 'opacity:0.85;' : 'background:#1f2937;'}">
+        <td><small>${notif.id}</small></td>
+        <td><small>${notif.user_id}</small></td>
+        <td><strong>${escapeHtml(notif.title)}</strong></td>
+        <td style="max-width:300px; white-space:pre-wrap;">${escapeHtml(notif.message)}</td>
+        <td><span style="font-size:0.85rem; padding:3px 8px; background:#374151; border-radius:4px;">${notif.type}</span></td>
+        <td>${assessmentLink}</td>
+        <td>${ticketLink}</td>
+        <td>${date}</td>
+        <td>${status}</td>
+        <td>
+          <button onclick="markAsRead('${notif.id}')" class="btn btn-small">
+            ${notif.is_read ? 'Mark Unread' : 'Mark Read'}
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  tbody.innerHTML = html;
+}
+
+
+
+// Mark as read
+async function markAsRead(id) {
+  const { error } = await supabase
+    .from('admin_notifications')
+    .update({ is_read: true })
+    .eq('id', id);
+  
+  if (error) {
+    console.error(error);
+    notyf.error("Failed to update status");
+  } else {
+    notyf.success("Notification marked as read");
+    loadAdminNotifications(); // Refresh
+  }
+}
+
+// Optional: Cleanup when leaving the page/tab
+window.addEventListener('beforeunload', () => {
+  if (notificationsChannel) {
+    notificationsChannel.unsubscribe();
+  }
+});
+
+
+async function postAnnouncement() {
+  const msg = document.getElementById("annMsg").value
+  const target = document.getElementById("annTarget").value
+  
+  if (!msg) {
+    showToast("Enter message", "error")
+    return
+  }
+  
+  // 1. Insert announcement
+  const { error: annError } = await supabase
+    .from("announcements")
+    .insert([{ message: msg, target }])
+  
+  if (annError) {
+    console.error(annError)
+    showToast("Error sending announcement", "error")
+    return
+  }
+  
+  // 2. Get users based on target
+  let usersQuery = supabase.from("users").select("id")
+  
+  if (target !== "all") {
+    usersQuery = usersQuery.eq("role", target) // e.g. "student", "admin"
+  }
+  
+  const { data: users, error: userError } = await usersQuery
+  
+  if (userError) {
+    console.error(userError)
+    showToast("Announcement sent, but failed to notify users", "error")
+    return
+  }
+  
+  // 3. Insert notifications for all users
+  const notifications = users.map(user => ({
+    user_id: user.id,
+    title: "📢 New Announcement",
+    message: msg,
+    type: "announcement"
+  }))
+  
+  const { error: notifError } = await supabase
+    .from("notifications")
+    .insert(notifications)
+  
+  if (notifError) {
+    console.error(notifError)
+    showToast("Announcement sent, but notification failed", "error")
+  } else {
+    showToast("Announcement sent & users notified 🚀", "success")
+  }
+  
+  // 4. Clear input
+  document.getElementById("annMsg").value = ""
+}
+
+
+// Add these two functions
+
+function viewSupportTicket(ticketId) {
+  if (!ticketId) {
+    notyf.error("Invalid ticket ID");
+    return;
+  }
+  
+  // For now, just show a message (you can expand this later)
+  notyf.info(`Opening ticket: ${ticketId}`);
+  
+  // If you want to open the ticket modal directly:
+  // You can call loadTickets() then find and open it, but simplest for now:
+  console.log("View ticket requested:", ticketId);
+  
+  // Optional: Auto-open ticket modal if you have a way to load it
+  // showTicketDetail({ id: ticketId }); // if you want to try
+}
+
+function closeModal() {
+  // Close all possible modals safely
+  const modals = [
+    'assessment-modal',
+    'user-modal',
+    'ticket-modal',
+    'custom-confirm-modal'
+  ];
+  
+  modals.forEach(id => {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove('show');
+    }
+  });
+  
+  console.log("All modals closed");
+}
+
+  // Safe and efficient HTML escaping
+function escapeHtml(text) {
+  if (!text) return '';
+  
+  const str = String(text);
+  
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+  window.refreshAll = () => {
+    loadUsers()
+    loadAssessments()
+    loadTickets()
+    loadAllEnrollments()
+    loadPendingEnrollments()
+    notyf.success("Dashboard refreshed")
+  }
+
+  window.closeTicketModal = () => document.getElementById('ticket-modal')?.classList.remove('show')
+
+// Make loadUsers globally accessible
+window.loadUsers = async function() {
+  const sortMode = document.getElementById('user-sort').value || 'newest';
+  
+  let query = supabase
+    .from('users')
+    .select(`
+      id, full_name, username, phone, email, gender, country, state, city, 
+      level, department, institution, profile_image, created_at
+    `);
+  
+  if (sortMode === 'alpha') {
+    query = query.order('full_name', { ascending: true });
+  } else {
+    query = query.order('created_at', { ascending: sortMode === 'oldest' });
+  }
+  
+  const { data, error } = await query;
+  
+  if (error) {
+    notyf.error('Failed to load users');
+    return;
+  }
+  
+  const tbody = document.querySelector('#users-table tbody');
+  tbody.innerHTML = '';
+  
+  data.forEach((user, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:center; font-weight:500;">${index + 1}</td>
+      <td>${user.full_name || '—'}</td>
+      <td>${user.username || '—'}</td>
+      <td>${user.phone || '—'}</td>
+      <td>${user.email || '—'}</td>
+      <td>${user.institution || '—'}</td>
+      <td>${user.department || '—'}</td>
+      <td>${user.level || '—'}</td>
+    `;
+    tr.onclick = () => showUserDetail(user);
+    tbody.appendChild(tr);
+  });
+};
+
+window.filterUsers = function() {
+  const val = document.getElementById('user-search').value.toLowerCase().trim();
+  document.querySelectorAll('#users-table tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+  });
+};
+
+
+
+// Add this event listener after init() or in your init function
+document.getElementById('user-search').addEventListener('keyup', filterUsers);
+
+  
+
+function showUserDetail(user) {
+  const modal = document.getElementById('user-modal');
+  const title = document.getElementById('user-modal-title');
+  const body = document.getElementById('user-modal-body');
+  
+  title.textContent = user.full_name || user.username || 'User Profile';
+  
+  const imgHTML = user.profile_image ?
+    `<img src="${user.profile_image}" style="width:200px;height:200px;object-fit:cover;border-radius:16px;margin:20px auto;display:block;border:3px solid var(--accent);" onerror="this.src='https://via.placeholder.com/200?text=No+Image';">` :
+    `<div style="width:200px;height:200px;background:#111118;border-radius:16px;margin:20px auto;display:flex;align-items:center;justify-content:center;color:#666;">No Profile Image</div>`;
+  
+  body.innerHTML = `
+    ${imgHTML}
+    <div style="display:grid; grid-template-columns: 140px 1fr; gap:12px 20px; line-height:1.6; margin-top:10px;">
+      <strong>Full Name:</strong> <span>${user.full_name || '—'}</span>
+      <strong>Username:</strong> <span>${user.username || '—'}</span>
+      <strong>Email:</strong> <span>${user.email || '—'}</span>
+      <strong>Phone:</strong> <span>${user.phone || '—'}</span>
+      <strong>Gender:</strong> <span>${user.gender || '—'}</span>
+      <strong>Country:</strong> <span>${user.country || '—'}</span>
+      <strong>State:</strong> <span>${user.state || '—'}</span>
+      <strong>City:</strong> <span>${user.city || '—'}</span>
+      <strong>Institution:</strong> <span>${user.institution || '—'}</span>
+      <strong>Department:</strong> <span>${user.department || '—'}</span>
+      <strong>Level:</strong> <span>${user.level || '—'}</span>
+      <strong>Joined:</strong> <span>${user.created_at ? new Date(user.created_at).toLocaleDateString('en-GB') : '—'}</span>
+      <strong>User ID:</strong> <span style="font-family:monospace;">${user.id}</span>
+    </div>
+  `;
+  
+  modal.classList.add('show');
+}
+
+window.closeUserModal = () => document.getElementById('user-modal').classList.remove('show');
+
+
+
+  window.saveTicketResponse = async (id) => {
+    const text = document.getElementById('adminResponseInput')?.value.trim()
+    if (!text) return showToast('Response cannot be empty', 'error')
+    
+    const spinner = document.getElementById('loading-spinner')
+    spinner?.classList.remove('hidden')
+    
+    try {
+      const { error } = await supabase
+        .from('support_tickets')
+        .update({
+          support_response: text,
+          support_response_at: new Date().toISOString(),
+          last_replied_by: 'admin',
+          status: 'in_progress',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+      
+      if (error) throw error
+      
+      showToast('Response saved', 'success')
+      document.getElementById('currentAdminResponse').textContent = text
+      loadTickets()
+    } catch (err) {
+      showToast('Failed to save response', 'error')
+      console.error(err)
+    } finally {
+      spinner?.classList.add('hidden')
+    }
+  }
+
+  window.broadcastPush = async () => {
+    notyf.success("Broadcast feature removed")
+  }
+
+// Custom Confirm Function
+async function showCustomConfirm(message, title = "Confirm Action", isDanger = false) {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById('custom-confirm-modal');
+    const titleEl = document.getElementById('confirm-title');
+    const messageEl = document.getElementById('confirm-message');
+    const cancelBtn = document.getElementById('confirm-cancel');
+    const proceedBtn = document.getElementById('confirm-proceed');
+    
+    titleEl.textContent = title;
+    messageEl.textContent = message;
+    
+    // Reset button styles
+    proceedBtn.classList.remove('confirm-btn-danger');
+    if (isDanger) {
+      proceedBtn.textContent = "Yes, Resolve";
+      proceedBtn.classList.add('confirm-btn-danger');
+    } else {
+      proceedBtn.textContent = "Yes, Proceed";
+    }
+    
+    overlay.style.display = 'flex';
+    // Trigger animation
+    setTimeout(() => overlay.classList.add('show'), 10);
+    
+    const closeModal = () => {
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 200);
+    };
+    
+    // Yes / Proceed
+    proceedBtn.onclick = () => {
+      closeModal();
+      resolve(true);
+    };
+    
+    // Cancel
+    cancelBtn.onclick = () => {
+      closeModal();
+      resolve(false);
+    };
+    
+    // Close with Escape key
+    const escapeHandler = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        resolve(false);
+        document.removeEventListener('keydown', escapeHandler);
+      }
+    };
+    document.addEventListener('keydown', escapeHandler);
+  });
+}
+
+// Updated updateTicketStatus function
+window.updateTicketStatus = async (id, newStatus) => {
+  console.log('🔄 updateTicketStatus called:', { id, newStatus });
+  
+  if (!id) {
+    showToast('Error: Missing ticket ID', 'error');
+    return;
+  }
+  
+  const isResolve = newStatus === 'resolved';
+  const confirmMessage = isResolve ?
+    "Mark this ticket as RESOLVED?\nThis action cannot be easily undone." :
+    `Change status to "${newStatus}"?`;
+  
+  const confirmed = await showCustomConfirm(
+    confirmMessage,
+    "Update Ticket Status",
+    isResolve
+  );
+  
+  if (!confirmed) {
+    console.log('❌ User cancelled the action');
+    return;
+  }
+  
+  console.log(`✅ User confirmed status change to: ${newStatus}`);
+  
+  const spinner = document.getElementById('loading-spinner');
+  if (spinner) spinner.classList.remove('hidden');
+  
+  try {
+    // 🔥 1. Get ticket first (to know user_id)
+    const { data: ticketData, error: fetchError } = await supabase
+      .from('support_tickets')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (fetchError) throw fetchError;
+    
+    const ticket = ticketData;
+    
+    // 🔥 2. Update ticket
+    const updatePayload = {
+      status: newStatus,
+      updated_at: new Date().toISOString(),
+      last_replied_by: 'admin'
+    };
+    
+    if (newStatus === 'resolved') {
+      updatePayload.resolved_at = new Date().toISOString();
+    }
+    
+    const { data, error } = await supabase
+      .from('support_tickets')
+      .update(updatePayload)
+      .eq('id', id)
+      .select();
+    
+    if (error) throw error;
+    if (!data || data.length === 0) throw new Error('Ticket not found');
+    
+    console.log('✅ Ticket updated successfully:', data[0]);
+    
+    // 🔥 3. Insert notification for the user
+    const statusTextMap = {
+      open: "🟢 Ticket Opened",
+      pending: "⏳ Ticket Pending",
+      resolved: "✅ Ticket Resolved"
+    };
+    
+    const messageMap = {
+      open: "Your support ticket has been reopened.",
+      pending: "Your ticket is being reviewed by support.",
+      resolved: "Your issue has been resolved. 🎉"
+    };
+    
+    const { error: notifError } = await supabase
+      .from('notifications')
+      .insert({
+        user_id: ticket.user_id,
+        title: statusTextMap[newStatus] || "📩 Ticket Update",
+        message: messageMap[newStatus] || `Your ticket status changed to ${newStatus}`,
+        type: "ticket",
+        reference_id: ticket.id // optional but powerful
+      });
+    
+    if (notifError) {
+      console.error('⚠️ Notification error:', notifError);
+      showToast('Ticket updated, but notification failed', 'error');
+    } else {
+      showToast(`Ticket marked as ${newStatus}`, 'success');
+    }
+    
+    await loadTickets();
+    closeTicketModal();
+    
+  } catch (err) {
+    console.error('💥 Update failed:', err);
+    showToast('Failed to update status', 'error');
+  } finally {
+    setTimeout(() => {
+      if (spinner) spinner.classList.add('hidden');
+    }, 600);
+  }
+};
+
+  // ──────────────────────────────────────────────
+  // Assessments
+  // ──────────────────────────────────────────────
+
+  let allAssessments = [];
+
+// Load Assessments - Sorted by newest first
+window.loadAssessments = async function() {
+  const tbody = document.querySelector('#assessments-table tbody');
+  tbody.innerHTML = '<tr><td colspan="8" style="padding:3rem;text-align:center;color:#777;">Loading assessments...</td></tr>';
+  
+  const { data, error } = await supabase
+    .from('assessments')
+    .select('id, user_id, type, filename, submitted_at, status, points, file_url')
+    .order('submitted_at', { ascending: false }); // ← Newest first
+  
+  if (error) {
+    notyf.error('Failed to load assessments');
+    return;
+  }
+  
+  allAssessments = data || [];
+  renderAssessments(allAssessments);
+};
+
+// Render with S/N
+function renderAssessments(items) {
+  const tbody = document.querySelector('#assessments-table tbody');
+  tbody.innerHTML = '';
+  
+  if (items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="padding:3rem;text-align:center;color:#777;">No assessments found</td></tr>';
+    return;
+  }
+  
+  items.forEach((item, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:center; font-weight:500;">${index + 1}</td>
+      <td>${item.user_id ? item.user_id.slice(0,8) + '...' : '—'}</td>
+      <td>${escapeHtml(item.type || '—')}</td>
+      <td title="${escapeHtml(item.filename || '')}">${escapeHtml(item.filename?.slice(0,28) || '—')}${item.filename?.length > 28 ? '...' : ''}</td>
+      <td>${item.submitted_at ? new Date(item.submitted_at).toLocaleString('en-GB', {dateStyle:'medium', timeStyle:'short'}) : '—'}</td>
+      <td><span class="status ${(item.status || 'pending').toLowerCase()}">${escapeHtml(item.status || 'Pending')}</span></td>
+      <td style="text-align:center; font-weight:600;">${item.points ?? '—'}</td>
+      <td style="text-align:center;">
+        <button class="btn btn-primary" onclick="event.stopImmediatePropagation(); showAssessmentDetail('${item.id}')">View</button>
+      </td>
+    `;
+    tr.onclick = () => showAssessmentDetail(item.id);
+    tbody.appendChild(tr);
+  });
+}
+
+// Filter function
+window.filterAssessments = function(status = null) {
+  const selectedStatus = status || document.getElementById('assessment-filter').value;
+  
+  if (selectedStatus === "All") {
+    renderAssessments(allAssessments);
+  } else {
+    const filtered = allAssessments.filter(a => (a.status || 'Pending') === selectedStatus);
+    renderAssessments(filtered);
+  }
+};
+
+
+// ==================== 1. MAIN FUNCTION ====================
+async function showAssessmentDetail(id) {
+  if (!id) {
+    notyf.error("Invalid assessment ID");
+    return;
+  }
+  
+  const { data: item, error } = await supabase
+    .from('assessments')
+    .select('id, user_id, type, filename, submitted_at, status, points, file_url')
+    .eq('id', id)
+    .single();
+  
+  if (error || !item) {
+    notyf.error("Assessment not found");
+    console.error(error);
+    return;
+  }
+  
+  const modal = document.getElementById('assessment-modal');
+  const title = document.getElementById('modal-title');
+  const body = document.getElementById('modal-body');
+  
+  if (!modal || !title || !body) return;
+  
+  title.textContent = item.filename || 'Assessment Details';
+  
+  const ext = item.filename ? item.filename.split('.').pop().toLowerCase() : '';
+  const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
+  const isPdf = ext === 'pdf';
+  const isTextFile = item.file_url && !isImage && !isPdf;
+  
+  let previewHTML = '';
+  
+  if (item.file_url) {
+    if (isImage) {
+      previewHTML = `<img src="${item.file_url}" style="max-width:100%; border-radius:10px;">`;
+    }
+    else if (isPdf) {
+      previewHTML = `<iframe src="${item.file_url}" style="width:100%; height:520px; border:none; border-radius:10px;"></iframe>`;
+    }
+    else {
+      // Text / Code files
+      previewHTML = `
+        <div style="position:relative; background:#0d1117; border-radius:10px; overflow:hidden; border:1px solid #30363d;">
+          <button onclick="copyFileContent('${item.file_url}')" 
+                  style="position:absolute; top:12px; right:12px; padding:8px 14px; background:#58a6ff; color:#000; 
+                         border:none; border-radius:6px; cursor:pointer; font-size:0.9rem; z-index:10;">
+            📋 Copy Content
+          </button>
+          <pre id="file-content" style="margin:0; padding:1.5rem; max-height:520px; overflow:auto; 
+                                      white-space:pre-wrap; font-family:monospace; color:#c9d1d9; line-height:1.5;">
+            Loading content...
+          </pre>
+        </div>`;
+    }
+  } else {
+    previewHTML = `<p style="color:#f87171; text-align:center; padding:60px;">No file available</p>`;
+  }
+  
+  body.innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-label">User ID:</div><div>${item.user_id}</div>
+      <div class="detail-label">Type:</div><div>${item.type || '—'}</div>
+      <div class="detail-label">Filename:</div><div>${item.filename || '—'}</div>
+      <div class="detail-label">Submitted:</div><div>${new Date(item.submitted_at).toLocaleString()}</div>
+      <div class="detail-label">Status:</div><div>${item.status || 'Pending'}</div>
+      <div class="detail-label">Points:</div><div>${item.points ?? '—'}</div>
+    </div>
+
+    <div style="margin:2rem 0;">
+      <label style="display:block; margin-bottom:0.5rem;">Points to award:</label>
+      <input id="points-input" type="number" min="0" value="${item.points ?? 0}" style="width:140px; padding:10px;">
+      <button class="btn btn-success" onclick="savePoints('${item.id}')">Save & Update</button>
+    </div>
+
+    <div style="margin-top:1.5rem;">
+      <strong>File Preview:</strong>
+      <div id="file-preview-area" style="margin-top:12px;">
+        ${previewHTML}
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('show');
+  
+  // Auto-load text content for non-image/pdf files
+  if (isTextFile) {
+    loadFileContent(item.file_url);
+  }
+}
+
+// ==================== 2. LOAD FILE CONTENT ====================
+async function loadFileContent(url) {
+  const contentDiv = document.getElementById('file-content');
+  if (!contentDiv) return;
+  
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error();
+    
+    const text = await res.text();
+    contentDiv.textContent = text;
+    
+    // Make it easy to select manually
+    contentDiv.style.userSelect = "text";
+    contentDiv.style.cursor = "text";
+    contentDiv.title = "Click inside, press Ctrl+A then Ctrl+C to copy";
+    
+  } catch (err) {
+    contentDiv.innerHTML = `<span style="color:#f87171;">Could not load content. File may not be publicly accessible.</span>`;
+  }
+}
+
+// ==================== 3. COPY FUNCTION (Most Reliable for localhost) ====================
+window.copyFileContent = async function(url) {
+  const btn = event?.currentTarget;
+  const originalText = btn ? btn.textContent : "📋 Copy Content";
+  
+  try {
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Loading file...";
+    }
+    
+    // Fetch the file content
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to load file");
+    
+    const text = await res.text();
+    
+    if (!text || text.trim() === '') {
+      throw new Error("File is empty");
+    }
+    
+    // Create a big temporary textarea with the content (easiest way on localhost)
+    const tempTextarea = document.createElement("textarea");
+    tempTextarea.value = text;
+    
+    // Style it nicely and center it
+    Object.assign(tempTextarea.style, {
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "85%",
+      height: "460px",
+      zIndex: "10000",
+      background: "#0d1117",
+      color: "#c9d1d9",
+      padding: "20px",
+      border: "3px solid #58a6ff",
+      borderRadius: "10px",
+      fontFamily: "ui-monospace, monospace",
+      fontSize: "14px",
+      whiteSpace: "pre-wrap",
+      lineHeight: "1.5",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.6)"
+    });
+    
+    document.body.appendChild(tempTextarea);
+    
+    // Auto select all text
+    tempTextarea.focus();
+    tempTextarea.select();
+    
+    if (btn) {
+      btn.textContent = "✅ Content ready – Ctrl+A then Ctrl+C";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 3000);
+    }
+    
+    notyf.success("File content loaded in a box.<br><b>Select all (Ctrl+A) + Copy (Ctrl+C)</b>");
+    
+    // Auto close the box after 35 seconds
+    setTimeout(() => {
+      if (tempTextarea && tempTextarea.parentNode) {
+        tempTextarea.parentNode.removeChild(tempTextarea);
+      }
+    }, 35000);
+    
+  } catch (err) {
+    console.error("Copy error:", err);
+    
+    if (btn) {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+    
+    notyf.error("Could not load file.<br>Please copy manually from the preview area.");
+  }
+};
+
+
+
+
+  window.savePoints = async (id) => {
+  const points = parseInt(document.getElementById('points-input')?.value || 0, 10)
+  
+  if (isNaN(points) || points < 0) {
+    showToast('Please enter a valid number ≥ 0', 'error')
+    return
+  }
+  
+  const spinner = document.getElementById('loading-spinner')
+  spinner?.classList.remove('hidden')
+  
+  try {
+    // 🔥 1. Update assessment
+    const { data: updated, error: updateErr } = await supabase
+      .from('assessments')
+      .update({
+        points,
+        status: points > 0 ? 'Approved' : 'Rejected',
+        reviewed_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select('user_id')
+      .single()
+    
+    if (updateErr) throw updateErr
+    if (!updated?.user_id) throw new Error('No user_id returned')
+    
+    // 🔥 2. Reward coins (if approved)
+    if (points > 0) {
+      const { error: coinErr } = await supabase.from('coins').insert({
+        user_id: updated.user_id,
+        amount: points,
+        type: 'assessment_reward',
+        reference_id: id,
+        created_at: new Date().toISOString()
+      })
+      
+      if (coinErr) {
+        console.error('⚠️ Coin insert failed:', coinErr)
+      }
+    }
+    
+    // 🔥 3. Notification system (PRO level)
+    const isApproved = points > 0
+    
+    const { error: notifError } = await supabase
+      .from('notifications')
+      .insert({
+        user_id: updated.user_id,
+        title: isApproved ? '🎉 Assessment Approved' : '📊 Assessment Reviewed',
+        message: isApproved ?
+          `Great job! You earned ${points} points 🚀` :
+          'Your assessment was reviewed but not approved. Keep trying 💪',
+        type: 'assessment',
+        reference_id: id,
+        is_read: false,
+        created_at: new Date().toISOString()
+      })
+    
+    if (notifError) {
+      console.error('⚠️ Notification failed:', notifError)
+      showToast('Assessment updated, but notification failed', 'error')
+    } else {
+      showToast(
+        `Assessment ${isApproved ? 'approved' : 'rejected'} — ${points} pts`,
+        'success'
+      )
+    }
+    
+    // 🔄 Refresh UI
+    closeModal()
+    loadAssessments()
+    
+  } catch (err) {
+    console.error('💥 Error:', err)
+    showToast('Failed to update assessment', 'error')
+  } finally {
+    spinner?.classList.add('hidden')
+  }
+}
+
+
+
+  window.closeModal = () => document.getElementById('assessment-modal')?.classList.remove('show')
+
+  // ─── Tickets ─────────────────────────────────────────────
+
+async function loadTickets() {
+  console.log('🔄 loadTickets() called');
+  
+  const status = document.getElementById('ticketStatusFilter')?.value || '';
+  const search = document.getElementById('ticketSearch')?.value?.trim().toLowerCase() || '';
+  
+  console.log('📊 Filter values:', { status, search });
+  
+  // Build the query step by step
+  let query = supabase
+    .from('support_tickets')
+    .select('*')
+    .order('created_at', { ascending: false });
+  
+  console.log('📝 Base query created');
+  
+  if (status) {
+    console.log(`🔎 Applying status filter: status = ${status}`);
+    query = query.eq('status', status);
+  }
+  
+  if (search) {
+    console.log(`🔎 Applying search filter: "${search}"`);
+    query = query.or(`subject.ilike.%${search}%,message.ilike.%${search}%`);
+  }
+  
+  console.log('🚀 Executing Supabase query...');
+  
+  const { data, error } = await query;
+  
+  console.log('📥 Query finished');
+  console.log('✅ Data received:', data);
+  console.log('❌ Error received:', error);
+  
+  if (error) {
+    console.error('💥 Supabase error details:', error);
+    showToast('Failed to load tickets', 'error');
+    return;
+  }
+  
+  console.log(`🎯 ${data?.length || 0} tickets returned from database`);
+  
+  const tbody = document.querySelector('#tickets-table tbody');
+  
+  if (!tbody) {
+    console.error('❌ Could not find table body: #tickets-table tbody');
+    return;
+  }
+  
+  console.log('🧹 Clearing table body...');
+  tbody.innerHTML = '';
+  
+  if (!data || data.length === 0) {
+    console.log('⚠️ No tickets found after filtering');
+    tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="padding:3rem;text-align:center;color:#777;">
+                    No tickets found
+                </td>
+            </tr>`;
+    return;
+  }
+  
+  console.log('✍️ Rendering tickets...');
+  
+  data.forEach((t, index) => {
+    console.log(`📌 Rendering ticket #${index + 1}:`, t);
+    
+    const tr = document.createElement('tr');
+    
+    tr.innerHTML = `
+            <td>${escapeHtml(t.subject || '(no subject)')}</td>
+            <td>${t.user_id ? t.user_id.slice(0,8) + '…' : '—'}</td>
+            <td>${new Date(t.created_at).toLocaleString([], {dateStyle:'medium', timeStyle:'short'})}</td>
+            <td><span class="status ${t.status}">${t.status || '—'}</span></td>
+            <td>${t.support_response ? 'Yes' : '—'}</td>
+        `;
+    
+    tr.onclick = () => {
+      console.log('👆 Ticket clicked:', t.id || t);
+      showTicketDetail(t);
+    };
+    
+    tbody.appendChild(tr);
+  });
+  
+  console.log('✅ loadTickets() completed successfully');
+}
+
+
+
+  function showTicketDetail(ticket) {
+    const modal = document.getElementById('ticket-modal')
+    const content = document.getElementById('ticket-detail-content')
+
+    document.getElementById('ticket-modal-title').textContent = ticket.subject || 'Ticket'
+
+    let html = `
+      <div class="detail-grid">
+        <div class="detail-label">User ID:</div><div>${ticket.user_id}</div>
+        <div class="detail-label">Created:</div><div>${new Date(ticket.created_at).toLocaleString()}</div>
+        <div class="detail-label">Status:</div><div><span class="status ${ticket.status}">${ticket.status}</span></div>
+        <div class="detail-label">Updated:</div><div>${ticket.updated_at ? new Date(ticket.updated_at).toLocaleString() : '—'}</div>
+        ${ticket.resolved_at ? `<div class="detail-label">Resolved:</div><div>${new Date(ticket.resolved_at).toLocaleString()}</div>` : ''}
+      </div>
+
+      <div style="margin:1.5rem 0;">
+        <strong>Message:</strong>
+        <div style="background:#111118; padding:1.2rem; border-radius:10px; margin-top:0.6rem; white-space:pre-wrap;">
+          ${escapeHtml(ticket.message || '(no message)')}
+        </div>
+      </div>
+    `
+
+    if (ticket.screenshot_url) {
+      html += `
+        <div style="margin:1.5rem 0;">
+          <strong>Screenshot:</strong><br>
+<img src="${ticket.screenshot_url}" 
+  alt="Ticket Screenshot" 
+  style="max-width:100%; border-radius:10px; margin-top:0.8rem; box-shadow:0 4px 12px rgba(0,0,0,0.5); display:block;">
+        </div>` }
+
+    html += `
+      <div style="margin-top:2rem;">
+        <strong>Admin Response:</strong>
+        <div id="currentAdminResponse" style="background:#111118; padding:1.2rem; border-radius:10px; margin:0.6rem 0; white-space:pre-wrap; min-height:80px;">
+          ${escapeHtml(ticket.support_response || '(no response yet)')}
+        </div>
+
+        <textarea id="adminResponseInput" placeholder="Type or update admin response..." style="width:100%; font-size:16px; min-height:140px; padding:1rem; background:#0d0d14; border:1px solid rgba(192,132,252,0.3); border-radius:10px; color:var(--text);">${escapeHtml(ticket.support_response || '')}</textarea>
+
+        <div style="margin-top:1.2rem;">
+          <button class="btn btn-primary" onclick="saveTicketResponse('${ticket.id}')">Save Response</button>
+          <button class="btn btn-success" onclick="updateTicketStatus('${ticket.id}', 'resolved')">Resolve</button>
+          <button class="btn btn-danger" onclick="updateTicketStatus('${ticket.id}', 'closed')">Close</button>
+          <button class="btn" onclick="updateTicketStatus('${ticket.id}', 'in_progress')" style="background:#4b5563;color:white;">Set In Progress</button>
+        </div>
+      </div>
+    `
+
+    content.innerHTML = html
+    modal.classList.add('show')
+  }
+  
+  
+  // ─── Enrollments ─────────────────────────────────────────────
+async function loadAllEnrollments() {
+  const table = document.querySelector('#allEnrollTable');
+  if (!table) {
+    console.warn('Table #allEnrollTable not found on this page');
+    return;
+  }
+  
+  const tbody = table.querySelector('tbody');
+  if (!tbody) {
+    console.warn('No <tbody> inside #allEnrollTable');
+    return;
+  }
+  
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2.5rem;">Loading...</td></tr>';
+  
+
+  
+  const { data, error } = await supabase
+    .from('course_enrollments')
+    .select('*')
+  .order('created_at', { ascending: false });
+
+  
+  if (error) {
+    console.error('Error loading all enrollments:', error);
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2.5rem;color:#f00;">
+      Failed to load: ${error.message || 'Unknown error'}
+    </td></tr>`;
+    return;
+  }
+  
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2.5rem;color:#aaa;">No enrollments in the system yet</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = ''; // clear loading
+  
+  data.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.full_name || '—'}</td>
+      <td>${r.email || '—'}</td>
+      <td>${r.course || '—'}</td>
+      <td>${r.selected_stage || '—'}</td>
+      <td>₦${(r.amount_paid || 0).toLocaleString()}</td>
+      <td><span class="status status-${r.payment_status}">${r.payment_status || '—'}</span></td>
+      <td>${new Date(r.created_at).toLocaleDateString()}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+  async function loadPendingEnrollments() {
+    const tbody = document.querySelector('#pendingEnrollTable tbody')
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2.5rem;">Loading...</td></tr>'
+
+    const { data, error } = await supabase
+      .from('course_enrollments')
+      .select('*')
+      .eq('payment_status', 'pending')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      notyf.error("Failed to load pending")
+      return
+    }
+
+    tbody.innerHTML = data.length ? '' : '<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:#aaa;">No pending payments</td></tr>'
+
+    data.forEach(r => {
+      const tr = document.createElement('tr')
+      tr.innerHTML = `
+        <td>${r.full_name}</td>
+        <td>${r.phone}</td>
+        <td>${r.course}</td>
+        <td>${r.selected_stage || '—'}</td>
+        <td>₦${(r.amount_paid || 0).toLocaleString()}</td>
+        <td style="text-align:center;">
+          <button class="btn-action btn-success" onclick="verifyEnrollment('${r.id}', 'verified')">Verify</button>
+          <button class="btn-action btn-danger" onclick="verifyEnrollment('${r.id}', 'rejected')">Reject</button>
+        </td>
+      `
+      tbody.appendChild(tr)
+    })
+  }
+  
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container')
+    if (!container) return
+
+    const toast = document.createElement('div')
+    toast.className = `toast ${type}`
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button onclick="this.parentElement.remove()" style="background:none;border:none;color:inherit;font-size:1.4rem;cursor:pointer;margin-left:auto;">×</button>
+    `
+    container.appendChild(toast)
+
+    toast.offsetHeight
+    toast.classList.add('show')
+
+    setTimeout(() => {
+      toast.classList.remove('show')
+      setTimeout(() => toast.remove(), 600)
+    }, 5000)
+  }
+
+  window.closeUserModal = () => document.getElementById('user-modal')?.classList.remove('show')
+
+  document.addEventListener('mousemove', e => {
+    const glow = document.querySelector('.cursor-glow')
+    if (glow) {
+      glow.style.left = e.clientX + 'px'
+      glow.style.top  = e.clientY + 'px'
+    }
+  })
+
+// Custom confirmation dialog
+function showConfirm(message, onConfirm, onCancel = () => {}) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  `;
+
+  const dialog = document.createElement('div');
+  dialog.style.cssText = `
+    background: white;
+    border-radius: 12px;
+    padding: 24px 32px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    font-family: system-ui, sans-serif;
+  `;
+
+  const msgEl = document.createElement('p');
+  msgEl.textContent = message;
+  msgEl.style.cssText = `
+    margin: 0 0 24px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+  `;
+  dialog.appendChild(msgEl);
+
+  const btnContainer = document.createElement('div');
+  btnContainer.style.cssText = `
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  `;
+
+  const btnNo = document.createElement('button');
+  btnNo.textContent = 'No';
+  btnNo.style.cssText = `
+    padding: 10px 24px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    min-width: 100px;
+  `;
+  btnNo.onmouseover = () => { btnNo.style.background = '#f5f5f5'; };
+  btnNo.onmouseout = () => { btnNo.style.background = 'white'; };
+  btnNo.onclick = () => { onCancel(); overlay.remove(); };
+
+  const btnYes = document.createElement('button');
+  btnYes.textContent = 'Yes';
+  btnYes.style.cssText = `
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #e53e3e;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    min-width: 100px;
+  `;
+  btnYes.onmouseover = () => { btnYes.style.background = '#c53030'; };
+  btnYes.onmouseout = () => { btnYes.style.background = '#e53e3e'; };
+  btnYes.onclick = () => { onConfirm(); overlay.remove(); };
+
+  btnContainer.appendChild(btnNo);
+  btnContainer.appendChild(btnYes);
+  dialog.appendChild(btnContainer);
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.addEventListener('keydown', function esc(e) {
+    if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); }
+  });
+}
+// Updated verifyEnrollment with better debugging
+window.verifyEnrollment = async function(id, status) {
+  if (!id) {
+    showToast("No enrollment ID provided", "error");
+    return;
+  }
+  
+  const action = status === 'verified' ? 'VERIFY' : 'REJECT';
+  
+  showConfirm(
+    `Are you sure you want to ${action} this enrollment?`,
+    async () => {
+        const spinner = document.getElementById('loading-spinner')
+        spinner?.classList.remove('hidden')
+        
+        try {
+          console.log(`Attempting to ${status} enrollment ID:`, id);
+          
+          // 🔥 1. Get enrollment (to know user_id + course)
+          const { data: enrollment, error: fetchErr } = await supabase
+            .from('course_enrollments')
+            .select('*')
+            .eq('id', id)
+            .single()
+          
+          if (fetchErr) throw fetchErr
+          
+          // 🔥 2. Update enrollment
+          const { data, error } = await supabase
+            .from('course_enrollments')
+            .update({
+              payment_status: status,
+              verified_at: new Date().toISOString(),
+            })
+            .eq('id', id)
+            .select()
+          
+          console.log('Update response → data:', data, 'error:', error);
+          
+          if (error) throw error;
+          
+          if (!data || data.length === 0) {
+            showToast("No rows updated. Check RLS.", "error");
+            return;
+          }
+          
+          // 🔥 3. Insert notification
+          const isVerified = status === 'verified'
+          
+          const { error: notifError } = await supabase
+            .from('notifications')
+            .insert({
+              user_id: enrollment.user_id,
+              title: isVerified ? '🎓 Enrollment Approved' : '❌ Enrollment Rejected',
+              message: isVerified ?
+                'Your course enrollment has been approved! You can now start learning 🚀' :
+                'Your enrollment was rejected. Please contact support or try again.',
+              type: 'enrollment',
+              reference_id: id,
+              is_read: false,
+              created_at: new Date().toISOString()
+            })
+          
+          if (notifError) {
+            console.error('⚠️ Notification failed:', notifError)
+            showToast(`Payment ${status}, but notification failed`, "error")
+          } else {
+            showToast(`Payment marked as ${status}`, "success")
+          }
+          
+          // 🔄 Refresh UI
+          loadAllEnrollments();
+          loadPendingEnrollments();
+          
+        } catch (err) {
+          console.error('💥 Full error:', err);
+          showToast("Update failed: " + (err.message || err), "error");
+        } finally {
+          spinner?.classList.add('hidden')
+        }
+      },
+      () => {}
+  );
+};
+
+
+
+  window.switchEnrollmentTab = n => {
+    document.getElementById('enroll-all').style.display = n===0 ? 'block' : 'none'
+    document.getElementById('enroll-pending').style.display = n===1 ? 'block' : 'none'
+  }
+
+  window.postAnnouncement = postAnnouncement
+window.showAssessmentDetail = showAssessmentDetail
+window.viewSupportTicket = viewSupportTicket
+window.closeModal = closeModal
+window.markAsRead = markAsRead
+
+  // Start
+  init()
+</script>
+</body>
+</html>
+
+
