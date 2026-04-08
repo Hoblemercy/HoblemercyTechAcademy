@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoblemercy Tech - Login</title>
+
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@200,300,400,500,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #000;
+      --text: #fff;
+      --accent: #a855f7;
+      --secondary: #60a5fa;
+      --glow: rgba(168, 85, 247, 0.4);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px;
+     
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(168,85,247,0.25), transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(96,165,250,0.2), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08), transparent 60%),
+        #000;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: twinkle 4s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: -1px;
+      line-height: 1.05;
+      margin-bottom: 8px;
+      text-shadow: 0 0 30px rgba(168,85,247,0.5);
+    }
+
+    h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .subtitle {
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      opacity: 0.85;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 20px;
+    }
+
+    .login-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 24px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: white;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--glow);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .login-btn:active {
+      transform: scale(0.98);
+    }
+
+    .login-btn.google { background: linear-gradient(135deg, #4285f4, #34a853); }
+    .login-btn.github  { background: linear-gradient(135deg, #333, #111); }
+    .login-btn.email   { background: linear-gradient(135deg, var(--accent), #9333ea); }
+
+    .login-btn i {
+      font-size: 1.4rem;
+    }
+
+    .login-btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .login-btn.loading i { display: none; }
+    .login-btn.loading::after {
+      content: "";
+      width: 20px;
+      height: 20px;
+      border: 3px solid white;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ───────────────────────────────────────────────
+       EMAIL AUTH CONTAINER (hidden by default)
+    ──────────────────────────────────────────────── */
+    .auth-container {
+      display: none;
+      width: 100%;
+      max-width: 420px;
+      background: rgba(20, 20, 30, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(168,85,247,0.15);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .auth-container.visible {
+      display: block;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .close-auth {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 2.2rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .close-auth:hover {
+      color: white;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 16px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      transition: all 0.25s;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .auth-form {
+      display: none;
+      padding: 28px 32px 40px;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .auth-form.active {
+      display: flex;
+    }
+
+    input {
+      padding: 14px 16px;
+      font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      color: white;
+      width: 100%;
+    }
+
+    input::placeholder {
+      color: rgba(255,255,255,0.45);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.25);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .btn {
+      padding: 14px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn.primary:hover {
+      background: #9333ea;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.12);
+      color: white;
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .forgot-link {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .forgot-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .forgot-link a:hover {
+      text-decoration: underline;
+    }
+
+    #forgot-password-view {
+      padding: 32px 28px;
+    }
+
+    #forgot-password-view h3 {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 1.4rem;
+    }
+
+    .info-text {
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .forgot-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .terms-small {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .terms-small a {
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .rules-dropdown {
+      margin-top: 16px;
+      padding: 16px 20px;
+      background: rgba(0,0,0,0.45);
+      border-radius: 12px;
+      border: 1px solid rgba(168,85,247,0.2);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.35s ease;
+      opacity: 0;
+    }
+
+    .rules-dropdown.visible {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    .rules-dropdown ol {
+      padding-left: 22px;
+      font-size: 0.93rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .rules-dropdown li {
+      margin-bottom: 10px;
+    }
+
+    .redirect-loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(12px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      z-index: 2000;
+    }
+
+    .redirect-loader.show {
+      display: flex;
+    }
+
+    .loader-circle {
+      width: 64px;
+      height: 64px;
+      border: 5px solid rgba(168,85,247,0.3);
+      border-top: 5px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 280px;
+      max-width: 90%;
+      padding: 14px 18px;
+      background: rgba(0,0,0,0.88);
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10000;
+      opacity: 0;
+      transform: translate(-50%, 100px);
+      transition: all 0.4s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .toast-icon { font-size: 24px; }
+    .toast-content { flex: 1; }
+    .toast-title { font-weight: 600; font-size: 1rem; }
+    .toast-message { font-size: 0.9rem; opacity: 0.9; }
+
+    .toast-progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.3);
+      width: 100%;
+      transform-origin: left;
+      transform: scaleX(1);
+      transition: transform 4s linear;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      background: radial-gradient(circle, rgba(168,85,247,0.18), transparent 60%);
+      filter: blur(40px);
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 3.2rem; }
+      .subtitle { font-size: 1.1rem; }
+      .login-btn { padding: 14px 20px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+  <div class="cursor-glow"></div>
+
+  <h1>Hoblemercy <em>Tech</em></h1>
+  <div class="subtitle">Learn High Income Skills Online</div>
+
+  <!-- Main visible buttons -->
+  <div class="login-container">
+    <button class="login-btn google" onclick="signInWithProvider('google')">
+      <i class="fab fa-google"></i> Continue with Google
+    </button>
+    <button class="login-btn github" onclick="signInWithProvider('github')">
+      <i class="fab fa-github"></i> Continue with GitHub
+    </button>
+    <button class="login-btn email" onclick="showEmailAuth()">
+      <i class="fas fa-envelope"></i> Continue with Email
+    </button>
+  </div>
+
+  <!-- Hidden Email Auth Container -->
+  <div id="emailAuthContainer" class="auth-container">
+    <button class="close-auth" onclick="hideEmailAuth()">×</button>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="login">Log In</button>
+      <button class="tab-btn" data-tab="signup">Sign Up</button>
+    </div>
+
+    <form id="login-form" class="auth-form active">
+      <input type="email" id="login-email" placeholder="Email" required autocomplete="email">
+      <div class="password-wrapper">
+        <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+        <i id="toggleLoginPassword" class="fas fa-eye"></i>
+      </div>
+      <button type="button" class="btn primary" onclick="loginWithEmail()">Log In</button>
+
+      <div class="forgot-link">
+        <a href="#" onclick="showForgotPassword()">Forgot password?</a>
+      </div>
+    </form>
+
+    <form id="signup-form" class="auth-form">
+      <input type="email" id="signup-email" placeholder="Email" required autocomplete="email">
+      <div class="password-wrapper">
+        <input type="password" id="signup-password" placeholder="Password" required autocomplete="new-password">
+        <i id="toggleSignupPassword" class="fas fa-eye"></i>
+      </div>
+      <button type="button" class="btn primary" onclick="signUpWithEmail()">Sign Up</button>
+
+      <p class="terms-small">
+        By signing up, you agree to our 
+        <a href="#" onclick="toggleRules(event)">Terms & Rules</a>.
+      </p>
+
+      <div id="rules-dropdown" class="rules-dropdown">
+        <ol>
+          <li>This page is strictly for learning. No unrelated messages.</li>
+          <li>Respect the instructor and other students.</li>
+          <li>No insults, arguments, or distractions.</li>
+          <li>No private messaging the instructor without permission.</li>
+          <li>Attend all classes (attendance will be monitored).</li>
+          <li>Late joining of class must be explained.</li>
+          <li>All assignments must be submitted before deadline.</li>
+          <li>Weekly assignments are compulsory.</li>
+          <li>Stage project must be completed before moving to next level.</li>
+          <li>No sharing of class materials outside the group.</li>
+          <li>No advertisement or spam.</li>
+          <li>Serious students only.</li>
+        </ol>
+      </div>
+    </form>
+
+    <div id="forgot-password-view" class="auth-form" style="display:none;">
+      <h3>Reset Password</h3>
+      <p class="info-text">Enter your email to receive a reset link.</p>
+      <input type="email" id="forgot-email" placeholder="Your email" required autocomplete="email">
+      <div class="forgot-actions">
+        <button type="button" class="btn secondary" onclick="hideForgotPassword()">Back</button>
+        <button type="button" class="btn primary" onclick="forgotPassword()">Reset password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="toast-icon fas fa-check-circle"></i>
+    <div class="toast-content">
+      <strong class="toast-title"></strong>
+      <span class="toast-message"></span>
+    </div>
+    <div class="toast-progress"></div>
+  </div>
+
+  <!-- Redirect loader -->
+  <div id="redirectLoader" class="redirect-loader">
+    <div class="loader-circle"></div>
+    <p>Redirecting to dashboard...</p>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://jffkatwagcfshvddnipr.supabase.co'
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8'
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+    const WELCOME_PAGE = window.location.origin + '/welcome.html'
+
+    // Starfield
+    const starsContainer = document.querySelector('.stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.width = star.style.height = (Math.random() * 2 + 0.8) + 'px';
+      star.style.animationDelay = Math.random() * 5 + 's';
+      starsContainer.appendChild(star);
+    }
+
+    // Cursor glow
+    const glow = document.querySelector('.cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+// Password visibility toggles for both forms
+function initPasswordToggles() {
+  // Login form
+  const toggleLogin = document.getElementById('toggleLoginPassword');
+  const passLogin = document.getElementById('login-password');
+  
+  if (toggleLogin && passLogin) {
+    toggleLogin.addEventListener('click', () => {
+      const type = passLogin.type === 'password' ? 'text' : 'password';
+      passLogin.type = type;
+      toggleLogin.classList.toggle('fa-eye');
+      toggleLogin.classList.toggle('fa-eye-slash');
+    });
+  }
+  
+  // Signup form
+  const toggleSignup = document.getElementById('toggleSignupPassword');
+  const passSignup = document.getElementById('signup-password');
+  
+  if (toggleSignup && passSignup) {
+    toggleSignup.addEventListener('click', () => {
+      const type = passSignup.type === 'password' ? 'text' : 'password';
+      passSignup.type = type;
+      toggleSignup.classList.toggle('fa-eye');
+      toggleSignup.classList.toggle('fa-eye-slash');
+    });
+  }
+}
+
+// Call this once after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initPasswordToggles();
+});
+    // ───────────────────────────────────────────────
+    // TOAST
+    // ───────────────────────────────────────────────
+    function showToast(message, type = 'success', title = '') {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+
+      const icon = toast.querySelector('.toast-icon');
+      const msg = toast.querySelector('.toast-message');
+      const ttl = toast.querySelector('.toast-title');
+      const progress = toast.querySelector('.toast-progress');
+
+      ttl.textContent = title || (type === 'success' ? 'Success' : 'Error');
+      msg.textContent = message;
+
+      toast.className = `toast ${type}`;
+      switch (type) {
+        case 'success': icon.className = 'toast-icon fas fa-circle-check'; break;
+        case 'error':   icon.className = 'toast-icon fas fa-circle-xmark'; break;
+        case 'warning': icon.className = 'toast-icon fas fa-triangle-exclamation'; break;
+        case 'info':    icon.className = 'toast-icon fas fa-circle-info'; break;
+      }
+
+      toast.classList.add('show');
+      progress.style.transition = 'transform 4s linear';
+      progress.style.transform = 'scaleX(0)';
+      setTimeout(() => {
+        toast.classList.remove('show');
+        progress.style.transition = 'none';
+        progress.style.transform = 'scaleX(1)';
+      }, 4000);
+    }
+
+    // ───────────────────────────────────────────────
+    // SHOW / HIDE EMAIL CONTAINER
+    // ───────────────────────────────────────────────
+    function showEmailAuth() {
+      const container = document.getElementById('emailAuthContainer');
+      container.classList.add('visible');
+      container.style.display = 'block';
+    }
+
+    function hideEmailAuth() {
+      const container = document.getElementById('emailAuthContainer');
+      container.classList.remove('visible');
+      setTimeout(() => {
+        container.style.display = 'none';
+        // Reset state
+        document.querySelector('.tab-btn[data-tab="login"]').click();
+        document.getElementById('forgot-password-view').style.display = 'none';
+        document.getElementById('rules-dropdown').classList.remove('visible');
+      }, 450);
+    }
+
+    // ───────────────────────────────────────────────
+    // TOGGLE RULES
+    // ───────────────────────────────────────────────
+    function toggleRules(e) {
+      e.preventDefault();
+      const dropdown = document.getElementById('rules-dropdown');
+      dropdown.classList.toggle('visible');
+    }
+
+    // ───────────────────────────────────────────────
+    // TAB SWITCHING
+    // ───────────────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        document.getElementById(btn.dataset.tab + '-form').classList.add('active');
+
+        document.getElementById('forgot-password-view').style.display = 'none';
+        document.getElementById('rules-dropdown').classList.remove('visible');
+      });
+    });
+
+    // ───────────────────────────────────────────────
+    // FORGOT PASSWORD
+    // ───────────────────────────────────────────────
+    function showForgotPassword() {
+      document.getElementById('login-form').classList.remove('active');
+      document.getElementById('forgot-password-view').style.display = 'flex';
+    }
+
+    function hideForgotPassword() {
+      document.getElementById('forgot-password-view').style.display = 'none';
+      document.getElementById('login-form').classList.add('active');
+    }
+
+    // ───────────────────────────────────────────────
+    // YOUR EXISTING AUTH FUNCTIONS (updated selectors)
+    // ───────────────────────────────────────────────
+    async function loginWithEmail() {
+      const email = document.getElementById('login-email')?.value.trim();
+      const password = document.getElementById('login-password')?.value;
+      if (!email || !password) return showToast('Enter email and password', 'warning');
+
+      const btn = document.querySelector('#login-form .btn.primary');
+      if (btn) btn.classList.add('loading');
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (btn) btn.classList.remove('loading');
+
+      if (error) {
+        showToast(error.message, 'error', 'Login Failed');
+      } else {
+        showToast('Welcome back!', 'success');
+        showRedirectLoader();
+      }
+    }
+
+    async function signUpWithEmail() {
+      const email = document.getElementById('signup-email')?.value.trim();
+      const password = document.getElementById('signup-password')?.value;
+      if (!email || !password) return showToast('Enter email and password', 'warning');
+
+      const btn = document.querySelector('#signup-form .btn.primary');
+      if (btn) btn.classList.add('loading');
+
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (btn) btn.classList.remove('loading');
+
+      if (error) {
+        showToast(error.message, 'error', 'Sign Up Failed');
+      } else {
+        showToast('Account created!', 'success');
+        showRedirectLoader();
+      }
+    }
+
+async function forgotPassword() {
+  const email = document.getElementById('forgot-email')?.value.trim();
+  
+  if (!email) {
+    showToast('Please enter your email', 'warning');
+    return;
+  }
+  
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showToast('Please enter a valid email address', 'warning');
+    return;
+  }
+  
+  const btn = document.querySelector('#forgot-password-view .btn.primary');
+  if (btn) btn.classList.add('loading');
+  
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://hoblemercytechacademy.vercel.app/reset.html' // ← CHANGE TO YOUR ACTUAL URL
+    });
+    
+    if (btn) btn.classList.remove('loading');
+    
+    if (error) {
+      showToast(error.message, 'error');
+    } else {
+      showToast('Password reset link sent! Please check your email.', 'success');
+      hideForgotPassword();
+    }
+    
+  } catch (err) {
+    if (btn) btn.classList.remove('loading');
+    console.error(err);
+    showToast('Something went wrong. Please try again later.', 'error');
+  }
+}
+
+async function signInWithProvider(provider) {
+    const btn = event?.currentTarget;
+    if (btn) btn.classList.add('loading');
+
+    try {
+      showToast(`Connecting with ${provider}...`, 'info');
+
+      // Small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+   const { error } = await supabase.auth.signInWithOAuth({
+  provider: provider.toLowerCase(),
+  options: {
+    redirectTo: `${window.location.origin}/auth-callback.html`,
+    // Force PKCE flow explicitly (default, but sometimes helps)
+    flowType: 'pkce'
+  }
+});
+
+      if (error) {
+        console.error('OAuth error:', error);
+        showToast(error.message, 'error', 'Login Failed');
+      }
+      // If no error, Supabase will automatically redirect to the callback page
+      // → We do NOT need any code here
+
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      showToast('Something went wrong. Please try again.', 'error');
+    } finally {
+      if (btn) btn.classList.remove('loading');
+    }
+  }
+
+  // Optional: Redirect loader (only use if needed on other pages)
+  function showRedirectLoader() {
+    const loader = document.getElementById('redirectLoader');
+    if (loader) loader.classList.add('show');
+    
+    setTimeout(() => {
+      window.location.href = WELCOME_PAGE;
+    }, 1500);
+  }
+
+  // Init – Only check session on pages that need it (NOT on login page usually)
+  async function init() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      console.log('Login page init - session exists?', !!session);
+      
+      if (session) {
+        console.log('User already logged in → redirecting to welcome');
+        showRedirectLoader();
+      }
+    } catch (err) {
+      console.error('Init error:', err);
+    }
+  }
+
+  // Start
+  init();
+
+
+
+    // Expose functions
+    window.signInWithProvider = signInWithProvider;
+    window.loginWithEmail = loginWithEmail;
+    window.signUpWithEmail = signUpWithEmail;
+    window.forgotPassword = forgotPassword;
+    window.hideForgotPassword = hideForgotPassword
+    window.showForgotPassword = showForgotPassword;
+    window.showEmailAuth = showEmailAuth;
+    window.hideEmailAuth = hideEmailAuth;
+    window.toggleRules        = toggleRules;   
+  </script>
+</body>
+</html>

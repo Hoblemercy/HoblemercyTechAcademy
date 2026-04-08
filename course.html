@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Your Course – Hoblemercy Tech Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+  <style>
+    :root { --bg:#0a0716; --card:#140f24; --accent:#a78bfa; --text:#f8f9ff; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui; min-height:100vh; padding:2rem; }
+    .container { max-width:1100px; margin:0 auto; }
+    h1 { text-align:center; font-size:2.8rem; margin-bottom:3rem; background:linear-gradient(90deg,#d5b9ff,#c4a1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .course-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem; }
+    .course-card {
+      background:linear-gradient(145deg,#0f0b1e,#140f24);
+      border:1px solid rgba(167,139,250,0.18);
+      border-radius:20px;
+      padding:2rem;
+      text-align:center;
+      transition:all 0.4s;
+      box-shadow:0 10px 40px -10px rgba(0,0,0,0.6);
+    }
+    .course-card:hover { transform:translateY(-10px); box-shadow:0 25px 70px -15px rgba(167,139,250,0.3); }
+    .course-icon { font-size:4.5rem; color:var(--accent); margin-bottom:1rem; }
+    .course-title { font-size:1.8rem; margin:1rem 0; }
+    .course-desc { color:#c9b8e8; margin-bottom:1.8rem; min-height:80px; }
+    .btn-select {
+      background:linear-gradient(90deg,#6d28d9,#a855f7);
+      color:white; border:none; padding:1rem 2rem; border-radius:12px; font-size:1.1rem; cursor:pointer;
+      transition:all 0.3s;
+    }
+    .btn-select:hover { transform:scale(1.05); box-shadow:0 10px 30px rgba(109,40,217,0.4); }
+  </style>
+</head>
+<body>
+  
+<button onclick="window.history.back()" style="background:linear-gradient(90deg,#6d28d9,#a855f7);
+color:white; border:none; padding:3px 20px; border-radius:12px; font-size:1.1rem; cursor:pointer;
+transition:all 0.3s;">← Back</button>
+
+<div class="container">
+  <h1>Choose Your Path</h1>
+  <div class="course-grid">
+    <div class="course-card">
+      <i class="ri-layout-2-line course-icon"></i>
+      <div class="course-title">Frontend Development</div>
+      <p class="course-desc">Master HTML, CSS, JavaScript, React & modern tools</p>
+      <button class="btn-select" onclick="goToPricing('frontend')">Select Course</button>
+    </div>
+
+    <div class="course-card">
+      <i class="ri-code-box-line course-icon"></i>
+      <div class="course-title">Full-Stack Development</div>
+      <p class="course-desc">Frontend + Node.js, Express, Databases & Deployment</p>
+      <button class="btn-select" onclick="goToPricing('fullstack')">Select Course</button>
+    </div>
+
+   <div class="course-card">
+     <i class="ri-brain-line  course-icon"></i>
+     <div class="course-title">Backend Development</div>
+     <p class="course-desc"> Supabase, python, Databases & Deployment</p>
+     <button class="btn-select" onclick="goToPricing('backend')">Select Course</button>
+   </div>
+
+
+    <div class="course-card">
+      <i class="ri-robot-line course-icon"></i>
+      <div class="course-title">AI Tools & Automation</div>
+      <p class="course-desc">Learn Al Tools. Automate Tasks.
+Work Smarter & Earn Online. </p>
+      <button class="btn-select" onclick="goToPricing('ai')">Select Course</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function goToPricing(course) {
+    window.location.href = `pricing.html?course=${course}`;
+  }
+</script>
+</body>
+</html>

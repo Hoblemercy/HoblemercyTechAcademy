@@ -1,0 +1,2421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Courses - Tech Training Academy</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <link 
+  href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" 
+  rel="stylesheet"
+/>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-S..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+    :root {
+      --bg: #000;
+      --text: #ffffff;
+      --text-secondary: rgba(255,255,255,0.7);
+      --text-muted: rgba(255,255,255,0.45);
+      --accent: #a855f7;
+      --accent-dark: #9333ea;
+      --secondary: #60a5fa;
+      --glass: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.15);
+      --glow: rgba(168,85,247,0.4);
+      --transition: all 0.35s ease;
+      --input-bg: rgba(255,255,255,0.06);
+      --input-border: rgba(255,255,255,0.20);
+      --input-placeholder: rgba(255,255,255,0.45);
+      --card-bg: rgba(30,30,46,0.4);
+      --price-tag: #10b981;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    body.light {
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --glass: rgba(255,255,255,0.70);
+      --glass-border: rgba(15,23,42,0.12);
+      --glow: rgba(168,85,247,0.22);
+      --input-bg: rgba(15,23,42,0.04);
+      --input-border: rgba(15,23,42,0.14);
+      --input-placeholder: rgba(15,23,42,0.45);
+      --card-bg: rgba(255,255,255,0.75);
+      --price-tag: #059669;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: var(--transition);
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+    header.section-header { text-align: center; padding: 5rem 0 3rem; }
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .lead { font-size: 1.25rem; color: var(--text-secondary); max-width: 680px; margin: 0 auto; }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 999;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .theme-toggle:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--glow); }
+    
+    /* Badge */
+.badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--glass-border);
+  font-size: 0.85rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Highlight text */
+.highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* CTA Buttons */
+.header-cta {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.primary-btn {
+  background: linear-gradient(90deg, #00f5ff, #7b61ff);
+  border: none;
+  padding: 0.9rem 1.6rem;
+  border-radius: 50px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  padding: 0.9rem 1.6rem;
+  border-radius: 50px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* COUNTDOWN */
+.countdown-banner {
+  margin: 2rem auto;
+  max-width: 900px;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(255,0,150,0.1), rgba(0,255,255,0.1));
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from { box-shadow: 0 0 10px rgba(255,0,150,0.2); }
+  to { box-shadow: 0 0 25px rgba(0,255,255,0.4); }
+}
+
+/* STATS */
+.stats-section {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+
+
+.stat-item:hover {
+  transform: translateY(-10px);
+}
+
+.stat-item i {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 1.8rem;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+    .course-card.glow-card {
+      flex: 0 0 320px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.2rem;
+      padding: 1.8rem;
+      box-shadow: 0 8px 32px var(--glow);
+      transition: var(--transition);
+    }
+    .course-card.glow-card:hover {
+      transform: translateY(-12px) scale(1.04);
+      box-shadow: 0 20px 50px var(--glow);
+    }
+    /* COURSE CARDS */
+.course-card {
+  position: relative;
+}
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.15), transparent 40%);
+  pointer-events: none;
+}
+
+.card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(90deg, red, orange);
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+}
+
+.card-btn {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 0.6rem;
+  border: none;
+  background: linear-gradient(90deg, #7b61ff, #00f5ff);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card-btn:hover {
+  transform: scale(1.05);
+}
+    .course-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
+    .duration { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.2rem; }
+    .duration i { color: var(--secondary); }
+    .features { margin: 1.3rem 0; color: var(--text-muted); font-size: 0.95rem; }
+    .features li { margin-bottom: 0.6rem; display: flex; align-items: flex-start; gap: 0.6rem; }
+    .features i { color: var(--accent); margin-top: 0.2rem; }
+
+    /* What You Will Learn */
+    .benefits-section {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .benefit-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      padding: 2rem 1.5rem;
+      transition: var(--transition);
+    }
+    .benefit-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px var(--glow); }
+    .benefit-card i { font-size: 2.8rem; color: var(--accent); margin-bottom: 1rem; }
+
+    /* Roadmap */
+    .roadmap-section {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, transparent, var(--glass));
+    }
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      max-width: 800px;
+      margin: 3rem auto 0;
+    }
+    .roadmap-step {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      padding: 1.8rem;
+    }
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .step-content h4 { color: var(--accent); margin-bottom: 0.5rem; }
+
+    /* Live Stats */
+    .stats-section {
+      padding: 3rem 0;
+      text-align: center;
+    }
+    .stats-grid {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .stat-item {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+    }
+    .stat-item strong { color: var(--accent); font-size: 2.2rem; display: block; }
+
+
+.section-title {
+  text-align: center;
+  font-size: clamp(2.1rem, 5vw, 2.8rem);
+  margin-bottom: 3rem;
+  font-weight: 700;
+  color: var(--text);
+  background: linear-gradient(90deg, var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 2.2rem;
+  padding: 2rem 2.1rem;
+  box-shadow: 
+    0 20px 60px -15px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(168,85,247,0.08) inset;
+  transition: transform 0.3s ease, box-shadow 0.4s ease;
+}
+
+.form-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    0 30px 80px -20px rgba(168,85,247,0.22),
+    0 0 0 1px rgba(168,85,247,0.12) inset;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.form-row.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+}
+
+@media (min-width: 640px) {
+  .form-row.grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.55rem;
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #f87171;
+  font-size: 0.9rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 7px;
+  border-radius: 0.9rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(168,85,247,0.18);
+  background: rgba(168,85,247,0.04);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 15px;
+  user-select: none;
+}
+
+.checkbox-label input {
+  margin-top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  accent-color: var(--accent);
+}
+
+.btn-primary {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 1.15rem 1.5rem;           /* ← added horizontal padding for better touch targets */
+  border-radius: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+
+  /* Better focus state for keyboard users */
+  outline: none;
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(var(--accent-rgb), 0.2); /* soft outer glow */
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(168, 85, 247, 0.35); /* ← good, but consider using var(--accent-rgb) */
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(-1px);          /* ← subtle press feedback */
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  background: linear-gradient(90deg, #aaa, #999); /* ← optional: gray gradient when disabled */
+}
+
+    /* Premium Toast */
+    .premium-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      box-shadow: 0 10px 40px rgba(168,85,247,0.4);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 1000;
+      opacity: 0;
+      transform: translate(-50%, 100px);
+      transition: all 0.5s ease;
+    }
+    .premium-toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    .toast-icon { font-size: 1.6rem; }
+
+    /* Countdown */
+    .countdown-banner {
+      background: rgba(245,158,11,0.15);
+      border: 1px solid var(--warning);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      text-align: center;
+      margin: 2rem auto;
+      max-width: 500px;
+    }
+    .countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--warning);
+      margin-top: 0.8rem;
+    }
+
+    /* Premium Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(6px);
+    }
+/* ───────────────────────────────────────
+   Loading Overlay (Premium version)
+─────────────────────────────────────── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 35, 7.88);
+  backdrop-filter: blur(8px);
+  display: none;
+  place-items: center;
+  z-index: 3000;
+}
+
+.premium-spinner {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 5px solid transparent;
+  border-radius: 50%;
+  animation: spin 1.4s linear infinite;
+}
+
+.ring-1 {
+  border-top-color: var(--accent);
+}
+
+.ring-2 {
+  border-top-color: var(--secondary);
+  animation-duration: 1.9s;
+  animation-direction: reverse;
+}
+
+.spinner-center {
+  position: absolute;
+  inset: 24px;
+
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--glass-border);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.spinner-logo {
+  font-size: 3.2rem;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+  animation: pulse 2s infinite;
+}
+
+.spinner-text {
+  color:white;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  max-width: 110px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; transform: scale(0.92); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+    /* Pricing Modal */
+    .pricing-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .pricing-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      max-width: 520px;
+      width: 92%;
+      padding: 2.8rem;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .close-btn:hover { color: var(--accent); }
+    .stage {
+      margin: 2rem 0;
+      padding: 1.6rem;
+      border-radius: 1rem;
+      background: rgba(168,85,247,0.08);
+      border: 1px solid rgba(168,85,247,0.18);
+    }
+    .stage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .stage-title { font-size: 1.35rem; color: var(--accent); }
+    .price { font-size: 1.6rem; font-weight: 700; color: var(--price-tag); }
+    .stage-info { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.8rem; }
+    .glow-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.glow-card:hover {
+  transition: transform 0.1s ease;
+}
+
+
+/* Rules trigger (looks like a link but is a button) */
+.rules-trigger {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.rules-trigger:hover,
+.rules-trigger:focus {
+  color: var(--accent-dark);
+  outline: none;
+}
+
+.rules-teaser {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+/* ───────────────────────────────────────
+   Rules Modal
+─────────────────────────────────────── */
+.rules-modal {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(6px);
+  display: none;
+  place-items: center;
+  z-index: 2500;
+}
+
+.rules-modal.active {
+  display: grid;
+}
+
+.rules-modal-content {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.4rem;
+  width: min(90%, 580px);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--card-bg);
+  z-index: 2;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.rules-body {
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+.rules-body ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.5rem 0;
+}
+
+.rules-body li {
+  margin-bottom: 1.1rem;
+  padding-left: 1.8rem;
+  position: relative;
+}
+
+.rules-body li::before {
+  content: "•";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.rules-note {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  padding: 1rem 1.2rem;
+  border-radius: 0.6rem;
+  margin-top: 1.8rem;
+  color: #fca5a5;
+}
+
+.modal-footer {
+  padding: 1.2rem 2rem;
+  border-top: 1px solid var(--glass-border);
+  text-align: right;
+}
+
+.btn-secondary {
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.8rem;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(168, 85, 247, 0.2);
+}
+/* Pricing Section */
+.pricing-section {
+  padding: 5rem 1.5rem;
+  background: linear-gradient(to bottom, rgba(30,25,50,0.6), transparent);
+  display: none;
+}
+.pricing-title {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+}
+.pricing-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.stage-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.stage-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 60px rgba(168,85,247,0.25);
+}
+.stage-card .badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f59e0b;
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.3rem 1rem;
+  border-radius: 3rem;
+  font-weight: 700;
+}
+.stage-card h4 {
+  font-size: 1.35rem;
+  margin: 1rem 0 0.5rem;
+}
+.original-price {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+.current-price {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0.5rem 0;
+}
+.stage-card button {
+  margin-top: 1.5rem;
+}
+
+/* Payment & Confirmation */
+.payment-container, .confirmation-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,35,0.95);
+  backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+}
+.payment-card, .confirmation-card {
+  background: var(--card-bg);
+  border-radius: 1.6rem;
+  padding: 3rem 2.5rem;
+  max-width: 520px;
+  width: 92%;
+  text-align: center;
+}
+.amount-display {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+}
+.bank-banner img {
+  width: 100%;
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.payment-warning {
+  color: #f87171;
+  font-size: 0.95rem;
+}
+.big-check {
+  font-size: 5rem;
+  margin: 1rem 0;
+}
+.status-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.btn-whatsapp {
+  background: #25D366;
+  color: white;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border-radius: 3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Table */
+.reg-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.reg-table th, .reg-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+.reg-table th {
+  background: rgba(168,85,247,0.1);
+  font-weight: 600;
+}
+.status-pending { color: #f59e0b; }
+.status-verified { color: #22c55e; font-weight: 700; }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--bg-color, white);
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close-btn:hover {
+  color: #000;
+}
+
+.pricing-subtitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+/* Optional: hide the original pricing section completely */
+#pricingSection {
+  display: none !important;
+}
+
+/* ────────────────────────────────────────────────
+   Ultra Premium – Luxe Dark Theme 2025
+───────────────────────────────────────────────── */
+
+.lux-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 4, 18, 0.92);
+  backdrop-filter: blur(14px);
+  display: none;
+  place-items: center;
+  z-index: 10000;
+  align-items: flex-start;     /* ← changed - better for scrollable modals */
+  padding: 2rem 1rem;          /* ← gives breathing room on small screens */
+}
+
+.lux-modal-container {
+  background: linear-gradient(145deg, #0a0716 0%, #110c22 100%);
+  border: 1px solid rgba(147, 51, 234, 0.16);
+  border-radius: 24px;
+  box-shadow: 0 30px 90px -20px rgba(0,0,0,0.75),
+              inset 0 0 0 1px rgba(147, 51, 234, 0.1);
+  width: min(94vw, 1080px);
+  max-height: 92vh;            /* ← crucial */
+  overflow-y: auto;            /* ← makes it scrollable */
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #7c3aed #140f24;
+  color: #fafaff;
+  position: relative;
+}
+
+/* Optional: nicer scrollbar for WebKit browsers */
+.lux-modal-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.lux-modal-container::-webkit-scrollbar-track {
+  background: #140f24;
+}
+
+.lux-modal-container::-webkit-scrollbar-thumb {
+  background: #7c3aed;
+  border-radius: 5px;
+}
+
+.lux-modal-container::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}
+
+.lux-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2.4rem 1rem;
+  border-bottom: 1px solid rgba(147, 51, 234, 0.08);
+}
+
+.lux-modal-header h2 {
+  margin: 0;
+  font-size: 2.3rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e9d5ff, #c4a1ff, #b794f4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.6px;
+}
+
+.lux-modal-close {
+  background: none;
+  border: none;
+  color: #b794f4;
+  font-size: 2.4rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.lux-modal-close:hover {
+  color: white;
+  transform: rotate(90deg) scale(1.15);
+}
+
+.lux-pricing-notice {
+  text-align: center;
+  color: #c9b8e8;
+  font-size: 1.08rem;
+  margin: 1.2rem 2.4rem 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.lux-pricing-notice i {
+  color: #b794f4;
+  font-size: 1.5rem;
+}
+
+/* ───── Plan Cards ───── */
+.lux-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 2rem;
+  padding: 0 2.4rem 3rem;
+}
+
+.lux-plan-card {
+  background: rgba(18, 14, 38, 0.65);
+  border: 1px solid rgba(147, 51, 234, 0.13);
+  border-radius: 18px;
+  padding: 2.2rem 2rem;
+  text-align: center;
+  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: visible;
+  pointer-events: auto !important;
+font-weight: 600;
+z-index:9999 !important;
+user-select: auto;
+cursor: pointer !important;
+}
+
+.lux-plan-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 20%, rgba(147, 51, 234, 0.09) 50%, transparent 80%);
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.lux-plan-card:hover::before,
+.lux-plan-card.lux-featured::before {
+  opacity: 1;
+}
+
+.lux-plan-card.lux-featured,
+.lux-plan-card:hover {
+  transform: translateY(-14px);
+  border-color: #b794f4;
+  box-shadow: 0 32px 70px -20px rgba(147, 51, 234, 0.38);
+  background: rgba(22, 18, 48, 0.8);
+}
+
+.lux-plan-card h3 {
+  color: #ffffff;
+  font-size: 1.65rem;
+  margin: 0 0 1.5rem;
+  font-weight: 600;
+}
+
+.lux-price-block {
+  margin: 1.8rem 0 2.2rem;
+  min-height: 85px;
+}
+
+.lux-price-main {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #e9d5ff, #c4a1ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lux-price-old {
+  display: block;
+  color: #8a7ab3;
+  font-size: 1.2rem;
+  margin-top: 0.6rem;
+  text-decoration: line-through;
+}
+
+.lux-badge-recommended {
+  position: absolute;
+  top: -14px;
+  right: 28px;
+  background: linear-gradient(90deg, #7c3aed, #b794f4, #d6bcfa);
+  color: white;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.4rem 1.3rem;
+  border-radius: 60px;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45);
+}
+
+.lux-btn-select {
+  background: linear-gradient(90deg, #6d28d9, #a855f7, #c084fc);
+  background-size: 220% 100%;
+  color: white;
+  border: none;
+  font-size: 1.12rem;
+  pointer-events: auto !important;
+  font-weight: 600;
+  z-index:9999 !important;
+   user-select: auto;
+ cursor: pointer !important;
+  padding: 1.1rem 2.5rem;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 1.4rem;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 28px rgba(109, 40, 217, 0.32);
+}
+
+.lux-btn-select:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 48px rgba(109, 40, 217, 0.5);
+  background-position: right center;
+}
+.lux-plan-icon {
+  font-size: 3.2rem;
+  margin-bottom: 1.2rem;
+  color: #b794f4;
+  opacity: 0.92;
+  transition: all 0.4s ease;
+}
+
+.lux-plan-card:hover .lux-plan-icon,
+.lux-plan-card.lux-featured .lux-plan-icon {
+  color: #d6bcfa;
+  transform: scale(1.12) translateY(-4px);
+  opacity: 1;
+}
+/* ────────────────────────────────────────────────
+   Ultra Premium Payment & Confirmation – Dark Luxe
+───────────────────────────────────────────────── */
+
+.lux-payment-backdrop,
+.lux-confirmation-backdrop {
+  background: rgba(6, 4, 18, 0.92);
+  backdrop-filter: blur(16px);
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  z-index: 9998;
+  padding: 1rem;
+}
+
+.lux-payment-card,
+.lux-confirmation-card {
+  background: linear-gradient(145deg, #0f0b1e 0%, #140f24 100%);
+  border: 1px solid rgba(147, 51, 234, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 30px 90px -20px rgba(0,0,0,0.75),
+              inset 0 0 0 1px rgba(147, 51, 234, 0.12);
+  width: min(92vw, 520px);
+  padding: 2.5rem 2rem;
+  color: #f8f9ff;
+  text-align: center;
+}
+
+.glass-effect {
+  background: rgba(20, 15, 36, 0.45);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(147, 51, 234, 0.16);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.8rem 0;
+}
+
+.lux-icon-header {
+  font-size: 3.2rem;
+  color: #b794f4;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.lux-amount-display {
+  font-size: 1.4rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.lux-amount-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #d5b9ff, #c4a1ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+
+.lux-bank-banner img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.lux-bank-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.1rem;
+  margin: 0.8rem 0;
+  color: #c9b8e8;
+}
+
+.lux-bank-detail i {
+  font-size: 1.6rem;
+  color: #a78bfa;
+}
+
+.lux-btn-confirm,
+.lux-btn-whatsapp,
+.lux-btn-secondary {
+  background: linear-gradient(90deg, #6d28d9, #a855f7, #c084fc);
+  background-size: 200% 100%;
+  color: white;
+  border: none;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 1.1rem 2.4rem;
+  border-radius: 14px;
+  cursor: pointer;
+  margin: 1.5rem auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.35);
+}
+
+.lux-btn-confirm:hover,
+.lux-btn-whatsapp:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px rgba(109, 40, 217, 0.5);
+  background-position: right center;
+}
+
+.lux-premium-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+}
+
+.ring {
+  position: absolute;
+  border: 4px solid #a78bfa;
+  border-radius: 50%;
+  animation: ring 2s linear infinite;
+  opacity: 0.6;
+}
+
+.ring-1 { width: 100%; height: 100%; border-color: #7c3aed; animation-delay: -0.4s; }
+.ring-2 { width: 70%; height: 70%; top: 15%; left: 15%; border-color: #b794f4; animation-delay: -0.8s; }
+.ring-3 { width: 40%; height: 40%; top: 30%; left: 30%; border-color: #d6bcfa; }
+
+@keyframes ring {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.lux-big-check i {
+  font-size: 6rem;
+  color: #10b981;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.lux-success-title {
+  font-size: 2.4rem;
+  background: linear-gradient(90deg, #e9d5ff, #c4a1ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 1rem 0;
+}
+
+.lux-welcome-text {
+  font-size: 1.2rem;
+  color: #c9b8e8;
+  margin-bottom: 2rem;
+}
+
+/* Confetti container – you can use canvas or CSS particles */
+.lux-confetti-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+
+.lux-countdown {
+  background: rgba(147, 51, 234, 0.12);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: #d6bcfa;
+}
+
+.lux-countdown strong {
+  font-size: 1.4rem;
+  color: #fff;
+  min-width: 70px;
+  text-align: center;
+}
+
+.lux-countdown.pulse {
+  animation: pulse-bg 1.5s infinite;
+}
+
+@keyframes pulse-bg {
+  0%, 100% { background: rgba(147, 51, 234, 0.12); }
+  50% { background: rgba(147, 51, 234, 0.25); }
+}
+
+.lux-copy-btn {
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: #d6bcfa;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.25s;
+}
+
+.lux-copy-btn:hover {
+  background: rgba(167, 139, 250, 0.3);
+  transform: scale(1.05);
+}
+.lux-plan-card.lux-selected {
+  border-color: #a78bfa !important;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+  transform: scale(1.03);
+}
+/* Remixicon CDN (if not already included) */
+@import url('https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css');
+
+    @media (max-width: 768px) {
+      .marquee-track { animation-duration: 55s; }
+      .course-card.glow-card { flex: 0 0 280px; }
+      .stats-grid { gap: 2.5rem; }
+    }
+    @media (max-width: 480px) {
+  .lux-modal-container {
+    padding: 1.2rem 0;           /* less top/bottom space */
+    max-height: 88vh;            /* give more room for cards */
+  }
+
+  .lux-plan-grid {
+    gap: 1.4rem;                 /* tighter spacing between cards */
+    padding: 0 1.2rem 2rem;
+  }
+
+  .lux-plan-card {
+    padding: 1.6rem 1.4rem;      /* smaller padding inside cards */
+  }
+
+  .lux-plan-icon {
+    font-size: 2.6rem;           /* slightly smaller icons */
+    margin-bottom: 1rem;
+  }
+
+  .lux-modal-header h2 {
+    font-size: 1.9rem;           /* title fits better */
+  }
+
+  .lux-pricing-notice {
+    font-size: 1rem;
+    margin: 0.8rem 1.2rem 1.6rem;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </div>
+
+  <div class="container">
+
+<header class="section-header">
+  <div class="badge">
+    <i class="fas fa-bolt"></i> Limited Slots Available
+  </div>
+  
+  <h1>
+    <i class="fas fa-laptop-code"></i>
+    Our Training Programs
+  </h1>
+  
+  <p class="lead">
+    Master in-demand tech skills • Build real projects • Launch your career •
+    <span class="highlight">Lifetime access & updates</span>
+  </p>
+  
+  <div class="header-cta">
+    <button class="primary-btn">
+      <i class="fas fa-rocket"></i> Start Learning Now
+    </button>
+    <button class="secondary-btn">
+      <i class="fas fa-play-circle"></i> Watch Preview
+    </button>
+  </div>
+</header>
+
+
+<!-- Countdown Banner -->
+<div class="countdown-banner">
+  <div class="countdown-content">
+    <h3>
+      <i class="fas fa-fire"></i> Limited Time Offer – Stage 1 Access
+    </h3>
+    
+    <p>
+      Enroll now and get Stage 1 for only
+      <strong>₦2,000</strong> (deductible from full price)
+    </p>
+    
+    <div class="countdown" id="countdown">
+      <i class="fas fa-clock"></i> Offer ends in: --:--:--
+    </div>
+  </div>
+</div>
+
+
+<!-- Live Stats -->
+<section class="stats-section">
+  <h2>
+    <i class="fas fa-users"></i> Join Our Growing Community
+  </h2>
+  
+  <div class="stats-grid">
+    <div class="stat-item">
+      <i class="fas fa-user-graduate"></i>
+      <strong>1,200+</strong>
+      <span>Students Enrolled</span>
+    </div>
+    
+    <div class="stat-item">
+      <i class="fas fa-star"></i>
+      <strong>4.9/5</strong>
+      <span>Average Rating</span>
+    </div>
+    
+    <div class="stat-item">
+      <i class="fas fa-briefcase"></i>
+      <strong>85%</strong>
+      <span>Job Placement Rate</span>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Auto-sliding glowing cards -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track" >
+      
+      <!-- We duplicate the items so it loops nicely -->
+      <div class="course-card glow-card">
+        <h3>Frontend Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i>
+       12 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> HTML5 • CSS3 • Tailwind / SS</li>
+          <li><i class="fas fa-check"></i> JavaScript (ES6+)</li>
+          <li><i class="fas fa-check"></i> React / Next.js</li>
+          <li><i class="fas fa-check"></i> TypeScript basics</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Backend Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 14 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Node.js & Express</li>
+          <li><i class="fas fa-check"></i> MongoDB / PostgreSQL</li>
+          <li><i class="fas fa-check"></i> Authentication & Authorization</li>
+          <li><i class="fas fa-check"></i> REST & GraphQL APIs</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Fullstack Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 20 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Frontend + Backend combined</li>
+          <li><i class="fas fa-check"></i> Next.js / MERN / MEVN</li>
+          <li><i class="fas fa-check"></i> Deployment & DevOps basics</li>
+          <li><i class="fas fa-check"></i> Real-world projects</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Data Analysis</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 10 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Excel • Power BI</li>
+          <li><i class="fas fa-check"></i> Python (Pandas, NumPy)</li>
+          <li><i class="fas fa-check"></i> SQL for Data Analysis</li>
+          <li><i class="fas fa-check"></i> Data Storytelling</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>AI & Machine Learning</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 8 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Python for AI</li>
+          <li><i class="fas fa-check"></i> Machine Learning Algorithms</li>
+          <li><i class="fas fa-check"></i> Deep Learning (TensorFlow/PyTorch)</li>
+          <li><i class="fas fa-check"></i> Model Deployment</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>SEO & Digital Optimization</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 8 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> On-page & Technical SEO</li>
+          <li><i class="fas fa-check"></i> Keyword Research & Strategy</li>
+          <li><i class="fas fa-check"></i> Content Marketing</li>
+          <li><i class="fas fa-check"></i> Google Analytics & Search Console</li>
+        </ul>
+      </div>
+      
+      
+        <!-- Auto-sliding glowing cards -->
+<div class="marquee-wrapper">
+  <div class="marquee-track">
+    
+   <!-- We duplicate the items so it loops nicely -->
+      <div class="course-card glow-card">
+        <h3>Frontend Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i>
+       12 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> HTML5 • CSS3 • Tailwind / SCSS</li>
+          <li><i class="fas fa-check"></i> JavaScript (ES6+)</li>
+          <li><i class="fas fa-check"></i> React / Next.js</li>
+          <li><i class="fas fa-check"></i> TypeScript basics</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Backend Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 14 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Node.js & Express</li>
+          <li><i class="fas fa-check"></i> MongoDB / PostgreSQL</li>
+          <li><i class="fas fa-check"></i> Authentication & Authorization</li>
+          <li><i class="fas fa-check"></i> REST & GraphQL APIs</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Fullstack Development</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 20 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Frontend + Backend combined</li>
+          <li><i class="fas fa-check"></i> Next.js / MERN / MEVN</li>
+          <li><i class="fas fa-check"></i> Deployment & DevOps basics</li>
+          <li><i class="fas fa-check"></i> Real-world projects</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>Data Analysis</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 10 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Excel • Power BI</li>
+          <li><i class="fas fa-check"></i> Python (Pandas, NumPy)</li>
+          <li><i class="fas fa-check"></i> SQL for Data Analysis</li>
+          <li><i class="fas fa-check"></i> Data Storytelling</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>AI & Machine Learning</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 8 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Python for AI</li>
+          <li><i class="fas fa-check"></i> Machine Learning Algorithms</li>
+          <li><i class="fas fa-check"></i> Deep Learning (TensorFlow/PyTorch)</li>
+          <li><i class="fas fa-check"></i> Model Deployment</li>
+        </ul>
+      </div>
+      
+      <div class="course-card glow-card">
+        <h3>SEO & Digital Optimization</h3>
+        <div class="duration"><i class="fas fa-calendar-days"></i> 8 Weeks</div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> On-page & Technical SEO</li>
+          <li><i class="fas fa-check"></i> Keyword Research & Strategy</li>
+          <li><i class="fas fa-check"></i> Content Marketing</li>
+          <li><i class="fas fa-check"></i> Google Analytics & Search Console</li>
+        </ul>
+      </div>
+      
+</div>
+   
+  </div>
+</div>
+    <!-- What You Will Learn (Conversion Booster) -->
+    <section class="benefits-section">
+      <h2>What You Will Gain</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <i class="fas fa-laptop-code"></i>
+          <h3>Build Real-World Apps</h3>
+          <p>From day one – hands-on projects that matter</p>
+        </div>
+        <div class="benefit-card">
+          <i class="fas fa-dollar-sign"></i>
+          <h3>Earn as a Freelancer</h3>
+          <p>Learn high-demand skills to start freelancing fast</p>
+        </div>
+        <div class="benefit-card">
+          <i class="fas fa-plane"></i>
+          <h3>Work Remotely</h3>
+          <p>Unlock global job opportunities from anywhere</p>
+        </div>
+        <div class="benefit-card">
+          <i class="fas fa-robot"></i>
+          <h3>Use AI Tools</h3>
+          <p>Automate tasks & 10× your productivity</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Learning Roadmap -->
+    <section class="roadmap-section">
+      <h2 style="text-align:center;">Your Growth Journey</h2>
+      <div class="roadmap">
+        <div class="roadmap-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Master the Basics</h4>
+            <p>Core concepts, tools & best practices – strong foundation</p>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Build Real Projects</h4>
+            <p>Apply knowledge through guided & independent projects</p>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Create Standout Portfolio</h4>
+            <p>Professional-grade work ready to impress employers/clients</p>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Earn & Scale</h4>
+            <p>Freelance, get hired, or launch your own products</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- Registration Form Section -->
+<section class="registration-section">
+  <div class="container">
+    <h2 class="section-title">Start Your Journey Today</h2>
+    
+    <div class="form-card">
+      <form id="courseForm" class="registration-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullname">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullname" name="fullname" required autocomplete="name">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel">
+          </div>
+        </div>
+        
+        <div class="form-row grid-2">
+          <div class="form-group">
+            <label for="country">Country <span class="required">*</span></label>
+            <input type="text" id="country" name="country" placeholder="Nigeria" required autocomplete="country">
+          </div>
+          <div class="form-group">
+            <label for="state">State <span class="required">*</span></label>
+            <input type="text" id="state" name="state" placeholder="Lagos" required autocomplete="address-level1">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City <span class="required">*</span></label>
+            <input type="text" id="city" name="city" placeholder="Lagos" required autocomplete="address-level2">
+          </div>
+        </div>
+        
+        <div class="form-row grid-2">
+          <div class="form-group">
+            <label for="course">Choose Your Path <span class="required">*</span></label>
+    <select id="course" name="course" required>
+  <option value="" disabled selected>Select course...</option>
+  <option value="frontend">Frontend Development</option>
+  <option value="backend">Backend Development</option>
+  <option value="fullstack">Fullstack Development</option>
+  <option value="data">Data Analysis</option>
+  <option value="ai">AI & Machine Learning</option>
+  <option value="seo">SEO & Digital Optimization</option>
+</select>
+          </div>
+          
+          <div class="form-group">
+            <label for="level">Your Current Level <span class="required">*</span></label>
+            <select id="level" name="level" required>
+              <option value="" disabled selected>Select level...</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="device">Preferred Device for Coding <span class="required">*</span></label>
+            <select id="device" name="device" required>
+              <option value="" disabled selected>Select device...</option>
+              <option value="laptop">Laptop / Computer</option>
+              <option value="phone">Phone</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="motivation">Why do you want to learn this? <span class="required">*</span></label>
+            <textarea id="motivation" name="motivation" placeholder="Tell us your goals..." rows="4" required></textarea>
+          </div>
+        </div>
+<!-- Replace your current checkbox div with this -->
+  <label class="checkbox-label">
+    <input type="checkbox" id="agree" name="agree" required>
+    </label>
+    <button type="button" class="rules-trigger" aria-label="View Rules and Regulations">I agree 
+      Rules & Regulations of the program
+    </button>
+
+
+<!-- Rules Modal (hidden by default) -->
+<div class="rules-modal" id="rulesModal">
+  <div class="rules-modal-content">
+    <div class="modal-header">
+      <h3>Program Rules & Regulations</h3>
+      <button type="button" class="modal-close" aria-label="Close rules">×</button>
+    </div>
+    
+    <div class="rules-body">
+      <p>By enrolling in this program, you agree to follow these rules at all times:</p>
+      <ul>
+        <li><strong>Attendance</strong>: Attend at least 85% of live sessions. Repeated unexplained absence may lead to removal.</li>
+        <li><strong>Assignments</strong>: Submit all required assignments on time. Late submissions may receive reduced feedback or no point.</li>
+        <li><strong>Respect & Conduct</strong>: Treat instructors, mentors, and fellow students with respect. No harassment, discrimination, hate speech, or disruptive behavior.</li>
+        <li><strong>No Sharing of Materials</strong>: Do not share course videos, code templates, private Notion pages, Discord resources, or any paid content outside the program.</li>
+        <li><strong>Academic Integrity</strong>: All submitted work must be your own. Plagiarism, cheating, or using AI to completely bypass learning will result in immediate removal without refund.</li>
+        <li><strong>Communication</strong>: Use official channels (Discord / designated group) for questions and support. No private messaging instructors for course-related help unless explicitly allowed.</li>
+        <li><strong>Device & Setup</strong>: Come prepared with the required tools/software as stated for your chosen path. Technical issues due to unpreparedness are your responsibility.</li>
+        <li><strong>Payment & Commitment</strong>: Fees are non-refundable after the program begins except in exceptional cases reviewed by the team.</li>
+        <li><strong>Recording</strong>: No unauthorized recording or screenshotting of live sessions without explicit permission.</li>
+        <li><strong>Changes</strong>: The program reserves the right to update these rules. Significant changes will be communicated in advance.</li>
+      </ul>
+      
+      <p class="rules-note">Breaking any of these rules may result in warnings, temporary suspension, permanent removal from the program, and/or forfeiture of access — with no refund.</p>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary modal-close">x</button>
+    </div>
+  </div>
+</div>
+       <button type="submit" class="btn-primary" id="submitBtn" disabled>
+  <i class="fas fa-paper-plane"></i> Proceed to Pricing
+</button>
+      </form>
+    </div>
+  </div>
+</section>
+  <p class="discount-note">Get Stage 1 access for only ₦2,000 • Unlock all stages later</p>
+</div>
+
+<!-- Premium Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="premium-spinner">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="spinner-center">
+      <div class="spinner-logo"><i class="fas fa-graduation-cap"></i></div>
+      <div class="spinner-text">Preparing Your Plan...</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Payment Instructions – Ultra Premium -->
+<div class="lux-payment-backdrop" id="paymentSection">
+  <div class="lux-payment-card">
+    <div class="lux-payment-header">
+      <i class="ri-bank-card-line lux-icon-header"></i>
+      <h3>Complete Your Secure Payment</h3>
+    </div>
+    
+    <div class="lux-amount-display">
+      <span>Amount Due:</span>
+      <strong id="paymentAmount" class="lux-amount-value">₦0</strong>
+    </div>
+    
+    <!-- Countdown Timer -->
+    <div class="lux-countdown" id="countdownDisplay">
+      <i class="ri-timer-line"></i>
+      <span>Verification window closes in:</span>
+      <strong id="countdownTimer">15:00</strong>
+    </div>
+    
+    <!-- Bank Details with Copy Buttons -->
+    <div class="lux-bank-banner glass-effect">
+      <img id="bankBannerImg" src="opay.png" alt="Bank Account Details">
+      <div class="lux-bank-info">
+        <p class="lux-bank-note">
+          Transfer **exactly** the amount shown above.
+        </p>
+        
+        <div class="lux-bank-detail" id="accountNameRow">
+          <i class="ri-user-line"></i>
+          <span><strong>Account Name:</strong> Himiko Tech Academy</span>
+          <button class="lux-copy-btn" data-copy-target="accountNameRow">
+            <i class="ri-file-copy-line"></i> Copy
+          </button>
+        </div>
+        
+        <div class="lux-bank-detail" id="bankNameRow">
+          <i class="ri-bank-line"></i>
+          <span><strong>Bank:</strong> Zenith Bank</span>
+          <button class="lux-copy-btn" data-copy-target="bankNameRow">
+            <i class="ri-file-copy-line"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <button class="lux-btn-confirm" id="confirmPaymentBtn">
+      <i class="ri-check-double-line"></i>
+      I Have Made The Payment
+    </button>
+    
+    <p class="lux-payment-warning">
+      <i class="ri-error-warning-line"></i>
+      Do not refresh or close this page after payment.
+    </p>
+  </div>
+</div>
+
+<!-- Payment Confirmation – Ultra Premium -->
+<div class="lux-confirmation-backdrop" id="confirmationSection">
+  <div class="lux-confirmation-card glass-effect">
+    <!-- Verifying -->
+    <div class="lux-confirm-spinner" id="confirmSpinner">
+      <div class="lux-premium-spinner">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+      <p class="lux-confirm-text">
+        <i class="ri-time-line"></i>
+        Verifying your transfer...<br>
+        <strong id="countdownInSpinner">15:00 remaining</strong>
+      </p>
+    </div>
+    
+    <!-- Success -->
+    <div class="lux-success-state" id="successState" style="display:none;">
+      <div class="lux-big-check">
+        <i class="ri-check-double-line"></i>
+      </div>
+      <h3>Payment Recorded</h3>
+      <p class="lux-status-text">
+        Status: <strong id="currentStatus">Pending Final Verification</strong>
+      </p>
+      
+      <div class="lux-admin-tools">
+        <button class="lux-btn-secondary" id="simulateVerifyBtn">
+          <i class="ri-tools-line"></i> Demo: Mark as Verified
+        </button>
+      </div>
+    </div>
+    
+    <!-- Final Celebration -->
+    <div class="lux-final-success" id="finalSuccess" style="display:none;">
+      <div class="lux-confetti-container"></div>
+      <div class="lux-success-icon">
+        <i class="ri-rocket-2-fill"></i>
+      </div>
+      <h2 class="lux-success-title">Welcome to Himiko Tech Academy!</h2>
+      <p class="lux-welcome-text">
+        Your journey starts now.
+      </p>
+      
+      <button class="lux-btn-whatsapp" id="whatsappBtn">
+        <i class="ri-whatsapp-line"></i>
+        Join Course WhatsApp Group
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Ultra Premium Pricing Modal -->
+<div class="lux-modal-backdrop" id="pricingModal">
+  <div class="lux-modal-container">
+    <div class="lux-modal-header">
+      <h2>Unlock <span id="modalCourseName">Your Course</span></h2>
+      <button class="lux-modal-close" id="closePricingModal" aria-label="Close">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    
+    <p class="lux-pricing-notice">
+      <i class="ri-sparkling-line"></i> Early bird access — claim your spot now
+    </p>
+    
+    <div class="lux-plan-grid" id="modalPricingGrid">
+      <!-- JS-populated plan cards -->
+    </div>
+  </div>
+</div>
+
+  <!-- Premium Toast -->
+  <div class="premium-toast" id="premiumToast">
+    <div class="toast-icon"><i class="fas fa-crown"></i></div>
+    <div>Unlock Premium Access & Lifetime Updates!</div>
+
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm"
+
+// ────────────────────────────────────────────────
+// Supabase Initialization
+// ────────────────────────────────────────────────
+const supabase = createClient(
+  "https://jffkatwagcfshvddnipr.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8"
+);
+
+// ────────────────────────────────────────────────
+// Notyf Setup
+// ────────────────────────────────────────────────
+const notyf = new Notyf({
+  duration: 5000,
+  ripple: true,
+  dismissible: true,
+  position: { x: 'right', y: 'top' },
+  types: [
+    { type: 'success', background: 'linear-gradient(90deg, #10b981, #059669)' },
+    { type: 'error',   background: 'linear-gradient(90deg, #ef4444, #dc2626)', duration: 7000 },
+    { type: 'warning', background: '#f59e0b', duration: 6000 },
+    { type: 'info',    background: '#3b82f6' },
+  ]
+});
+
+// ────────────────────────────────────────────────
+// Helpers
+// ────────────────────────────────────────────────
+function getFullCourseName(shortCode) {
+  const map = {
+    frontend:  "Frontend Development",
+    backend:   "Backend Development",
+    fullstack: "Fullstack Development",
+    data:      "Data Analysis",
+    ai:        "AI & Machine Learning",
+    seo:       "SEO & Digital Optimization"
+  };
+  const code = (shortCode || '').toLowerCase().trim();
+  return map[code] || shortCode || "Unknown Course";
+}
+
+function hideRegistrationSection() {
+  const section = document.querySelector('.registration-section')?.closest('form')?.parentElement;
+  if (section) section.style.display = 'none';
+}
+
+function showEnrolledMessage(courseCode) {
+  const target = document.querySelector('#registration-section, .registration-section, #courseForm');
+  if (!target) return;
+
+  const container = target.closest('section, form')?.parentElement || target;
+  const courseName = getFullCourseName(courseCode);
+
+  const msg = document.createElement('div');
+  msg.style.cssText = `
+    padding: 2.5rem;
+    text-align: center;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.4);
+    border-radius: 16px;
+    margin: 2rem auto;
+    max-width: 720px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+  `;
+
+  msg.innerHTML = `
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+    <h2 style="color: #10b981; margin-bottom: 1rem;">Enrollment Complete!</h2>
+    <p style="font-size: 1.15rem; margin-bottom: 1.2rem; line-height: 1.6;">
+      You are now enrolled in <strong>${courseName}</strong>
+    </p>
+    <p style="opacity: 0.8;">Next step: choose your preferred plan or chat with us instantly.</p>
+
+    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <button id="choosePlanFromMessage" style="
+        padding: 0.9rem 2rem;
+        background: linear-gradient(135deg, #6d28d9, #a855f7, #c084fc);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+      ">
+        Choose Plan
+      </button>
+
+      <a id="whatsappBtn" href="https://wa.me/2349064748799" target="_blank" style="
+        padding: 0.9rem 2rem;
+        background: #25D366;
+        color: white;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.3s;
+      ">
+        Chat on WhatsApp
+      </a>
+    </div>
+  `;
+
+  container.innerHTML = '';
+  container.appendChild(msg);
+
+  // Animate in
+  setTimeout(() => {
+    msg.style.opacity = '1';
+    msg.style.transform = 'translateY(0)';
+  }, 50);
+
+  msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // Redirect to pricing page
+  document.getElementById('choosePlanFromMessage')?.addEventListener('click', () => {
+    const courseCode = sessionStorage.getItem('enrolled_course_code') || 'frontend';
+    window.location.href = `pricing.html?course=${courseCode}`;
+  });
+
+  // Optional hover effect on button
+  const chooseBtn = document.getElementById('choosePlanFromMessage');
+  chooseBtn?.addEventListener('mouseenter', () => chooseBtn.style.transform = 'scale(1.05)');
+  chooseBtn?.addEventListener('mouseleave', () => chooseBtn.style.transform = 'scale(1)');
+}
+
+// ────────────────────────────────────────────────
+// Main Logic – Everything starts here
+// ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  // Cache DOM elements
+  const form = document.getElementById('courseForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const loading = document.getElementById('loadingOverlay');
+
+  // Form validation
+  function checkFormValidity() {
+    if (!form || !submitBtn) return;
+    const isValid = form.checkValidity();
+    const agreeChecked = document.getElementById('agree')?.checked ?? true;
+    const canSubmit = isValid && agreeChecked;
+
+    submitBtn.disabled = !canSubmit;
+    submitBtn.style.opacity = canSubmit ? '1' : '0.6';
+    submitBtn.style.cursor = canSubmit ? 'pointer' : 'not-allowed';
+  }
+
+  if (form) {
+    ['input', 'change', 'blur'].forEach(evt => form.addEventListener(evt, checkFormValidity));
+  }
+  document.getElementById('agree')?.addEventListener('change', checkFormValidity);
+  checkFormValidity();
+
+  submitBtn?.addEventListener('mouseover', () => {
+    if (submitBtn.disabled) {
+      const reasons = [];
+      if (!form?.checkValidity()) reasons.push("some required fields are missing or invalid");
+      if (!document.getElementById('agree')?.checked) reasons.push("you haven't agreed to the Rules & Regulations");
+      notyf.warning(`Cannot proceed because: ${reasons.join(" and ")}`);
+    }
+  });
+
+  // Check if user is already enrolled
+  let isEnrolled = false;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data, error } = await supabase
+        .from('users')
+        .select('enrollment_complete, enrolled_course')
+        .eq('id', user.id)
+        .single();
+
+      if (!error && data?.enrollment_complete === true) {
+        isEnrolled = true;
+        hideRegistrationSection();
+        showEnrolledMessage(data.enrolled_course);
+      }
+    }
+  } catch (err) {
+    console.error("Enrollment status check failed:", err);
+  }
+
+  // Form submission (only if not enrolled)
+  if (!isEnrolled && form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity() || !document.getElementById('agree')?.checked) {
+        notyf.error("Please complete all required fields and agree to the rules.");
+        form.reportValidity();
+        return;
+      }
+
+      loading.style.display = 'flex';
+
+      const courseValue = document.getElementById('course')?.value?.trim() || '';
+      if (!courseValue) {
+        notyf.error("Please select a course");
+        loading.style.display = 'none';
+        return;
+      }
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error("Not authenticated");
+
+        const formData = Object.fromEntries(new FormData(form));
+
+        // Update user enrollment status
+        const { error: userError } = await supabase
+          .from('users')
+          .update({
+            enrollment_complete: true,
+            enrolled_course: courseValue
+          })
+          .eq('id', user.id);
+
+        if (userError) throw userError;
+
+        // Create enrollment record
+        const { error: enrollError } = await supabase
+          .from('course_enrollments')
+          .insert({
+            user_id: user.id,
+            full_name: formData.fullname,
+            email: formData.email?.toLowerCase().trim(),
+            phone: formData.phone,
+            country: formData.country || 'Nigeria',
+            state: formData.state,
+            city: formData.city,
+            course: courseValue,
+            level: formData.level,
+            device: formData.device,
+            motivation: formData.motivation,
+            selected_stage: null,
+            amount_paid: null,
+            payment_status: 'pending'
+          });
+
+        if (enrollError) throw enrollError;
+
+        sessionStorage.setItem('enrollment_email', formData.email?.toLowerCase().trim() || '');
+        sessionStorage.setItem('enrolled_course_code', courseValue); // for pricing redirect
+
+        notyf.success("Enrollment completed! Redirecting to choose plan...");
+
+        loading.style.display = 'none';
+        hideRegistrationSection();
+        showEnrolledMessage(courseValue);
+
+        // Optional: auto-redirect after short delay (or keep button)
+        // setTimeout(() => {
+        //   window.location.href = `pricing.html?course=${courseValue}`;
+        // }, 2000);
+
+      } catch (err) {
+        console.error("Enrollment error:", err);
+        notyf.error("Failed to save enrollment. Please try again.");
+        loading.style.display = 'none';
+      }
+    });
+  }
+
+  // ────────────────────────────────────────────────
+  // Theme Toggle + 48h Offer Countdown
+  // ────────────────────────────────────────────────
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const body = document.body;
+
+  function setTheme(isLight) {
+    body.classList.toggle('light', isLight);
+    themeIcon?.classList.toggle('fa-sun', isLight);
+    themeIcon?.classList.toggle('fa-moon', !isLight);
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+
+  setTheme(localStorage.getItem('theme') === 'light');
+
+  themeToggle?.addEventListener('click', () => setTheme(!body.classList.contains('light')));
+
+  // 48-hour offer countdown
+  const deadline = Date.now() + 48 * 60 * 60 * 1000;
+  function updateOfferCountdown() {
+    const el = document.getElementById("countdown");
+    if (!el) return;
+
+    const distance = deadline - Date.now();
+    if (distance <= 0) {
+      el.innerHTML = "⛔ Offer Expired";
+      return;
+    }
+
+    const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((distance / (1000 * 60)) % 60);
+    const s = Math.floor((distance / 1000) % 60);
+
+    el.innerHTML = `
+      <i class="fas fa-clock"></i> Offer ends in:
+      <strong>${h.toString().padStart(2, '0')}</strong>:
+      <strong>${m.toString().padStart(2, '0')}</strong>:
+      <strong>${s.toString().padStart(2, '0')}</strong>
+    `;
+  }
+  setInterval(updateOfferCountdown, 1000);
+  updateOfferCountdown();
+
+  // Card glow / 3D tilt effect (if you have .glow-card elements)
+  document.querySelectorAll(".glow-card").forEach(card => {
+    card.addEventListener("mousemove", e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = -(y - centerY) / 12;
+      const rotateY = (x - centerX) / 12;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)`;
+      card.style.setProperty('--x', `${x}px`);
+      card.style.setProperty('--y', `${y}px`);
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+    });
+  });
+});
+</script>
+</body>
+</html>

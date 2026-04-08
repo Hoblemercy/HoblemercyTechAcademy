@@ -1,0 +1,4883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="background-color" content="#0f172a"/>
+  
+  <!-- PWA / mobile enhancements -->
+  <meta name="theme-color" content="#0f172a"/>       
+  <meta name="background-color" content="#0f172a"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="HobleMercy Dashboard"/>
+
+  
+  <title>Dashboard • Hoblemercy Tech Digital Academy</title>
+  
+
+  <link rel="manifest" href="/manifest-student.json">
+  
+  <!-- Icons (add real files) -->
+  <link rel="icon" type="image/png" href="logo.png" sizes="192x192"/>
+  <link rel="apple-touch-icon" href="logo.png"/>
+  
+   <link rel="mask-icon" href="/icons/icon-maskable.svg" color="#0f172a"> 
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@200,300,400,500,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="dashboard.css">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker registered for PWA'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    });
+  }
+</script>
+</head>
+<body class="dark">
+  
+    <!-- Full-page loading overlay -->
+    <div id="app-loading" class="loading-overlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <h2>Preparing your dashboard...</h2>
+        <p>Almost ready • Just a moment</p>
+      </div>
+    </div>
+  
+  <!-- Stars -->
+  <div class="stars"></div>
+    <header class="profile-header-bar">
+    <div class="user-preview" onclick="openProfilePage()">
+      <div class="avatar-wrapper">
+        <img 
+          id="headerAvatar" 
+          src="https://i.pravatar.cc/150?img=68" 
+          alt="Your profile picture"
+          class="avatar-medium"
+        />
+        <span id="statusDot" class="status-dot active"></span>
+      </div>
+      
+      <div class="user-info">
+        <small id="statusText">Active now</small>
+      </div>
+    </div>
+
+    <button class="action-btn" onclick="openAssessmentPage()">
+     <i class="fas fa-upload"></i> Submit Assessment
+   </button>
+   </header>
+<div class="welcome-container">
+  <div class="welcome-track" id="welcomeMessage"></div>
+</div>
+ <main style="padding-bottom: 100px;">
+   <div style="display:flex; justify-content:space-between; align-items: center;">
+   <button id="enrollBtn" class="enrolls-btn">
+  <i class="fas fa-user-plus"></i>
+  <span>Enroll</span>
+</button>
+
+<!-- Small streak pill / badge style -->
+<div id="streakContainer" class="glass-card rounded-full px-5 py-2.5 flex items-center gap-3 shadow-[0_0_20px_var(--glow)] transition-all hover:scale-[1.02]">
+  <div class="text-2xl">🔥</div>
+  <div class="font-bold text-lg text-orange-400">
+    <span id="streakNumber">0</span><span class="text-base"> day</span>
+  </div>
+  <div class="text-xs text-[var(--text-muted)] ml-1">
+    streak
+  </div>
+</div> 
+</div>
+     <div class="announcement-container" id="announcementBar">
+  <div class="announcement-track" id="announcementText"></div>
+</div>
+
+
+
+<div class="assessment-cards">
+  <div class="assessment-card" id="assignmentCard">
+    <h4>Assignments</h4>
+    <p class="count">0</p>
+    <span>Approved</span>
+  </div>
+  
+  <div class="assessment-card" id="projectCard">
+    <h4>Projects</h4>
+    <p class="count">0</p>
+    <span>Approved</span>
+  </div>
+</div>
+
+
+
+<div class="max-w-2xl mx-auto">
+  <div id="progressCard" class="glass-card rounded-3xl p-10"></div>
+</div>
+
+<!-- TESTIMONIAL SUBMISSION -->
+<div class="glass-card rounded-3xl p-8 mt-8">
+    <h3 class="text-2xl font-bold mb-6">Share Your Experience</h3>
+    <form id="testimonialForm" class="space-y-6">
+        <input id="testimonialName" type="text" placeholder="Your Name" 
+               class="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl px-6 py-4 text-[var(--text)]" required>
+        
+        <input id="testimonialPost" type="text" placeholder="Your Role / Post (e.g. Frontend Developer)" 
+               class="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl px-6 py-4 text-[var(--text)]">
+        
+        <textarea id="testimonialMessage" placeholder="Your message..." rows="4"
+                  class="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-2xl px-6 py-4 text-[var(--text)]" required></textarea>
+        
+        <!-- Star Rating -->
+        <div class="flex items-center gap-2">
+            <span class="text-[var(--text-muted)] text-sm mr-3">Rating:</span>
+            <div id="starRating" class="flex gap-1 text-3xl cursor-pointer">
+                <!-- Stars will be added by JS -->
+            </div>
+        </div>
+
+        <button type="submit"
+                class="w-full py-5 bg-gradient-to-r from-[var(--accent)] to-[#60a5fa] text-white rounded-3xl font-semibold text-lg">
+            Submit Testimonial
+        </button>
+    </form>
+</div>
+
+   </main>
+    
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-list">
+      <button class="nav-item active" data-page="home">
+        <i class="fas fa-house"></i>
+        <span>Home</span>
+      </button>
+    <a href="course.html" style="text-decoration: none;" class="nav-item" data-page="projects">
+        <i class="fas fa-book-open"></i>
+        <span>Courses</span>
+      </a>
+      <a onclick="showToast('This feature is not available yet', 'info')" style="text-decoration: none;" class="nav-item" data-page="projects">
+     <i class="fas fa-users-rectangle"></i> 
+        <span>Community</span>
+      </a>
+    <!-- Notification Bell with Badge -->
+<button class="nav-item" data-page="notifications">
+  <i class="fas fa-bell"></i>
+  <span>Notifications</span>
+  <span id="notificationCount" class="notification-count">0</span>
+</button>
+      <button class="nav-item" id="moreBtn">
+        <i class="fas fa-ellipsis"></i>
+        <span>More</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- More Menu Overlay -->
+  <div id="moreMenu">
+    <div class="more-header">
+      <button class="close-more" onclick="document.getElementById('moreMenu').classList.remove('open')">
+        <i class="fas fa-times" style="font-size: 1.8rem;"></i>
+      </button>
+      <button class="community-btn" onclick="showToast('This feature is not available yet', 'info')">
+        <i class="fas fa-users-rectangle"></i> Community
+      </button>
+    </div>
+    
+   <div class="leaderboard-section">
+  <h3 class="leaderboard-title">🏆 Leaderboard</h3>
+  
+  <div id="leaderboardList">
+    
+    <!-- JS will inject -->
+    <div class="horizontal-scroll">
+      
+      <div class="rank-card top-1">
+        <!-- user with wings -->
+      </div>
+      
+      <div class="rank-card top-2"></div>
+      <div class="rank-card top-3"></div>
+      
+    </div>
+    
+  </div>
+</div>
+    <div class="more-list">
+      <div class="more-item" onclick="openProfilePage()">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </div>
+     <div class="more-item" onclick="openAssessmentPage()">
+  <i class="fas fa-clipboard-question"></i>
+  <span>Assessment</span>
+</div>
+  <div class="more-item" onclick="showToast('This feature is not available yet', 'info')">
+  <i class="fas fa-award"></i>
+  <span>Certificate</span>
+</div>
+
+<div class="more-item" onclick="showToast('This feature is not available yet', 'info')">
+  <i class="fas fa-credit-card"></i>
+  <span>Payment</span>
+</div>
+   <div class="more-item" id="level-btn">
+  <i class="fas fa-rocket"></i>
+  <span>Progression</span>
+</div>
+   <button id="openSettingsBtn" class="more-item" style="font-weight: 300px;">
+  <i class="fas fa-user-cog"></i>
+  Account Settings
+</button>
+      <div class="more-item" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="modeIcon"></i>
+        <span>Dark/Light Mode</span>
+      </div>
+    
+  <a href="support.html" class="more-item" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+  
+    <i class="fas fa-headset"></i>
+    <span>Talk to Support</span>
+   
+  </a>
+
+     <div class="more-item logout" onclick="openLogoutModal()">
+  <i class="fas fa-arrow-right-from-bracket"></i>
+  <span>Logout</span>
+</div>
+    </div>
+  </div>
+
+
+
+<!-- Fullscreen Notifications Panel -->
+<div id="notificationsPanel" class="notifications-panel">
+  <div class="notifications-header">
+    <h2>Notifications</h2>
+    <button id="closeNotifications" class="close-btn">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    <button id="deleteAllNotifications" class="delete-all-btn" title="Delete All">
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+  <div id="notificationsList" class="notifications-list">
+    <p class="empty-text">Loading notifications...</p>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div id="settingsOverlay" class="settings-overlay"></div>
+
+<!-- Settings Panel -->
+<div id="accountSettingsContainer" class="settings-panel">
+  
+  <div class="settings-header">
+    <h2><i class="fas fa-shield-halved"></i> Account Settings</h2>
+    
+    <button class="close-settings">
+      <i class="fas fa-xmark"></i>
+    </button>
+  </div>
+  
+  <div class="settings-items">
+    
+    <div class="settings-item" onclick="togglePasswordForm()">
+      <i class="fas fa-key"></i>
+      <span>Change Password</span>
+      <i class="fas fa-chevron-right arrow"></i>
+    </div>
+   
+
+ <div class="settings-currency">
+  
+  <div class="settings-item" id="currencyBtn">
+    <i class="fas fa-dollar-sign"></i>
+    <span>Change Currency</span>
+    
+    <small id="currentCurrency">₦ NGN</small>
+    
+    <i class="fas fa-chevron-right arrow" id="currencyArrow"></i>
+  </div>
+  
+  <div class="currency-selected" id="currencyBox">
+    <i class="fas fa-money-bill-wave"></i>
+   
+    
+ <select id="currencySelect">
+      <option value="NGN">Select your currency</option>
+      <option value="NGN">🇳🇬 Nigeria (₦ NGN)</option>
+      <option value="GHS">🇬🇭 Ghana (₵ GHS)</option>
+      <option value="GMD">🇬🇲 Gambia (D GMD)</option>
+      <option value="INR">🇮🇳 India (₹ INR)</option>
+      <option value="AFN">🇦🇫 Afghanistan (؋ AFN)</option>
+      <option value="GBP">🇬🇧 UK (£ GBP)</option>
+      <option value="USD">🇺🇸 USA ($ USD)</option>
+      <option value="CAD">🇨🇦 Canada ($ CAD)</option>
+      <option value="EUR">🇩🇪 Germany (€ EUR)</option>
+      <option value="EUR">🇫🇷 France (€ EUR)</option>
+      <option value="KES">🇰🇪 Kenya (KES)</option>
+      <option value="RWF">🇷🇼 Rwanda (RWF)</option>
+      <option value="UGX">🇺🇬 Uganda (UGX)</option>
+      <option value="ZAR">🇿🇦 South Africa (ZAR)</option>
+      <option value="TZS">🇹🇿 Tanzania (TZS)</option>
+      <option value="ZMW">🇿🇲 Zambia (ZMW)</option>
+      <option value="PKR">🇵🇰 Pakistan (PKR)</option>
+      <option value="XOF">🇹🇬 Togo (XOF)</option>
+    </select>
+    <i class="fas fa-chevron-down arrow" id="currencyArrow"></i>
+  </div>
+  
+</div>
+    
+  </div>
+  
+  <!-- Password Form -->
+<div id="passwordForm" class="password-form">
+  
+  <h3><i class="fas fa-lock"></i> Change Password</h3>
+  
+  <div class="input-group">
+    <input type="password" id="oldPassword" placeholder="Old Password">
+    <i class="fas fa-eye toggle-eye" onclick="togglePasswordVisibility('oldPassword', this)"></i>
+  </div>
+  
+  <div class="input-group">
+    <input type="password" id="newPassword" placeholder="New Password">
+    <i class="fas fa-eye toggle-eye" onclick="togglePasswordVisibility('newPassword', this)"></i>
+  </div>
+  
+  <div class="input-group">
+    <input type="password" id="confirmPassword" placeholder="Confirm Password">
+    <i class="fas fa-eye toggle-eye" onclick="togglePasswordVisibility('confirmPassword', this)"></i>
+  </div>
+  
+  <button class="update-btn" onclick="updatePassword()" id="updatePasswordBtn">
+    <i class="fas fa-check"></i>
+    Update Password
+  </button>
+  
+</div>
+  
+  <div id="deviceSection" class="device-section">
+  
+  <h3>
+    <i class="fas fa-laptop"></i>
+    Devices & Sessions
+  </h3>
+  
+  <div id="deviceList"></div>
+  
+  <button class="logout-all-btn" onclick="logoutOtherDevices()">
+    <i class="fas fa-right-from-bracket"></i>
+    Logout Other Devices
+  </button>
+  
+</div>
+
+<div class="activity-section">
+  
+  <h3>
+    <i class="fas fa-clock-rotate-left"></i>
+    Login Activity
+  </h3>
+  
+  <div id="activityList"></div>
+  
+</div>
+  
+  
+  <div class="security-alerts">
+  
+  <h3>
+    <i class="fas fa-triangle-exclamation"></i>
+    Security Alerts
+  </h3>
+  
+  <div id="alertList"></div>
+  
+</div>
+  
+  
+  
+</div>
+
+
+
+<!-- PROFILE COMPLETION MODAL -->
+<div id="profileCompletionModal" class="profile-modal-overlay" style="display: none;">
+  <div class="profile-modal-content">
+    <div class="modal-icon">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    
+    <h2>Complete your profile ✨</h2>
+    <p>Finish setting up your public profile to unlock full features and let others discover you in the community!</p>
+    
+    <div class="modal-actions">
+      <button onclick="completeNow()" class="btn btn-primary">
+        Complete Now
+      </button>
+      <button onclick="maybeLater()" class="btn btn-secondary">
+        Maybe Later
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Profile Full Page -->
+<div id="profilePage" class="profile-page">
+  <header class="profile-header">
+    <button class="back-btn" onclick="closeProfilePage()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <h2>Profile</h2>
+  </header>
+  
+  <div class="profile-content">
+    <section class="personal-details">
+      <h3>Personal Details</h3>
+      <div class="avatar-large">
+    <img id="profileAvatar" 
+         src="https://i.pravatar.cc/150?img=68" 
+         alt="Profile">
+
+    <!-- Pencil icon -->
+    <div class="edit-icon" id="editBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Hidden file input -->
+  <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+
+      <div class="detail-item">
+        <strong>Full Name:</strong> <span id="displayFullName">Loading...</span>
+      </div>
+      <div class="detail-item">
+        <strong>Email:</strong> <span id="displayEmail">Loading...</span>
+      </div>
+      <div class="detail-item">
+        <strong>Phone:</strong> <span id="displayPhone">Not set</span>
+      </div>
+      <div class="detail-item">
+        <strong>Country:</strong> <span id="displayCountry">Nigeria</span>
+      </div>
+    </section>
+
+    <section class="public-details">
+      <h3>Public Profile (Editable)</h3>
+      <div class="edit-form" id="profileForm">
+
+        <label for="username">@Username <span class="required">*</span></label>
+        <input type="text" id="username" placeholder="@yourusername" required />
+
+        <label for="fullName">Full Name <span class="required">*</span></label>
+        <input type="text" id="fullName" placeholder="Your full name" required />
+        
+        <label for="headline">Headline <span class="required">*</span></label>
+        <select id="headline" required>
+          <option value="" disabled selected>Choose your tech headline...</option>
+          <option value="Full-Stack Developer crafting scalable & modern web experiences">Full-Stack Developer crafting scalable & modern web experiences</option>
+          <option value="Frontend Engineer — React, UI/UX, performance obsessed">Frontend Engineer — React, UI/UX, performance obsessed</option>
+          <option value="Backend Engineer building reliable APIs & systems">Backend Engineer building reliable APIs & systems</option>
+          <option value="Software Developer — clean code, maintainable architecture">Software Developer — clean code, maintainable architecture</option>
+          <option value="AI & Modern Stack Developer exploring agents and future tech">AI & Modern Stack Developer exploring agents and future tech</option>
+          <option value="Problem-Solving Coder — JavaScript • Python • Cloud">Problem-Solving Coder — JavaScript • Python • Cloud</option>
+          <option value="Passionate Dev creating tools & experiences people love">Passionate Dev creating tools & experiences people love</option>
+        </select>
+        <small class="help-text">Pick one that best represents you right now</small>
+
+        <label for="bio">Bio (short intro) <span class="required">*</span></label>
+        <textarea id="bio" placeholder="Short intro about yourself..." required></textarea>
+        
+        <label for="description">Description (detailed — optional)</label>
+        <textarea id="description" rows="5" placeholder="Skills, experience, passion, projects..."></textarea>
+        
+        <label for="twitter">Twitter / X (optional)</label>
+        <input type="url" id="twitter" placeholder="https://x.com/yourhandle  or  @yourhandle" />
+        <small class="help-text">Full link or just @handle — we'll format it nicely</small>
+
+        <label for="tiktok">TikTok (optional)</label>
+        <input type="url" id="tiktok" placeholder="https://tiktok.com/@yourhandle  or  @yourhandle" />
+        
+        <label for="whatsapp">WhatsApp <span class="required">*</span></label>
+        <input type="tel" id="whatsapp" placeholder="+234 812 345 6789" required />
+        
+        <label for="website">Website / Portfolio (optional)</label>
+        <input type="url" id="website" placeholder="https://yourportfolio.com" />
+        
+        <label for="github">GitHub (optional)</label>
+        <input type="url" id="github" placeholder="https://github.com/yourusername  or  yourusername" />
+        <small class="help-text">Full link or just username — great for showing your work</small>
+
+        <label for="location">Location <span class="required">*</span></label>
+        <input type="text" id="location" placeholder="City, Country (e.g. Lagos, Nigeria)" required />
+        
+        <label for="birthday">Birthday (optional)</label>
+        <input type="date" id="birthday" />
+        
+        <label for="profession">Profession (optional)</label>
+        <input type="text" id="profession" placeholder="e.g. Web Developer, Student, Freelancer" />
+        
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+         id="saveProfileBtn"
+          style="margin-top:1.5rem; margin-bottom: 70px; background: var(--accent); color: white; border: none; padding: 0.9rem 1.6rem; border-radius: 1rem; font-weight: 600; cursor: pointer;"
+        >
+          Save Public Profile
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- ASSESSMENT PAGE -->
+<div id="assessmentPage" class="assessment-page" style="display:none;">
+  <header class="page-header">
+    <button class="back-btn" onclick="closeAssessmentPage()"><i class="fas fa-chevron-left"></i></button>
+    <h2>Assessment</h2>
+  </header>
+  
+  <div class="assessment-content">
+    <!-- Tabs -->
+    <div class="tab-container">
+      <div class="tab active" onclick="switchTab(0)" id="tab0">Assignments</div>
+      <div class="tab" onclick="switchTab(1)" id="tab1">Projects</div>
+    </div>
+    
+    <!-- Upload Area -->
+    <div class="upload-card" id="uploadCard">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <h3>Upload your <span id="uploadType">Assignment</span></h3>
+      <p>Drag & drop or click to browse<br>PDF, JPG, PNG (max 10MB)</p>
+<input type="file" id="fileInput" style="display:none;" multiple>
+      <div class="file-preview" id="fileName"></div>
+      <div id="fileListContainer" class="file-list"></div>
+<!-- old #fileName can stay for compatibility or be removed -->
+    </div>
+    
+    <!-- Progress -->
+    <div class="progress-container hidden" id="progressContainer">
+      <div class="progress-bar">
+        <div class="progress" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">0%</div>
+    </div>
+    <div class="submit-container">
+  <button class="submit-btn" id="submitBtn" onclick="startUpload()" disabled>
+    Submit
+  </button>
+</div>
+    
+    <!-- Submission History -->
+    <div class="history-section">
+      <h3>Your Submission History</h3>
+      <div id="historyList" class="history-list">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications Page -->
+<div id="notificationsPage" class="full-page-section">
+  <header class="page-header">
+    <button class="back-btn" onclick="closePage('notificationsPage')"><i class="fas fa-chevron-left"></i></button>
+    <h2>Notifications</h2>
+  </header>
+  <div class="page-content centered-empty">
+    <i class="fas fa-bell-slash fa-4x" style="opacity:0.4; margin-bottom:1.5rem;"></i>
+    <h3>No notifications yet</h3>
+    <p>When you get updates, they'll appear here.</p>
+  </div>
+</div>
+
+
+
+<!-- Courses Page -->
+<div id="coursesPage" class="full-page-section">
+  <header class="page-header">
+    <button class="back-btn" onclick="closePage('coursesPage')"><i class="fas fa-chevron-left"></i></button>
+    <h2>Courses</h2>
+  </header>
+  <div class="page-content">
+    <div class="course-grid">
+      <!-- Example course cards -->
+      <div class="course-card glass-card">
+        <div class="course-image" style="background: linear-gradient(135deg, #8b5cf6, #d946ef);"></div>
+        <div class="course-info">
+          <h3>Full-Stack Web Development</h3>
+          <p>HTML, CSS, JavaScript, React, Node.js • 12 weeks</p>
+          <div class="price">₦45,000</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+      
+      <div class="course-card glass-card">
+        <div class="course-image" style="background: linear-gradient(135deg, #10b981, #34d399);"></div>
+        <div class="course-info">
+          <h3>UI/UX Design Masterclass</h3>
+          <p>Figma, User Research, Prototyping • 8 weeks</p>
+          <div class="price">₦38,000</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+      
+      <div class="course-card glass-card">
+        <div class="course-image" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);"></div>
+        <div class="course-info">
+          <h3>Digital Marketing & SEO</h3>
+          <p>Google Ads, Social Media, Analytics • 10 weeks</p>
+          <div class="price">₦32,000</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Page -->
+<div id="settingsPage" class="full-page-section">
+  <header class="page-header">
+    <button class="back-btn" onclick="closePage('settingsPage')"><i class="fas fa-chevron-left"></i></button>
+    <h2>Settings</h2>
+  </header>
+  <div class="page-content settings-list">
+    <div class="settings-item" onclick="togglePasswordForm()">
+      <i class="fas fa-key"></i>
+      <div>Change Password</div>
+    </div>
+    <div class="settings-item">
+      <i class="fas fa-laptop"></i>
+      <div>Devices & Sessions</div>
+    </div>
+    <div class="settings-item">
+      <i class="fas fa-globe"></i>
+      <div>App Language</div>
+    </div>
+    <div class="settings-item">
+      <i class="fas fa-dollar-sign"></i>
+      <div>Change Currency</div>
+    </div>
+    
+    <!-- Password change form (hidden by default) -->
+    <div id="passwordForm" class="hidden-form glass-card" style="display:none; margin:1.5rem;">
+      <h3>Change Password</h3>
+      <input type="password" placeholder="Old Password" />
+      <input type="password" placeholder="New Password" />
+      <input type="password" placeholder="Confirm New Password" />
+      <button class="submit-btn" style="margin-top:1rem;">Update Password</button>
+      <button class="cancel-btn" onclick="togglePasswordForm()">Cancel</button>
+    </div>
+    
+    <div class="settings-item" onclick="openSupportPage()">
+      <i class="fas fa-headset"></i>
+      <div>Talk to Support</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="modal-overlay" style="display:none;">
+  <div class="modal-container glass-card">
+    
+    <h3>Log Out</h3>
+    <p>Are you sure you want to log out of your account?</p>
+    
+    <div class="modal-buttons">
+      <button class="cancel-btn" onclick="closeLogoutModal()">Cancel</button>
+      
+      <button id="confirmLogoutBtn" class="logout-confirm-btn" onclick="confirmLogout()">
+        Yes, Log Out
+      </button>
+    </div>
+    
+  </div>
+</div>
+
+
+
+<!-- Overlay -->
+<div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
+
+<!-- Sliding premium container -->
+<div class="premium-panel" id="premium-panel">
+  
+  <div class="panel-header">
+    <h2>Your Progression Grid</h2>
+    <button class="close-panel" onclick="closePanel()">×</button>
+  </div>
+  
+  <!-- Profile Card -->
+  <div class="user-profile-card">
+
+    <div class="avatar-wraper">
+      <svg class="progress-ring" width="90" height="90">
+        <circle class="ring-bg" cx="45" cy="45" r="40"></circle>
+        <circle class="ring-progress" cx="45" cy="45" r="40"></circle>
+      </svg>
+      <img id="profile-avatar" src="https://via.placeholder.com/120?text=You" alt="Profile">
+    </div>
+
+    <div class="profile-info">
+      <h3 id="username-display">Loading...</h3>
+      <p class="current-level">
+        <span id="stage-emoji">⚪</span>
+        <span id="current-level-display">Node</span>
+      </p>
+      <div class="points-balance">
+        <span id="point-count">0</span> points
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Achievements -->
+  <div class="achievements">
+    <div class="badge">⚡ submit Assessment</div>
+    <div class="badge">💻 Win Task</div>
+    <div class="badge">🔥 Engas</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Level Cards -->
+  <div class="levels-grid">
+    <div class="level-card" data-min="0">
+      <div class="level-header">
+        <span class="stage-emoji">⚪</span>
+        <span class="level-name">Node</span>
+      </div>
+      <p>0 – 99 points</p>
+      <div class="progress-bar"><div class="fill"></div></div>
+    </div>
+
+    <div class="level-card" data-min="100">
+      <div class="level-header">
+        <span class="stage-emoji">🏃</span>
+        <span class="level-name">Runner</span>
+      </div>
+      <p>100 – 499 points</p>
+      <div class="progress-bar"><div class="fill"></div></div>
+    </div>
+
+    <div class="level-card" data-min="500">
+      <div class="level-header">
+        <span class="stage-emoji">💻</span>
+        <span class="level-name">Decoder</span>
+      </div>
+      <p>500 – 1499 points</p>
+      <div class="progress-bar"><div class="fill"></div></div>
+    </div>
+
+    <div class="level-card" data-min="1500">
+      <div class="level-header">
+        <span class="stage-emoji">🧠</span>
+        <span class="level-name">Architect</span>
+      </div>
+      <p>1500 – 4999 points</p>
+      <div class="progress-bar"><div class="fill"></div></div>
+    </div>
+
+    <div class="level-card" data-min="5000">
+      <div class="level-header">
+        <span class="stage-emoji">👑</span>
+        <span class="level-name">Net Sovereign</span>
+      </div>
+      <p>5000+ points</p>
+      <div class="progress-bar"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Points History -->
+  <div class="points-history">
+    <h3>Points History</h3>
+    <div id="history-list">
+      <p>Loading history...</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Level Up Popup -->
+<div class="levelup-popup" id="levelup-popup">
+  <div class="levelup-box">
+    <h2>LEVEL UP 🚀</h2>
+    <p id="new-level-text"></p>
+  </div>
+</div>
+
+
+<div id="community-full-view" class="community-full-view hidden">
+  <div class="full-view-header">
+    <button class="close-full-view" aria-label="Close">
+      <i class="fas fa-times"></i>
+    </button>
+    <h1 class="full-view-title">Your Community Profile</h1>
+  </div>
+
+
+<div class="community-profile-card" id="community-profile-card">
+  
+  <button class="edit-profile-btn" title="Edit public profile">
+  <i class="fas fa-pencil-alt"></i>
+</button>
+
+  <!-- Avatar + progress ring (adapted from your example) -->
+  <div class="avatar-wrapper center" style="margin-top:50px;" >
+  
+    <img id="community-profile-avatar" 
+         class="avatar-large" 
+         src="https://via.placeholder.com/120?text=?" 
+         alt="Community profile">
+  </div>
+
+  <!-- Name -->
+  <h2 id="community-full-name" class="community-name mt-3">Loading...</h2>
+
+  <!-- Active status -->
+  <div class="status-line mb-1">
+    <span id="community-active-status" class="status-dot offline"></span>
+    <span id="community-active-text">Offline</span>
+  </div>
+
+  <!-- Member since -->
+  <p class="member-since text-muted mb-4">
+    Member since <span id="member-since-date">—</span>
+  </p>
+
+  <!-- Join / Joined button -->
+  <button id="join-community-btn" class="btn btn-primary mb-4" style="display:none;">
+    Join Community
+  </button>
+  <div id="joined-badge" class="badge bg-success mb-4" style="display:none;">
+    Joined Community ✓
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs flex justify-center gap-2 mb-5">
+    <button class="tab-btn active" data-tab="about">About</button>
+    <button class="tab-btn" data-tab="posts">Posts</button>
+  </div>
+
+  <!-- Tab content -->
+  <div id="tab-content" class="tab-content">
+
+    <!-- About tab -->
+    <div id="about-tab" class="tab-panel active">
+      <div class="leaderboard-stats mb-5">
+        <div class="podium">
+          <span class="gold">🥇 <span id="wins-1st">0</span></span>
+          <span class="silver">🥈 <span id="wins-2nd">0</span></span>
+          <span class="bronze">🥉 <span id="wins-3rd">0</span></span>
+        </div>
+        <p class="points-line">
+          <strong><span id="community-points">0</span> points</strong>
+          <span class="next-level">• <span id="points-to-next">—</span> to next level</span>
+        </p>
+      </div>
+
+      <p id="community-headline" class="headline mb-3"></p>
+      <p id="community-bio" class="bio mb-4"></p>
+      <p id="community-location" class="location mb-3"></p>
+
+      <div id="social-links" class="social-links flex gap-3 mb-4"></div>
+
+      <p class="username-tag">
+        <span>@</span><span id="community-username"></span>
+      </p>
+    </div>
+
+    <!-- Posts tab -->
+    <div id="posts-tab" class="tab-panel" style="display:none;">
+      <div id="user-posts-container" class="posts-grid">
+        <!-- Posts loaded here dynamically -->
+      </div>
+      <div id="no-posts-message" class="text-center py-8" style="display:none;">
+        <p class="text-muted">No posts yet.</p>
+        <button id="join-to-post-btn" class="btn btn-outline mt-3" style="display:none;">
+          Join Community to Start Posting
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm"
+
+const supabaseUrl  = "https://jffkatwagcfshvddnipr.supabase.co"
+const supabaseKey  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8"
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// ─── Push Notifications for Student Dashboard ─────────────────────
+
+// ────────────────────────────────────────────────
+//  AUTH & USER MANAGEMENT (Cleaned)
+// ────────────────────────────────────────────────
+
+let currentUser   = null
+let currentProfile = null
+let isUploading    = false
+let isChecking     = true;
+
+async function checkAuth() {
+  try {
+    isChecking = true;
+    
+    const { data: { session }, error } = await supabase.auth.getSession();
+    
+    if (error || !session) {
+      location.replace("auth.html");
+      return;
+    }
+    
+    currentUser = session.user;
+    
+    // Check role from users table
+    const { data: profile } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', currentUser.id)
+      .single();
+    
+    const userRole = profile?.role || 'user';
+    
+    if (userRole === 'admin') {
+      console.log("Admin user detected → redirecting");
+      location.replace("mydashboard.html");
+      return;
+    }
+    
+    // Student continues
+    await detectNewDevice();
+    await saveSession();
+    await saveLoginActivity();
+    
+    // Load student data
+    await Promise.all([
+      loadAndDisplayProfile(),
+      updateAndRenderStreak(),
+      loadUserProgress(),
+      setupRealtimeNotifications()
+    ]);
+    
+  } catch (err) {
+    console.error("Auth error:", err);
+    showToast("Connection problem. Please check internet.", "error", 6000);
+    setTimeout(() => location.replace("auth.html"), 2500);
+  } finally {
+    isChecking = false;
+  }
+}
+
+// Auth state listener
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_OUT" || !session) {
+    location.replace("auth.html");
+    return;
+  }
+  if (session?.user) currentUser = session.user;
+});
+
+// Run on page load
+window.addEventListener('load', () => checkAuth());
+
+// Re-check when tab becomes visible
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && !isChecking) {
+    checkAuth();
+  }
+});
+
+// ────────────────────────────────────────────────
+//  UTILITIES
+// ────────────────────────────────────────────────
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function showToast(msg, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  let iconHTML = "";
+  switch(type) {
+    case "success": iconHTML = '<i class="fas fa-check-circle"></i>'; break;
+    case "error": iconHTML = '<i class="fas fa-times-circle"></i>'; break;
+    case "warning": iconHTML = '<i class="fas fa-exclamation-triangle"></i>'; break;
+    case "info": iconHTML = '<i class="fas fa-info-circle"></i>'; break;
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <span class="toast-icon">${iconHTML}</span>
+    <span class="toast-message">${msg}</span>
+    <div class="toast-progress">
+      <div class="toast-progress-bar"></div>
+    </div>
+  `;
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  const progressBar = toast.querySelector(".toast-progress-bar");
+  progressBar.style.transition = `transform ${duration}ms linear`;
+  requestAnimationFrame(() => {
+    progressBar.classList.add("active");
+    progressBar.style.transform = "translateX(0)";
+  });
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("closing");
+    setTimeout(() => toast.remove(), 350);
+  }, duration);
+}
+
+function closeAllOverlays() {
+  ['moreMenu','profilePage','assessmentPage'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('open');
+  });
+}
+
+function setIfExists(id, property, value) {
+  const el = document.getElementById(id);
+  if (el) el[property] = value;
+}
+
+// ────────────────────────────────────────────────
+//  NOTIFICATIONS (Fixed Badge Count)
+// ────────────────────────────────────────────────
+
+async function updateNotificationCount() {
+  if (!currentUser) return;
+  try {
+    const { count, error } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", currentUser.id)
+      .eq("is_read", false);
+    
+    if (!error) {
+      const unreadCount = count || 0;
+      const notificationCount = document.getElementById("notificationCount");
+      if (notificationCount) {
+        notificationCount.textContent = unreadCount;
+        notificationCount.style.display = unreadCount > 0 ? "flex" : "none";
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch notification count:", err);
+  }
+}
+
+const bellBtn = document.querySelector('button[data-page="notifications"]');
+const notificationsPanel = document.getElementById("notificationsPanel");
+const closeNotifications = document.getElementById("closeNotifications");
+const deleteAllBtn = document.getElementById("deleteAllNotifications");
+const notificationsList = document.getElementById("notificationsList");
+
+// Open panel + mark as read + reset badge
+bellBtn.addEventListener("click", async () => {
+  if (!currentUser) return;
+  
+  notificationsPanel.classList.add("open");
+  await loadNotifications();
+  
+  // Mark all as read when opening panel
+  try {
+    await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("user_id", currentUser.id)
+      .eq("is_read", false);
+    
+    updateNotificationCount();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+closeNotifications.addEventListener("click", () => {
+  notificationsPanel.classList.remove("open");
+});
+
+async function loadNotifications() {
+  if (!currentUser) return;
+  
+  notificationsList.innerHTML = `<p class="empty-text">Loading notifications...</p>`;
+  
+  try {
+    const { data: notifications, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", currentUser.id)
+      .order("created_at", { ascending: false });
+    
+    if (error) throw error;
+    
+    if (!notifications || notifications.length === 0) {
+      notificationsList.innerHTML = `<p class="empty-text">No notifications yet.</p>`;
+      return;
+    }
+    
+    notificationsList.innerHTML = "";
+    
+    notifications.forEach(n => {
+      const time = new Date(n.created_at).toLocaleString([], {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      });
+      
+      const item = document.createElement("div");
+      item.className = "notification-item";
+      
+      item.innerHTML = `
+        <div class="notification-header">
+          <span class="notification-title">${n.title}</span>
+          <span class="notification-time">${time}</span>
+        </div>
+        <div class="notification-message">${escapeHtml(n.message)}</div>
+        <button class="delete-btn" title="Delete">
+          <i class="fas fa-trash"></i>
+        </button>
+      `;
+      
+      item.querySelector(".delete-btn").addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await supabase.from("notifications").delete().eq("id", n.id);
+        item.remove();
+        if (!notificationsList.querySelector(".notification-item")) {
+          notificationsList.innerHTML = `<p class="empty-text">No notifications yet.</p>`;
+        }
+        updateNotificationCount();
+      });
+      
+      notificationsList.appendChild(item);
+    });
+    
+  } catch (err) {
+    console.error(err);
+    notificationsList.innerHTML = `<p class="empty-text">Failed to load notifications.</p>`;
+  }
+}
+
+async function setupRealtimeNotifications() {
+  if (!currentUser) return;
+  
+  supabase
+    .channel(`notifications:user=${currentUser.id}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `user_id=eq.${currentUser.id}`
+      },
+      () => {
+        showToast("New notification received", "info", 3000);
+        updateNotificationCount();
+        if (notificationsPanel.classList.contains("open")) {
+          loadNotifications();
+        }
+      }
+    )
+    .subscribe();
+}
+
+// Delete all
+deleteAllBtn.addEventListener("click", async () => {
+  if (!currentUser || !confirm("Delete all notifications?")) return;
+  
+  await supabase.from("notifications").delete().eq("user_id", currentUser.id);
+  notificationsList.innerHTML = `<p class="empty-text">No notifications yet.</p>`;
+  showToast("All notifications deleted", "success");
+  updateNotificationCount();
+});
+
+
+
+// ────────────────────────────────────────────────
+//  Profile Loading & Saving
+// ────────────────────────────────────────────────
+async function loadAndDisplayProfile() {
+  if (!currentUser?.id) return;
+  
+  // ── Loading state ───────────────────────────────
+  const loadingEls = [
+    'userName', 'dashboardUserName', 'displayFullName',
+    'displayEmail', 'displayPhone', 'displayCountry',
+    'headerAvatar', 'profileAvatar'
+  ];
+  
+  loadingEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    
+    if (el.tagName === 'IMG') {
+      el.src = 'https://i.pravatar.cc/150?img=68'; // neutral placeholder while loading
+    } else {
+      el.textContent = 'Loading...';
+    }
+  });
+  
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', currentUser.id)
+      .single();
+    
+    // PGRST116 = no rows → treat as empty profile
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+    
+    currentProfile = data ?? {};
+    
+    // Fallback name
+    const fallbackName =
+      currentProfile.username ||
+      currentProfile.full_name ||
+      currentUser.email?.split('@')[0]?.split('.')[0] ||
+      'Student';
+    
+    // Display fields
+    setIfExists('userName', 'textContent', fallbackName);
+    setIfExists('dashboardUserName', 'textContent', fallbackName);
+    setIfExists('displayFullName', 'textContent', currentProfile.full_name || 'Not set');
+    setIfExists('displayEmail', 'textContent', currentUser.email || '—');
+    setIfExists('displayPhone', 'textContent', currentProfile.phone || 'Not set');
+    setIfExists('displayCountry', 'textContent', currentProfile.country || 'Nigeria');
+    
+    // Avatar Handling (Important Fix)
+    let avatarSrc = currentProfile.profile_image ||
+      currentProfile.profile_image ||
+      `https://i.pravatar.cc/150?u=${currentUser.id}`;
+    
+    // Add cache-busting if needed (helps show newly uploaded image immediately)
+    if (avatarSrc.includes('supabase.co')) {
+      avatarSrc += (avatarSrc.includes('?') ? '&' : '?') + 't=' + Date.now();
+    }
+    
+    setIfExists('headerAvatar', 'src', avatarSrc);
+    setIfExists('profileAvatar', 'src', avatarSrc);
+    
+    // ── Fill edit form fields ──────────────────────
+    const formFields = [
+      { id: 'username', dbKey: 'username' },
+      { id: 'fullName', dbKey: 'full_name' },
+      { id: 'headline', dbKey: 'headline' },
+      { id: 'bio', dbKey: 'bio' },
+      { id: 'description', dbKey: 'description' },
+      { id: 'twitter', dbKey: 'twitter' },
+      { id: 'tiktok', dbKey: 'tiktok' },
+      { id: 'whatsapp', dbKey: 'whatsapp' },
+      { id: 'website', dbKey: 'website' },
+      { id: 'github', dbKey: 'github' },
+      { id: 'location', dbKey: 'location' },
+      { id: 'birthday', dbKey: 'birthday' },
+      { id: 'profession', dbKey: 'profession' },
+    ];
+    
+    formFields.forEach(({ id, dbKey }) => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      
+      const value = currentProfile[dbKey];
+      
+      if (input.type === 'date' && value) {
+        try {
+          input.value = new Date(value).toISOString().split('T')[0];
+        } catch {
+          input.value = '';
+        }
+      } else {
+        input.value = value ?? '';
+      }
+    });
+    
+    showDashboardWelcome(fallbackName);
+    updateStatusDot(true);
+    
+  } catch (err) {
+    console.error("Profile load failed:", err);
+    showToast(
+      err.message?.includes('network') ?
+      "Network error – check your connection" :
+      "Couldn't load profile. Please try again.",
+      "error"
+    );
+  }
+  finally {
+    initAvatarUpload(); // Always initialize avatar upload
+  }
+}
+
+// ── Better way to attach save button ───────────────────────────────
+function attachSaveProfileListener() {
+  const btn = document.getElementById('saveProfileBtn');
+  if (!btn) {
+    console.warn("Save profile button not found");
+    return;
+  }
+  
+  // Remove previous listener if any (prevents duplicates)
+  btn.removeEventListener('click', handleSaveClick);
+  btn.addEventListener('click', handleSaveClick);
+}
+
+async function handleSaveClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  const btn = e.currentTarget;
+  const originalText = btn.textContent;
+  
+  try {
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    console.log("Save button clicked → calling savePublicProfile");
+    await savePublicProfile();
+    
+    // success toast is probably inside savePublicProfile()
+  } catch (err) {
+    console.error("Save profile failed:", err);
+    showToast("Failed to save profile – please try again", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+// Call this once when page loads (in DOMContentLoaded for example)
+document.addEventListener('DOMContentLoaded', () => {
+  attachSaveProfileListener();
+  // ... other init code
+});
+
+
+window.addEventListener('load', async () => {
+  console.log("[INIT] Page loaded");
+  await updateAndRenderStreak();
+  // ... other init calls like renderProgressCard(), createStarRating(), etc.
+});
+
+
+// ==================== STREAK LOGIC ====================
+// ==================== STREAK LOGIC ====================
+async function updateAndRenderStreak() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    console.log("No user → skipping streak");
+    return;
+  }
+  
+  const todayStr = new Date().toISOString().split('T')[0];
+  console.log("Today's date string:", todayStr);
+  
+  const { data: profile, error } = await supabase
+    .from('users')
+    .select('current_streak, last_visit_date')
+    .eq('id', user.id)
+    .single();
+  
+  if (error) {
+    console.error("Failed to fetch user profile for streak:", error);
+    return;
+  }
+  
+  let streak = profile?.current_streak || 0;
+  let lastVisit = profile?.last_visit_date;
+  
+  console.log("DB values → streak:", streak, "last_visit:", lastVisit);
+  
+  let newStreak = streak;
+  let shouldUpdateDB = false;
+  
+  if (!lastVisit || lastVisit !== todayStr) {
+    if (lastVisit === getYesterdayStr()) {
+      newStreak = streak + 1;
+      console.log("Consecutive day → streak increased to", newStreak);
+    } else {
+      newStreak = 1;
+      console.log("Streak reset → new streak = 1");
+    }
+    shouldUpdateDB = true;
+  } else {
+    console.log("Already visited today → streak unchanged");
+  }
+  
+  if (shouldUpdateDB) {
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        current_streak: newStreak,
+        last_visit_date: todayStr
+      })
+      .eq('id', user.id);
+    
+    if (updateError) {
+      console.error("Failed to update streak:", updateError);
+    } else {
+      console.log("Streak updated in DB →", newStreak);
+    }
+    
+    // Reward check (20-day milestone)
+    if (newStreak >= 20 && streak < 20) {
+      await supabase.from('user_coins').insert({
+        user_id: user.id,
+        amount: 10,
+        type: 'streak_reward',
+        reference_id: '20_day_streak'
+      });
+      
+      showToast("🎉 20-day streak unlocked! +10 coins added!", "success");
+      
+      // ✅ Only insert to notifications table (push sent automatically by realtime)
+      await supabase
+        .from("notifications")
+        .insert({
+          user_id: user.id,
+          title: "🔥 Streak Milestone Reached!",
+          message: `Congratulations! You've hit a ${newStreak}-day streak and earned +10 coins!`,
+          type: "streak_reward"
+        });
+    }
+    // Optional: Notify on normal streak increases (you can remove this if you want only milestones)
+    else if (newStreak > streak && newStreak > 1) {
+      await supabase
+        .from("notifications")
+        .insert({
+          user_id: user.id,
+          title: "🔥 Streak Increased!",
+          message: `Great job! Your streak is now ${newStreak} days 🔥`,
+          type: "streak"
+        });
+    }
+  }
+  
+  renderStreakContainer(newStreak);
+}
+
+// Helper to get yesterday in YYYY-MM-DD
+function getYesterdayStr() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return yesterday.toISOString().split('T')[0];
+}
+
+
+function renderStreakContainer(streak) {
+  const container = document.getElementById("streakContainer");
+  
+  // For compact pill version
+  container.innerHTML = `
+        <div class="text-2xl">🔥</div>
+        <div class="font-bold text-lg text-orange-400">
+            ${streak}<span class="text-base ml-1">day${streak !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="text-xs text-[var(--text-muted)] ml-2">streak</div>
+    `;
+  
+
+}
+
+
+
+// =============================================
+// IMPROVED STAR RATING LOGIC
+// =============================================
+let selectedRating = 3; // default
+
+function createStarRating() {
+  const container = document.getElementById("starRating");
+  if (!container) {
+    console.error("Star rating container not found!");
+    return;
+  }
+  
+  container.innerHTML = ''; // clear previous stars
+  
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("span");
+    star.textContent = i <= selectedRating ? "★" : "☆"; // solid vs outline
+    star.className = `cursor-pointer transition-colors duration-200 ${
+            i <= selectedRating 
+                ? "text-yellow-400 hover:text-yellow-300" 
+                : "text-gray-500 hover:text-gray-400"
+        }`;
+    
+    // Hover preview effect
+    star.onmouseover = () => previewRating(i);
+    star.onmouseout = () => previewRating(selectedRating);
+    
+    // Click to select
+    star.onclick = () => {
+      selectedRating = i;
+      createStarRating(); // re-render with new selection
+    };
+    
+    container.appendChild(star);
+  }
+}
+
+// Temporary preview on hover
+function previewRating(rating) {
+  const container = document.getElementById("starRating");
+  if (!container) return;
+  
+  const stars = container.querySelectorAll("span");
+  stars.forEach((star, index) => {
+    const starNum = index + 1;
+    star.textContent = starNum <= rating ? "★" : "☆";
+    star.className = `cursor-pointer transition-colors duration-200 ${
+            starNum <= rating 
+                ? "text-yellow-400 hover:text-yellow-300" 
+                : "text-gray-500 hover:text-gray-400"
+        }`;
+  });
+}
+
+// Make sure it runs when page loads
+document.addEventListener("DOMContentLoaded", () => {
+  createStarRating();
+  
+  // Also re-attach form submit if needed
+  const form = document.getElementById("testimonialForm");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return showToast("Please sign in", "error");
+      
+      const name = document.getElementById("testimonialName").value.trim();
+      const post = document.getElementById("testimonialPost").value.trim();
+      const message = document.getElementById("testimonialMessage").value.trim();
+      
+      if (!name || !message) {
+        showToast("Name and message are required", "error");
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('testimonials')
+        .insert({
+          user_id: user.id,
+          name,
+          post: post || null,
+          message,
+          rating: selectedRating
+        });
+      
+      if (!error) {
+        showToast("Thank you! Testimonial submitted 🎉", "success");
+        form.reset();
+        selectedRating = 3;
+        createStarRating();
+      } else {
+        showToast("Failed to submit – try again", "error");
+        console.error(error);
+      }
+    });
+  }
+});
+
+// Initialize on page load
+window.onload = async () => {
+  // ... your existing loadUserProgress() ...
+  
+  await updateAndRenderStreak(); // ← streak
+  createStarRating(); // ← stars
+  renderProgressCard(); // your existing card
+};
+
+
+// ────────────────────────────────────────────────
+//  Navigation & UI
+// ────────────────────────────────────────────────
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  
+  const isLight = document.body.classList.contains('light');
+  
+  // Save preference
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  
+  // Update icon
+  document.getElementById('modeIcon').className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+  
+  // Show toast message
+  showToast(
+    `Switched to ${isLight ? 'Light' : 'Dark'} mode`,
+    'info', // type: info / success / error
+    2500 // duration in ms
+  );
+}
+
+function loadTheme() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light')
+    document.getElementById('modeIcon').className = 'fas fa-sun'
+  }
+}
+
+function updateStatusDot(online = true) {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  
+  if (dot) {
+    dot.classList.toggle('active', !!online); // !! makes sure it's boolean
+  }
+  
+  if (text) {
+    text.textContent = online ? 'Active now' : 'Offline';
+  }
+}
+
+
+// ==================== COURSE DATA (expanded from your original) ====================
+
+const courseData = {
+            fullstack: {
+                name: "Fullstack Development",
+                icon: "🚀",
+                stages: [
+                    {
+                        title: "Stage 1: HTML & CSS Foundations",
+                        topics: [
+                            "Semantic HTML5 & Accessibility",
+                            "CSS Flexbox & Grid Mastery",
+                            "Responsive Design & Mobile-First",
+                            "Advanced Selectors & Custom Properties",
+                            "Basic Animations & Transitions",
+                            "Project: Modern Landing Page"
+                        ]
+                    },
+                    {
+                        title: "Stage 2: JavaScript & Supabase",
+                        topics: [
+                            "Modern JavaScript (ES6+, Async/Await)",
+                            "DOM Manipulation & Events",
+                            "Supabase Authentication & RLS",
+                            "Database CRUD Operations",
+                            "Realtime Subscriptions",
+                            "Project: Auth Todo Application"
+                        ]
+                    },
+                    {
+                        title: "Stage 3: React, TypeScript & Python",
+                        topics: [
+                            "React 18 + Hooks",
+                            "TypeScript Integration",
+                            "Python FastAPI Backend",
+                            "State Management & API Routes",
+                            "Fullstack Deployment",
+                            "Capstone: SaaS Platform"
+                        ]
+                    }
+                ]
+            },
+            frontend: {
+                name: "Frontend Development",
+                icon: "🎨",
+                stages: [
+                    {
+                        title: "Stage 1: HTML Mastery",
+                        topics: [
+                            "Semantic HTML5 & Structure",
+                            "Forms, Validation & ARIA",
+                            "SEO Fundamentals",
+                            "Project: Multi-page Website"
+                        ]
+                    },
+                    {
+                        title: "Stage 2: CSS + JS Interactivity",
+                        topics: [
+                            "Advanced CSS Animations",
+                            "JavaScript DOM & Events",
+                            "Tailwind Pro Techniques",
+                            "Mobile-First Responsive Design",
+                            "Project: Interactive Dashboard"
+                        ]
+                    },
+                    {
+                        title: "Stage 3: Supabase & Deployment",
+                        topics: [
+                            "Supabase Auth & Database",
+                            "Frontend Deployment (Vercel)",
+                            "Performance Optimization",
+                            "PWA Features",
+                            "Project: Dynamic Client App"
+                        ]
+                    }
+                ]
+            },
+            backend: {
+                name: "Backend Development",
+                icon: "⚙️",
+                stages: [
+                    {
+                        title: "Stage 1: Supabase Mastery",
+                        topics: [
+                            "PostgreSQL Schema Design",
+                            "Row Level Security (RLS)",
+                            "Authentication & Authorization",
+                            "Edge Functions & Storage",
+                            "Realtime Features"
+                        ]
+                    },
+                    {
+                        title: "Stage 2: Python & Database",
+                        topics: [
+                            "Python Fundamentals",
+                            "FastAPI Framework",
+                            "Advanced SQL & ORM",
+                            "RESTful API Architecture",
+                            "Authentication Systems"
+                        ]
+                    },
+                    {
+                        title: "Stage 3: Production Deployment",
+                        topics: [
+                            "Docker & CI/CD",
+                            "Cloud Hosting (Railway/AWS)",
+                            "Security & Monitoring",
+                            "Scaling Strategies",
+                            "Capstone: Production API"
+                        ]
+                    }
+                ]
+            },
+            ai: {
+                name: "AI & Digital Creation",
+                icon: "🤖",
+                stages: [
+                    {
+                        title: "Stage 1: AI Fundamentals & Research",
+                        topics: [
+                            "LLMs & Prompt Engineering",
+                            "Research Methodology",
+                            "AI Ethics & Limitations",
+                            "Project: AI Research Report"
+                        ]
+                    },
+                    {
+                        title: "Stage 2: AI Tools Mastery",
+                        topics: [
+                            "ChatGPT / Claude / Grok",
+                            "Image & Video Generation",
+                            "Automation Workflows",
+                            "AI Coding Assistants",
+                            "Project: AI-Powered Workflow"
+                        ]
+                    },
+                    {
+                        title: "Stage 3: Freelancing & Online Content",
+                        topics: [
+                            "Personal Brand Building",
+                            "Upwork / Fiverr Strategy",
+                            "Content Creation (YouTube, Blog)",
+                            "Monetization & Portfolio",
+                            "Launch Your AI Brand"
+                        ]
+                    }
+                ]
+            }
+        }
+
+
+let currentCourseKey = "frontend";
+let currentStage = 1;
+let completedTopics = {};
+let currentUserId = null;
+
+
+
+async function loadUserProgress() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    showToast("Please sign in first", "error");
+    return;
+  }
+  currentUserId = user.id;
+  
+  // Get course & stage
+  const { data: profile, error: profileError } = await supabase
+    .from('users')
+    .select('enrolled_course, selected_stage')
+    .eq('id', user.id)
+    .single();
+  
+  if (profileError) console.error("Profile fetch error:", profileError);
+  if (!profile || !profile.enrolled_course || !profile.selected_stage) {
+    renderNoEnrollment();
+    return;
+  }
+  
+  currentCourseKey = profile.enrolled_course;
+  currentStage = profile.selected_stage;
+  
+  console.log("Loaded course:", currentCourseKey, "stage:", currentStage);
+  
+  // Get progress
+  const { data: progress, error: progressError } = await supabase
+    .from('user_course_progress')
+    .select('stage, topic_index, completed')
+    .eq('user_id', user.id)
+    .eq('course', currentCourseKey);
+  
+  if (progressError) {
+    console.error("Progress fetch error:", progressError);
+  }
+  
+  console.log("Raw progress rows from Supabase:", progress);
+  
+  completedTopics = {};
+  progress?.forEach(p => {
+    const key = `${currentCourseKey}-${p.stage}-${p.topic_index}`;
+    completedTopics[key] = p.completed;
+    console.log(`Added topic: ${key} = ${p.completed}`);
+  });
+  
+  console.log("Final completedTopics object:", completedTopics);
+  
+  renderProgressCard();
+}
+
+function renderNoEnrollment() {
+  const card = document.getElementById("progressCard");
+  if (!card) return;
+  
+  card.innerHTML = `
+  <i class="fa-solid fa-graduation-cap text-5xl mb-6 text-[var(--accent)]"></i>
+      
+      <h2 class="text-2xl font-bold mb-3 tracking-tight">
+        No Course Enrollment
+      </h2>
+      
+      <p class="text-[var(--text-muted)] mb-8 max-w-md">
+        You have not enrolled in any course yet. Start your journey by enrolling in a course.
+      </p>
+      
+      <a href="enroll.html" 
+         class="px-6 py-3 rounded-xl bg-gradient-to-r from-[var(--accent)] to-[var(--secondary)] text-white font-semibold shadow-lg hover:scale-105 transition-all duration-300">
+         Enroll Now
+      </a>
+
+    </div>
+  `;
+}
+
+async function toggleTopic(topicIndex) {
+  const key = `${currentCourseKey}-${currentStage}-${topicIndex}`;
+  const newValue = !completedTopics[key];
+  
+  const { error } = await supabase
+    .from('user_course_progress')
+    .upsert({
+      user_id: currentUserId,
+      course: currentCourseKey,
+      stage: currentStage,
+      topic_index: topicIndex,
+      completed: newValue,
+      completed_at: newValue ? new Date().toISOString() : null
+    });
+  
+  if (!error) {
+    completedTopics[key] = newValue;
+    renderProgressCard();
+    
+    if (newValue) {
+      const topicName = courseData[currentCourseKey]?.stages[currentStage - 1]?.topics[topicIndex] || "a topic";
+      
+      // ✅ Only insert to notifications (push sent automatically)
+      await supabase
+        .from("notifications")
+        .insert({
+          user_id: currentUser.id,
+          title: "Topic Completed",
+          message: `Great work! You finished "${topicName}" in ${currentCourseKey} - Stage ${currentStage}`,
+          type: "course_progress"
+        });
+      
+      showToast("Topic marked complete! 🎉", "success");
+    } else {
+      showToast("Topic unmarked", "info");
+    }
+  } else {
+    showToast("Failed to update topic", "error");
+  }
+}
+
+
+
+
+
+
+function renderProgressCard() {
+  if (!currentCourseKey || !currentStage) {
+  renderNoEnrollment();
+  return;
+}
+
+    const data = courseData[currentCourseKey];
+    const card = document.getElementById("progressCard");
+
+    // Calculate progress in CURRENT stage only (from DB)
+    const currentStageTopics = data.stages[currentStage - 1]?.topics || [];
+    const completedInCurrent = currentStageTopics.filter((_, idx) => 
+        completedTopics[`${currentCourseKey}-${currentStage}-${idx}`] === true
+    ).length;
+
+    const currentCompletionPercent = currentStageTopics.length > 0 
+        ? Math.round((completedInCurrent / currentStageTopics.length) * 100) 
+        : 0;
+
+    let html = `
+        <div class="flex items-center gap-5 mb-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-3xl flex items-center justify-center text-4xl shadow-inner">
+                ${data.icon}
+            </div>
+            <div>
+                <div class="text-3xl font-bold tracking-tighter">${data.name}</div>
+                <div class="flex items-center gap-3 text-[var(--accent)] font-semibold mt-1">
+                    <span class="text-sm uppercase tracking-widest">Stage ${currentStage} of 3</span>
+                    <div class="h-1.5 w-1.5 bg-[var(--accent)] rounded-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Course Progress -->
+        <div class="mb-10">
+            <div class="flex justify-between text-xs uppercase tracking-widest mb-2 text-[var(--text-muted)]">
+                <span>OVERALL COURSE PROGRESS</span>
+                <span>${Math.round(((currentStage - 1) / 3) * 100)}%</span>
+            </div>
+            <div class="h-2.5 bg-[var(--glass-border)] rounded-3xl overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--secondary)] transition-all duration-700" 
+                     style="width: ${Math.round(((currentStage - 1) / 3) * 100)}%"></div>
+            </div>
+        </div>
+
+        <!-- Current Stage Progress -->
+        <div class="mb-10 p-5 glass-card rounded-2xl" style="display:none;">
+            <div class="flex justify-between text-sm font-medium mb-3">
+                <span>Current Stage Progress</span>
+                <span style="display:none;">${completedInCurrent} / ${currentStageTopics.length} topics • ${currentCompletionPercent}%</span>
+            </div>
+            <div class="h-2 bg-[var(--glass-border)] rounded-full overflow-hidden">
+                <div class="h-full bg-[var(--accent)] transition-all duration-700" 
+                     style="width: ${currentCompletionPercent}%"></div>
+            </div>
+        </div>
+    `;
+
+    // Render every stage
+    data.stages.forEach((stageData, idx) => {
+        const stageNum = idx + 1;
+        const isCompleted = stageNum < currentStage;
+        const isCurrent   = stageNum === currentStage;
+        const isFuture    = stageNum > currentStage;
+
+        html += `
+            <div class="relative mb-12 ${isCurrent ? 'before:content-[""] before:absolute before:left-5 before:top-10 before:bottom-[-30px] before:w-0.5 before:bg-[var(--accent)] before:opacity-60' : ''}">
+                <!-- Stage Header -->
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-10 h-10 flex-shrink-0 rounded-2xl flex items-center justify-center text-lg font-semibold transition-all
+                        ${isCompleted ? 'bg-green-500/20 text-green-400' : ''}
+                        ${isCurrent  ? 'bg-[var(--accent)] text-white shadow-[0_0_30px_var(--glow)]' : ''}
+                        ${isFuture   ? 'bg-[var(--input-bg)] text-[var(--text-muted)] border border-[var(--glass-border)]' : ''}">
+                        ${isCompleted ? '<i class="fa-solid fa-check"></i>' : stageNum}
+                    </div>
+                    <div class="font-semibold text-xl ${isCompleted ? 'line-through text-green-400/70' : isCurrent ? 'text-[var(--accent)]' : 'text-[var(--text-secondary)]'}">
+                        ${stageData.title}
+                        ${isCompleted ? ' <span class="text-green-400/80 text-sm">(Completed)</span>' : ''}
+                    </div>
+                </div>
+
+                <!-- Topics -->
+                <div class="ml-14 space-y-5">
+                    ${stageData.topics.map((topic, tIdx) => {
+                        let isTopicDone = false;
+                        let statusText = '';
+
+                        if (isCompleted) {
+                            isTopicDone = true;
+                            statusText = "You're learned";
+                        } else if (isCurrent) {
+                            isTopicDone = !!completedTopics[`${currentCourseKey}-${currentStage}-${tIdx}`];
+                            statusText = isTopicDone ? "You're learned" : "In progress";
+                        } else {
+                            statusText = "Locked";
+                        }
+
+                        return `
+                            <div class="flex items-start gap-4 group">
+                                <div class="mt-1 w-6 h-6 flex items-center justify-center transition-all ${isTopicDone ? 'text-green-400' : isCurrent ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] opacity-60'}">
+                                    ${isTopicDone 
+                                        ? '<i class="fa-solid fa-circle-check text-xl"></i>' 
+                                        : isCurrent 
+                                            ? '<i class="fa-regular fa-circle text-xl"></i>' 
+                                            : '<i class="fa-solid fa-lock text-base"></i>'
+                                    }
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-[var(--text-secondary)] text-[15px] leading-tight ${isTopicDone ? 'line-through opacity-70' : ''} ${isFuture ? 'opacity-50' : ''}">
+                                        ${topic}
+                                    </div>
+                                    <div class="text-xs mt-0.5 ${isTopicDone ? 'text-green-400/80' : isCurrent ? 'text-[var(--accent)]/70' : 'text-[var(--text-muted)]/60'}">
+                                        ${statusText}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    });
+
+    // Final status message
+    if (currentStage === 3 && completedInCurrent === currentStageTopics.length) {
+        html += `
+            <div class="mt-12 text-center py-8 border border-green-500/30 bg-green-500/5 rounded-3xl text-green-400 font-medium flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(34,197,94,0.15)]">
+                <i class="fa-solid fa-trophy text-2xl"></i>
+                <span class="text-lg">Congratulations! You have completed the entire course 🎉</span>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="mt-10 text-center text-[var(--text-muted)] text-sm py-4">
+                Currently showing your progress in ${data.name} — Stage ${currentStage}
+            </div>
+        `;
+    }
+
+    card.innerHTML = html;
+}
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  
+  const enrollBtn = document.getElementById("enrollBtn")
+  if (!enrollBtn) return
+  
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (user) {
+      const { data } = await supabase
+        .from("users")
+        .select("enrollment_complete")
+        .eq("id", user.id)
+        .single()
+      
+      if (data && data.enrollment_complete === true) {
+        enrollBtn.classList.add("active")
+        enrollBtn.innerHTML = `
+          <i class="fas fa-user-graduate"></i>
+        `
+      }
+    }
+    
+    enrollBtn.addEventListener("click", () => {
+      if (enrollBtn.classList.contains("active")) {
+        window.location.href = "dashboard.html"
+      } else {
+        window.location.href = "enroll.html"
+      }
+    })
+    
+  } catch (err) {
+    console.error("Enroll button error:", err)
+  }
+  
+})
+
+// Global variable to store selected avatar temporarily
+let selectedAvatarFile = null;
+
+// ====================== AVATAR PREVIEW SETUP ======================
+function initAvatarUpload() {
+  const editBtn = document.getElementById('editBtn');
+  const avatarInput = document.getElementById('avatarInput');
+  const profileAvatar = document.getElementById('profileAvatar');
+  
+  if (!editBtn || !avatarInput || !profileAvatar) return;
+  
+  // Click pencil icon to open file picker
+  editBtn.addEventListener('click', () => avatarInput.click());
+  
+  // When user selects a new image
+  avatarInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      showToast("Please select an image file", "warning");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      showToast("Image too large (max 5 MB)", "warning");
+      return;
+    }
+    
+    selectedAvatarFile = file; // Store for saving later
+    
+    // Show instant preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      profileAvatar.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+    
+    showToast("New avatar selected. Click 'Save Public Profile' to save it.", "info");
+  });
+}
+
+// ====================== SAVE PUBLIC PROFILE ======================
+async function savePublicProfile() {
+  console.log("savePublicProfile() started");
+  
+  if (!currentUser?.id) {
+    showToast("Not logged in", "error");
+    return;
+  }
+  
+  const btn = document.getElementById('saveProfileBtn');
+  if (!btn) return;
+  
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+  
+  const resetButton = () => {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  };
+  
+  const getTrimmed = (id) => (document.getElementById(id)?.value || '').trim();
+  
+  const rawData = {
+    username: getTrimmed("username"),
+    full_name: getTrimmed("fullName"),
+    headline: getTrimmed("headline"),
+    bio: getTrimmed("bio"),
+    description: getTrimmed("description"),
+    twitter: getTrimmed("twitter"),
+    tiktok: getTrimmed("tiktok"),
+    whatsapp: getTrimmed("whatsapp"),
+    website: getTrimmed("website"),
+    github: getTrimmed("github"),
+    location: getTrimmed("location"),
+    birthday: getTrimmed("birthday") || null,
+    profession: getTrimmed("profession"),
+  };
+  
+  if (!rawData.username || !rawData.full_name || !rawData.headline ||
+    !rawData.bio || !rawData.whatsapp || !rawData.location) {
+    showToast("Please fill all required fields (*)", "warning");
+    resetButton();
+    return;
+  }
+  
+  // Normalize social links
+  if (rawData.twitter && rawData.twitter.startsWith('@')) rawData.twitter = `https://x.com/${rawData.twitter.slice(1)}`;
+  if (rawData.tiktok && rawData.tiktok.startsWith('@')) rawData.tiktok = `https://tiktok.com/@${rawData.tiktok.slice(1)}`;
+  if (rawData.github && !rawData.github.includes('/')) rawData.github = `https://github.com/${rawData.github}`;
+  
+  const data = {
+    id: currentUser.id,
+    ...rawData,
+    bio: escapeHtml(rawData.bio),
+    headline: escapeHtml(rawData.headline),
+    description: escapeHtml(rawData.description),
+    updated_at: new Date().toISOString()
+  };
+  
+  try {
+    // === AVATAR UPLOAD ===
+    if (selectedAvatarFile) {
+      try {
+        const fileExt = selectedAvatarFile.name.split('.').pop().toLowerCase();
+        const filePath = `public/${currentUser.id}.${fileExt}`;
+        
+        if (currentProfile?.profile_image) {
+          const oldPath = currentProfile.profile_image.split('/').pop();
+          if (oldPath) await supabase.storage.from('profiles').remove([`public/${oldPath}`]);
+        }
+        
+        const { error: uploadError } = await supabase.storage
+          .from('profiles')
+          .upload(filePath, selectedAvatarFile, {
+            cacheControl: '3600',
+            upsert: true,
+            contentType: selectedAvatarFile.type,
+          });
+        
+        if (uploadError) throw uploadError;
+        
+        const { data: urlData } = supabase.storage.from('profiles').getPublicUrl(filePath);
+        data.profile_image = urlData.publicUrl;
+      } catch (uploadErr) {
+        console.error("Avatar upload failed:", uploadErr);
+        showToast("Avatar upload failed, but profile saved.", "warning");
+      }
+    }
+    
+    // === SAVE PROFILE DATA ===
+    const { error: upsertError } = await supabase
+      .from('users')
+      .upsert(data, { onConflict: 'id' });
+    
+    if (upsertError) {
+      console.error(upsertError);
+      showToast("Failed to save profile data. Try again.", "error");
+      resetButton();
+      return;
+    }
+    
+    // === MARK AS COMPLETED ===
+    await supabase
+      .from('profile_completed')
+      .upsert({
+        user_id: currentUser.id,
+        completed: true,
+        completed_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+    
+    
+    // ✅ Only insert to notifications (push sent automatically)
+await supabase
+  .from("notifications")
+  .insert({
+    user_id: currentUser.id,
+    title: "🎟️ Profile Completed!",
+    message: "Your public profile is now live in the community. Well done!",
+    type: "profile"
+  });
+  
+    // SUCCESS
+    currentProfile = { ...currentProfile, ...data };
+    selectedAvatarFile = null;
+    
+    showToast("Public profile saved successfully ✓", "success");
+    
+    // === CLOSE EVERYTHING ===
+    closeProfilePage(); // closes the profile editor properly
+    const modal = document.getElementById('profileCompletionModal');
+    if (modal) modal.style.display = 'none'; // hides the modal instantly
+    
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    showToast("Something went wrong", "error");
+  } finally {
+    resetButton();
+  }
+}
+
+
+
+// "Complete Now" button
+function completeNow() {
+  const modal = document.getElementById('profileCompletionModal');
+  if (modal) modal.style.display = 'none';
+  openProfilePage();
+}
+
+// "Maybe Later" button
+function maybeLater() {
+  const modal = document.getElementById('profileCompletionModal');
+  if (modal) modal.style.display = 'none';
+}
+
+
+
+// Optional: Let user dismiss temporarily (still shows again next time they open dashboard)
+function dismissProfileReminder() {
+  const container = document.getElementById('profileCompletionContainer');
+  container.style.display = 'none';
+}
+
+
+// Get the elements
+const moreBtn = document.getElementById('moreBtn');
+const moreMenu = document.getElementById('moreMenu');
+
+// Function to open the menu
+function openMoreMenu() {
+  moreMenu.classList.add('open');
+}
+
+// Function to close the menu (already handled by your close button)
+function closeMoreMenu() {
+  moreMenu.classList.remove('open');
+}
+
+// Add click event to the More button
+moreBtn.addEventListener('click', openMoreMenu);
+
+// Optional: Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  if (!moreMenu.contains(e.target) && e.target !== moreBtn) {
+    closeMoreMenu();
+  }
+});
+
+
+
+
+let currentTab = 0
+let selectedFiles = [];
+
+function openAssessmentPage() {
+  
+  console.log('Opening assessment page')
+  
+  closeAllOverlays?.()
+  
+  const page = document.getElementById('assessmentPage')
+  
+  if (!page) {
+    console.error("assessmentPage not found")
+    return
+  }
+  
+  page.style.display = "block"
+  page.classList.add("open")
+  
+  if (!page.dataset.initialized) {
+    
+    initAssessmentPage()
+    
+    page.dataset.initialized = "true"
+    
+  }
+  
+}
+
+function closeAssessmentPage() {
+  
+  const page = document.getElementById('assessmentPage')
+  
+  if (page) {
+    page.classList.remove("open")
+    page.style.display = "none"
+  }
+  
+}
+
+async function switchTab(idx) {
+  
+  currentTab = idx
+  
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx)
+  })
+  
+  document.getElementById('uploadType').textContent =
+    idx === 0 ? "Assignment" : "Project"
+  
+  await loadSubmissionHistory()
+  
+}
+
+async function initAssessmentPage() {
+  
+  const uploadCard = document.getElementById("uploadCard")
+  const fileInput = document.getElementById("fileInput")
+  
+  uploadCard.addEventListener("click", () => fileInput.click())
+  
+  uploadCard.addEventListener("dragover", e => {
+    e.preventDefault()
+    uploadCard.classList.add("dragover")
+  })
+  
+  uploadCard.addEventListener("dragleave", () => {
+    uploadCard.classList.remove("dragover")
+  })
+  
+  uploadCard.addEventListener("drop", e => {
+    e.preventDefault()
+    uploadCard.classList.remove("dragover")
+    handleFiles(e.dataTransfer.files)
+  })
+  
+  fileInput.addEventListener("change", () => {
+    handleFiles(fileInput.files)
+  })
+  
+  await loadSubmissionHistory()
+  
+}
+
+function updateFileListUI() {
+  const container = document.getElementById("fileListContainer"); // ← add this div in HTML
+  const fileNameEl = document.getElementById("fileName"); // old single name element
+  
+  if (!container) {
+    // fallback for old single-file UI
+    if (fileNameEl) {
+      fileNameEl.textContent = selectedFiles.length === 1 ?
+        selectedFiles[0].name :
+        selectedFiles.length > 1 ?
+        `${selectedFiles.length} files selected` :
+        "No file selected";
+    }
+    return;
+  }
+  
+  container.innerHTML = "";
+  
+  if (selectedFiles.length === 0) {
+    container.innerHTML = "<p class='empty'>No files selected yet</p>";
+    return;
+  }
+  
+  selectedFiles.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "file-item";
+    item.innerHTML = `
+      <span class="file-name">${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
+      <button type="button" class="remove-file" data-index="${index}">×</button>
+    `;
+    
+    item.querySelector(".remove-file").addEventListener("click", () => {
+      selectedFiles.splice(index, 1);
+      updateFileListUI();
+      document.getElementById("submitBtn").disabled = selectedFiles.length === 0;
+    });
+    
+    container.appendChild(item);
+  });
+}
+
+function handleFiles(files) {
+  if (!files?.length) return;
+  
+  const allowedExtensions = [
+    "html", "css", "js", "jsx", "ts", "tsx", "pdf", "jpg", "png", "jpeg",
+    "py", "java", "c", "cpp", "cs", "go", "rs", "rb", "php", "json", "md", "sh", "txt"
+  ];
+  
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  const newFiles = [];
+  
+  for (const file of files) {
+    const ext = file.name.split('.').pop()?.toLowerCase() || "";
+    
+    if (!allowedExtensions.includes(ext)) {
+      showToast(`Skipped ${file.name} — invalid type (.${ext})`, "warning", 4000);
+      continue;
+    }
+    
+    if (file.size > maxSize) {
+      showToast(`Skipped ${file.name} — too large (max 10MB)`, "warning", 4000);
+      continue;
+    }
+    
+    newFiles.push(file);
+  }
+  
+  if (newFiles.length === 0) {
+    showToast("No valid files were selected", "error");
+    return;
+  }
+  
+  // Add to existing selection (or replace — your choice)
+  // Option A: replace
+  selectedFiles = newFiles;
+  
+  // Option B: append (allows adding more files later)
+  // selectedFiles = [...selectedFiles, ...newFiles];
+  
+  updateFileListUI();
+  
+  showToast(`Added ${newFiles.length} file(s)`, "success", 2500);
+  
+  // Enable submit if there's at least one file
+  const submitBtn = document.getElementById("submitBtn");
+  if (submitBtn) submitBtn.disabled = selectedFiles.length === 0;
+}
+
+
+const uploadCard = document.getElementById("uploadCard");
+
+uploadCard.addEventListener("dragover", e => {
+  e.preventDefault();
+  uploadCard.classList.add("dragover");
+});
+
+uploadCard.addEventListener("dragleave", () => {
+  uploadCard.classList.remove("dragover");
+});
+
+uploadCard.addEventListener("drop", e => {
+  e.preventDefault();
+  uploadCard.classList.remove("dragover");
+  handleFiles(e.dataTransfer.files);
+});
+
+async function startUpload() {
+  if (selectedFiles.length === 0) {
+    showToast("No files selected", "error");
+    return;
+  }
+  
+  const submitBtn = document.getElementById("submitBtn");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressFill = document.getElementById("progressFill");
+  const progressText = document.getElementById("progressText");
+  
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = "Uploading...";
+  progressContainer.classList.remove("hidden");
+  progressFill.style.width = "0%";
+  progressText.textContent = "0%";
+  
+  const totalFiles = selectedFiles.length;
+  let completed = 0;
+  let hasError = false;
+  
+  const updateProgress = () => {
+    const percent = Math.round((completed / totalFiles) * 100);
+    progressFill.style.width = `${percent}%`;
+    progressText.textContent = `${percent}% (${completed}/${totalFiles})`;
+  };
+  
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) throw new Error("You must be logged in to upload");
+    
+    for (const file of selectedFiles) {
+      const fileExt = file.name.split(".").pop()?.toLowerCase() || "file";
+      const randomPart = Math.random().toString(36).slice(2, 10);
+      const timestamp = Date.now();
+      const fileName = `${randomPart}-${timestamp}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
+      
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage
+        .from("assessments")
+        .upload(filePath, file, { cacheControl: "3600", upsert: false });
+      
+      if (uploadError) {
+        console.error(`Upload failed for ${file.name}:`, uploadError);
+        showToast(`Failed to upload ${file.name}`, "error");
+        hasError = true;
+        continue;
+      }
+      
+      // Get public URL
+      const { data: urlData } = supabase.storage.from("assessments").getPublicUrl(filePath);
+      const publicUrl = urlData?.publicUrl;
+      
+      if (!publicUrl) {
+        showToast(`Could not get URL for ${file.name}`, "error");
+        hasError = true;
+        continue;
+      }
+      
+      // Save to DB + Get the new assessment ID
+      const { data: newAssessment, error: insertError } = await supabase
+        .from("assessments")
+        .insert({
+          user_id: user.id,
+          type: currentTab === 0 ? "assignment" : "project",
+          filename: file.name,
+          file_path: filePath,
+          file_url: publicUrl,
+          submitted_at: new Date().toISOString(),
+          status: "Pending",
+          points: 0
+        })
+        .select('id')
+        .single();
+      
+      if (insertError) {
+        console.error(`DB insert failed for ${file.name}:`, insertError);
+        showToast(`Submission record failed for ${file.name}`, "error");
+        hasError = true;
+        continue;
+      }
+      
+      // Success - update progress
+      completed++;
+      updateProgress();
+      
+      const submissionType = currentTab === 0 ? "Assignment" : "Project";
+      const assessmentId = newAssessment?.id;
+      
+       // 1. Notify ADMIN (this will trigger your Edge Function via webhook)
+      const { error: adminNotifError } = await supabase
+        .from("admin_notifications")
+        .insert({
+          title: `${submissionType} Submitted`,
+          message: `Student submitted a new ${submissionType.toLowerCase()}: ${file.name}`,
+          type: "assessment_submitted",
+          user_id: user.id,
+          assessment_id: assessmentId,
+          is_read: false
+        });
+      
+      if (adminNotifError) {
+        console.warn(`Failed to create admin notification:`, adminNotifError);
+      }
+      
+      // 2. Notify the student (this will also trigger push via webhook)
+      await supabase
+        .from("notifications")
+        .insert({
+          user_id: user.id,
+          title: `${submissionType} Submitted Successfully`,
+          message: `${file.name} has been uploaded and is pending review.`,
+          type: "assessment_submitted"
+        });
+      
+      } // ← End of the for loop
+      
+      // Final feedback after all files
+      if (hasError) {
+        showToast(`Upload finished with some errors (${completed}/${totalFiles} successful)`, "warning");
+      } else {
+        showToast(`All ${totalFiles} file(s) uploaded successfully! Pending review.`, "success");
+        
+        // Final success notification to student
+        const submissionType = currentTab === 0 ? "Assignment" : "Project";
+        
+        await supabase
+          .from("notifications")
+          .insert({
+            user_id: user.id,
+            title: `${submissionType} Submitted Successfully`,
+            message: `All ${totalFiles} file(s) uploaded and pending instructor review. Great job!`,
+            type: "assessment_submitted"
+          });
+      }
+      
+      } catch (err) {
+        console.error("Upload process error:", err);
+        showToast(err.message || "Upload failed", "error");
+      } finally {
+        // Reset
+        selectedFiles = [];
+        updateFileListUI();
+        submitBtn.innerHTML = "Submit";
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 800);
+        
+        if (typeof loadSubmissionHistory === "function") {
+          await loadSubmissionHistory();
+        }
+      }
+      }
+      
+      
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const bar = document.getElementById("announcementBar")
+  const text = document.getElementById("announcementText")
+
+  const assignmentCountEl = document.querySelector("#assignmentCard .count")
+  const projectCountEl = document.querySelector("#projectCard .count")
+
+  let isStudent = false
+
+  // 🧠 Get user status
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      const { data } = await supabase
+        .from("users")
+        .select("enrollment_complete")
+        .eq("id", user.id)
+        .single()
+
+      isStudent = data?.enrollment_complete === true
+    }
+  } catch (e) {
+    console.error("User check error:", e)
+  }
+
+  // =========================
+  // 📢 LOAD ANNOUNCEMENTS
+  // =========================
+  async function loadAnnouncements() {
+    try {
+      const { data } = await supabase
+        .from("announcements")
+        .select("*")
+        .eq("active", true)
+        .order("created_at", { ascending: false })
+
+      let filtered = []
+
+      if (data?.length) {
+        filtered = data.filter(a => {
+          if (a.target === "all") return true
+          if (a.target === "students" && isStudent) return true
+          if (a.target === "non_students" && !isStudent) return true
+          return false
+        })
+      }
+
+      if (!filtered.length) {
+        text.innerHTML = `<span>No announcement for today</span>`
+      } else {
+        text.innerHTML = filtered
+          .map(a => `<span>${a.message}</span>`)
+          .join("")
+      }
+
+      // smooth loop
+      text.innerHTML += text.innerHTML
+
+    } catch (err) {
+      console.error("Announcement load error:", err)
+      text.innerHTML = `<span>Error loading announcements</span>`
+    }
+  }
+
+  // =========================
+  // 📊 LOAD ASSESSMENTS – only for current user
+  // =========================
+  async function loadAssessments() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.warn("No logged-in user → cannot load personal assessments");
+        if (assignmentCountEl) assignmentCountEl.textContent = "—";
+        if (projectCountEl) projectCountEl.textContent = "—";
+        return;
+      }
+      
+      const { data, error } = await supabase
+        .from("assessments")
+        .select("type, status, filename")
+        .eq("user_id", user.id)
+        .in("status", ["Approved"]);
+      
+      if (error) {
+        console.error("Assessments fetch error:", error);
+        return;
+      }
+      
+      if (!data || data.length === 0) {
+        if (assignmentCountEl) assignmentCountEl.textContent = "0";
+        if (projectCountEl) projectCountEl.textContent = "0";
+        return;
+      }
+      
+      const assignments = data.filter(a => a.type === "assignment").length;
+      const projects = data.filter(a => a.type === "project").length;
+      
+      if (assignmentCountEl) assignmentCountEl.textContent = assignments;
+      if (projectCountEl) projectCountEl.textContent = projects;
+      
+    } catch (err) {
+      console.error("Assessment load error:", err);
+      if (assignmentCountEl) assignmentCountEl.textContent = "Error";
+      if (projectCountEl) projectCountEl.textContent = "Error";
+    }
+  }
+
+  await loadAnnouncements()
+  await loadAssessments()
+
+  // =========================
+  // 🔴 REAL-TIME: ANNOUNCEMENTS + ASSESSMENT APPROVAL
+  // =========================
+  supabase
+    .channel("announcements-live")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "announcements" },
+      () => {
+        loadAnnouncements()
+      }
+    )
+    .subscribe()
+
+  // Get current user once
+  let currentUserId = null;
+
+  async function initRealTime() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    
+    currentUserId = user.id;
+    
+    supabase
+      .channel(`assessments-live:${currentUserId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "assessments",
+          filter: `user_id=eq.${currentUserId}`
+        },
+        async (payload) => {
+          const newRecord = payload.new;
+          
+          // Only trigger when status changes to "Approved"
+          if (newRecord.status === "Approved") {
+            const typeName = newRecord.type === "assignment" ? "Assignment" : "Project";
+            
+            // ✅ Insert into notifications table (this triggers your Edge Function push)
+            await supabase
+              .from("notifications")
+              .insert({
+                user_id: currentUserId,
+                title: `🎉 ${typeName} Approved!`,
+                message: `${newRecord.filename} has been reviewed and approved by your instructor.`,
+                type: "assessment_approved"
+              });
+          }
+          
+          // Refresh the count UI
+          loadAssessments();
+        }
+      )
+      .subscribe();
+  }
+
+  // Initialize realtime after auth is ready
+  initRealTime();
+});
+
+
+
+// Show modal if profile is not completed
+async function checkProfileCompletion() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  
+  const { data, error } = await supabase
+    .from('profile_completed')
+    .select('completed')
+    .eq('user_id', user.id)
+    .single();
+  
+  const modal = document.getElementById('profileCompletionModal');
+  if (!modal) return;
+  
+  if (error || !data || data.completed === false) {
+    modal.style.display = 'flex';
+  } else {
+    modal.style.display = 'none';
+  }
+}
+
+
+
+
+
+
+async function loadSubmissionHistory() {
+  
+  const list = document.getElementById("historyList")
+  
+  list.innerHTML = "<p>Loading...</p>"
+  
+  try {
+    
+    const { data: { user } } =
+    await supabase.auth.getUser()
+    
+    if (!user) {
+      
+      list.innerHTML = "<p>Please login</p>"
+      
+      return
+      
+    }
+    
+    const { data, error } =
+    await supabase
+      .from("assessments")
+      .select("id,type,filename,submitted_at,status,points")
+      .eq("user_id", user.id)
+      .eq("type", currentTab === 0 ? "assignment" : "project")
+      .order("submitted_at", { ascending: false })
+    
+    if (error) throw error
+    
+    list.innerHTML = ""
+    
+    if (!data?.length) {
+      
+      list.innerHTML = "<p>No submissions yet.</p>"
+      
+      return
+      
+    }
+    
+    data.forEach(item => {
+      
+      const div = document.createElement("div")
+      
+      div.className = `history-item ${item.status.toLowerCase()}`
+      
+      div.innerHTML = `
+<strong>${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</strong>
+— ${new Date(item.submitted_at).toLocaleString()}<br>
+File: ${item.filename}<br>
+Status: <strong>${item.status}</strong><br>
+${item.status==="Approved"
+? `<span class="points">Points: ${item.points}</span>`
+: ""}
+`
+      
+      list.appendChild(div)
+      
+    })
+    
+  }
+  catch (err) {
+    
+    console.error(err)
+    
+    list.innerHTML = "<p>Error loading history</p>"
+    
+  }
+  
+}
+
+
+
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return "Good morning"
+  if (h < 18) return "Good afternoon"
+  return "Good evening"
+}
+
+function showDashboardWelcome(name) {
+  const container = document.getElementById("welcomeMessage")
+  if (!container) return
+
+  const greetings = [
+  "Believe in yourself — you are capable of amazing things!",
+  "Consistency beats intensity — keep coding every day.",
+  "Small progress today leads to big success tomorrow.",
+  "Every bug you fix makes you a better developer.",
+  "Your future self will thank you for coding today.",
+  "Dream big. Build bigger.",
+  "Code something today, no matter how small.",
+  "Great developers are made through persistence.",
+  "Stay curious and keep learning.",
+  "Today is another chance to become a better developer."
+]
+
+  const msg = greetings[Math.floor(Math.random()*greetings.length)]
+
+  container.innerHTML = `<strong>${getGreeting()}, ${name} 👋</strong><p>${msg}</p>`
+}
+
+
+// ────────────────────────────────────────────────
+//  INIT – runs once when DOM is ready
+// ────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", async () => {
+  loadTheme();
+  createStars();
+  
+  // Show loading overlay
+  const loadingOverlay = document.getElementById('app-loading');
+  if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+  
+  try {
+    // 1. Check authentication first
+    await checkAuth();
+    
+    // 2. Only run user-specific code if logged in
+    if (currentUser?.id) {
+      await Promise.all([
+        loadAndDisplayProfile(),
+        loadSessions(),
+        loadLoginActivity(),
+        initCurrencySystem(),
+        checkProfileCompletion(),
+        
+      ]);
+    }
+    
+    // 3. Hide loading overlay
+    if (loadingOverlay) {
+      loadingOverlay.classList.add('hidden');
+      setTimeout(() => loadingOverlay.remove(), 600);
+    }
+    
+  } catch (err) {
+    console.error("Initialization failed:", err);
+    
+    if (loadingOverlay) {
+      loadingOverlay.innerHTML = `
+        <div class="error-message">
+          <h3>Failed to load dashboard</h3>
+          <p>${err.message || "Please check your connection and refresh."}</p>
+          <button onclick="location.reload()">Retry</button>
+        </div>
+      `;
+    } else {
+      alert("Failed to initialize app. Please refresh the page.");
+    }
+  }
+});
+
+
+
+// ────────────────────────────────────────────────
+//  Move these out – they should be top-level functions
+// ────────────────────────────────────────────────
+async function initCurrencySystem() {
+  try {
+    await loadExchangeRates();
+    await loadUserCurrency();
+  } catch (err) {
+    console.warn("Currency system failed to initialize", err);
+    // Optional: fallback to NGN
+    if (typeof updateCurrencyDisplay === 'function') {
+      updateCurrencyDisplay('NGN');
+    }
+  }
+}
+
+
+
+// Simple stars (you can keep or replace with CSS version)
+function createStars() {
+  const container = document.querySelector(".stars")
+  if (!container) return
+  for (let i = 0; i < 60; i++) {
+    const star = document.createElement("div")
+    star.className = "star"
+    star.style.left = Math.random()*100 + "vw"
+    star.style.top  = Math.random()*100 + "vh"
+    star.style.animationDelay = Math.random()*5 + "s"
+    container.appendChild(star)
+  }
+}
+
+// Optional confetti – call on success only
+/* -------------------------------
+   CONFETTI CELEBRATION
+-------------------------------- */
+
+function startConfetti(duration = 2200) {
+  
+  const end = Date.now() + duration
+  
+  const colors = ["#22c55e", "#3b82f6", "#f59e0b", "#ec4899"]
+  
+  const interval = setInterval(() => {
+    
+    if (Date.now() > end) {
+      clearInterval(interval)
+      return
+    }
+    
+    const confetti = document.createElement("div")
+    
+    confetti.style.position = "fixed"
+    confetti.style.width = "8px"
+    confetti.style.height = "8px"
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)]
+    confetti.style.left = Math.random() * 100 + "vw"
+    confetti.style.top = "-10px"
+    confetti.style.zIndex = "9999"
+    confetti.style.opacity = "0.9"
+    confetti.style.transform = `rotate(${Math.random()*360}deg)`
+    confetti.style.transition = "transform 2s linear, top 2s linear"
+    
+    document.body.appendChild(confetti)
+    
+    setTimeout(() => {
+      confetti.style.top = "110vh"
+      confetti.style.transform = `rotate(${Math.random()*720}deg)`
+    }, 50)
+    
+    setTimeout(() => {
+      confetti.remove()
+    }, 2000)
+    
+  }, 40)
+  
+}
+
+
+/* -------------------------------
+   MODAL CONTROLS
+-------------------------------- */
+
+function openLogoutModal() {
+  
+  const modal = document.getElementById("logoutModal")
+  if (!modal) return
+  
+  modal.style.display = "flex"
+  
+}
+
+function closeLogoutModal() {
+  
+  const modal = document.getElementById("logoutModal")
+  if (!modal) return
+  
+  modal.style.display = "none"
+  
+}
+
+
+async function confirmLogout() {
+  const btn = document.getElementById("confirmLogoutBtn");
+  if (!btn) return;
+  
+  btn.disabled = true;
+  btn.innerText = "Logging out...";
+  
+  try {
+    // ← ADD THESE TWO LINES
+    if (typeof OneSignal !== "undefined") {
+      await OneSignal.logout();
+    }
+    
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    
+    startConfetti(1800);
+    showToast("Logged out successfully", "success");
+    
+    setTimeout(() => {
+      location.replace("auth.html");
+    }, 1200);
+    
+  } catch (err) {
+    console.error(err);
+    showToast("Logout failed", "error");
+    btn.disabled = false;
+    btn.innerText = "Yes, Log Out";
+  }
+}
+
+
+/* -------------------------------
+   MODAL CLICK OUTSIDE
+-------------------------------- */
+
+window.addEventListener("click", function(e) {
+  
+  const modal = document.getElementById("logoutModal")
+  
+  if (!modal) return
+  
+  if (e.target === modal) {
+    closeLogoutModal()
+  }
+  
+})
+
+
+/* -------------------------------
+   ESC KEY CLOSE MODAL
+-------------------------------- */
+
+document.addEventListener("keydown", function(e) {
+  
+  if (e.key === "Escape") {
+    closeLogoutModal()
+  }
+  
+})
+
+
+const panel = document.getElementById("accountSettingsContainer")
+const overlay = document.getElementById("settingsOverlay")
+const openBtn = document.getElementById("openSettingsBtn")
+const closeBtn = document.querySelector(".close-settings")
+
+openBtn.onclick = () => {
+  panel.classList.add("open")
+  overlay.classList.add("active")
+}
+
+function closeSettings() {
+  panel.classList.remove("open")
+  overlay.classList.remove("active")
+}
+
+closeBtn.onclick = closeSettings
+overlay.onclick = closeSettings
+
+
+function togglePasswordForm() {
+  const form = document.getElementById("passwordForm")
+ 
+  form.style.display =
+    form.style.display === "block" ? "none" : "block"
+}
+
+
+function togglePasswordVisibility(id, icon) {
+  
+  const input = document.getElementById(id)
+  
+  if (input.type === "password") {
+    input.type = "text"
+    icon.classList.replace("fa-eye", "fa-eye-slash")
+  } else {
+    input.type = "password"
+    icon.classList.replace("fa-eye-slash", "fa-eye")
+  }
+  
+}
+
+
+async function updatePassword() {
+  const oldInput = document.getElementById("oldPassword")
+  const newInput = document.getElementById("newPassword")
+  const confirmInput = document.getElementById("confirmPassword")
+  const submitBtn = document.getElementById("updatePasswordBtn")
+  const passwordForm = document.getElementById("passwordForm")
+  
+  const oldPwd = oldInput.value.trim()
+  const newPwd = newInput.value.trim()
+  const confirmPwd = confirmInput.value.trim()
+  
+  if (!oldPwd || !newPwd || !confirmPwd) {
+    showToast("Please fill all fields", "error")
+    return
+  }
+  
+  if (newPwd !== confirmPwd) {
+    showToast("Passwords do not match", "error")
+    return
+  }
+  
+  if (newPwd.length < 8) {
+    showToast("Password must be at least 8 characters", "error")
+    return
+  }
+  
+  try {
+    submitBtn.disabled = true
+    submitBtn.textContent = "Updating..."
+    
+    if (!currentUser) throw new Error("User not authenticated")
+    
+    // Reauthenticate
+    const { error: reauthError } = await supabase.auth.signInWithPassword({
+      email: currentUser.email,
+      password: oldPwd
+    })
+    
+    if (reauthError) throw reauthError
+    
+    // Update password
+    const { error } = await supabase.auth.updateUser({
+      password: newPwd
+    })
+    
+    if (error) throw error
+    
+    // ✅ Only insert to notifications table (push will be sent automatically)
+    await supabase
+      .from("notifications")
+      .insert({
+        user_id: currentUser.id,
+        title: "Password Updated",
+        message: "Your account password was successfully changed.",
+        type: "security"
+      })
+    
+    showToast("Password updated successfully", "success")
+    
+    oldInput.value = ""
+    newInput.value = ""
+    confirmInput.value = ""
+    passwordForm.style.display = "none"
+    
+  } catch (err) {
+    console.error(err)
+    showToast(err.message || "Failed to update password", "error")
+  } finally {
+    submitBtn.disabled = false
+    submitBtn.textContent = "Update Password"
+  }
+}
+
+function getDeviceInfo() {
+  const ua = navigator.userAgent;
+  let browser = "Unknown";
+  let device = "Desktop";
+  
+  if (ua.includes("Chrome")) browser = "Chrome";
+  if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+  if (ua.includes("Firefox")) browser = "Firefox";
+  
+  if (/Android/i.test(ua)) device = "Android";
+  if (/iPhone|iPad|iPod/i.test(ua)) device = "iOS";
+  
+  return { browser, device };
+}
+
+
+async function saveSession() {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError || !sessionData?.session) return;
+
+    const session = sessionData.session;
+    const userId = session.user.id;
+
+    const info = getDeviceInfo();
+
+    // ⚠️ DO NOT use access_token anymore
+    const sessionId = session.session_id; // ✅ correct unique identifier
+
+    // Check if session already exists
+    const { data: existing, error: checkError } = await supabase
+      .from("user_sessions")
+      .select("id")
+      .eq("session_id", sessionId)
+      .maybeSingle(); // ✅ prevents 406
+
+    if (checkError) {
+      console.warn("Session check error:", checkError);
+    }
+
+    if (existing) return;
+
+    // Insert safely
+    const { error: insertError } = await supabase
+      .from("user_sessions")
+      .insert({
+        user_id: userId,
+        device: info.device,
+        browser: info.browser,
+        session_id: sessionId // ✅ use this instead
+      });
+
+    if (insertError) {
+      console.error("Save session error:", insertError);
+    }
+
+  } catch (err) {
+    console.error("saveSession crash:", err);
+  }
+}
+
+async function saveLoginActivity() {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError || !sessionData?.session) return;
+
+    const session = sessionData.session;
+    const userId = session.user.id;
+    const sessionId = session.session_id; // ✅ FIX
+
+    const info = getDeviceInfo();
+
+    // Check existing (SAFE)
+    const { data: existing, error: checkError } = await supabase
+      .from("login_activity")
+      .select("id")
+      .eq("session_id", sessionId)
+      .maybeSingle(); // ✅ FIXES 406
+
+    if (checkError) {
+      console.warn("Login activity check error:", checkError);
+    }
+
+    if (existing) return;
+
+    // Insert
+    const { error: insertError } = await supabase
+      .from("login_activity")
+      .insert({
+        user_id: userId,
+        device: info.device,
+        browser: info.browser,
+        session_id: sessionId // ✅ FIX
+      });
+
+    if (insertError) {
+      console.error("Save login activity error:", insertError);
+    }
+
+  } catch (err) {
+    console.error("saveLoginActivity crash:", err);
+  }
+}
+
+async function detectNewDevice() {
+  try {
+    if (!currentUser?.id) return;
+
+    const info = getDeviceInfo();
+
+    const { data, error } = await supabase
+      .from("user_sessions")
+      .select("id")
+      .eq("user_id", currentUser.id)
+      .eq("device", info.device)
+      .eq("browser", info.browser);
+
+    if (error) {
+      console.error("Device check error:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      const message = `New device login: ${info.browser} on ${info.device}`;
+
+      showToast(message, "warning");
+
+      // Save alert
+      await supabase.from("security_alerts").insert({
+        user_id: currentUser.id,
+        message
+      });
+
+      // Save notification
+      await supabase.from("notifications").insert({
+        user_id: currentUser.id,
+        title: "New Device Login",
+        message: message,
+        type: "security"
+      });
+
+      console.log("🚨 New device detected");
+    }
+
+  } catch (err) {
+    console.error("detectNewDevice crash:", err);
+  }
+}
+
+async function loadSessions() {
+  
+  const container = document.getElementById("deviceList");
+  if (!container) return;
+  
+  const { data, error } = await supabase
+    .from("user_sessions")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+  
+  if (error) return;
+  
+  container.innerHTML = "";
+  
+  data.forEach(session => {
+    
+    const div = document.createElement("div");
+    div.className = "device-card";
+    
+    div.innerHTML = `
+      <div class="device-name">${session.browser} on ${session.device}</div>
+      <div class="device-meta">Last active: ${new Date(session.created_at).toLocaleString()}</div>
+    `;
+    
+    container.appendChild(div);
+    
+  });
+  
+}
+
+
+
+async function logoutOtherDevices() {
+  
+  try {
+    
+    await supabase
+      .from("user_sessions")
+      .delete()
+      .neq("user_id", currentUser.id);
+    
+    showToast("Other devices logged out", "success");
+    
+    loadSessions();
+    
+  } catch (err) {
+    
+    showToast("Error logging out devices", "error");
+    
+  }
+  
+}
+
+
+async function loadLoginActivity() {
+  
+  const container = document.getElementById("activityList");
+  if (!container) return;
+  
+  const { data } = await supabase
+    .from("login_activity")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+  
+  container.innerHTML = "";
+  
+  data.forEach(item => {
+    
+    const div = document.createElement("div");
+    
+    div.className = "activity-card";
+    
+    div.innerHTML = `
+      <div class="activity-title">
+        ${item.browser} on ${item.device}
+      </div>
+      <div class="activity-meta">
+        ${new Date(item.created_at).toLocaleString()}
+      </div>
+    `;
+    
+    container.appendChild(div);
+    
+  });
+  
+}
+
+
+const currencyBtn = document.getElementById("currencyBtn")
+const currencyBox = document.getElementById("currencyBox")
+const currencyArrow = document.getElementById("currencyArrow")
+
+currencyBtn.addEventListener("click", () => {
+  
+  currencyBox.classList.toggle("active")
+  currencyArrow.classList.toggle("rotate")
+  
+})
+const currencySymbols = {
+  NGN:"₦",
+  GHS:"₵",
+  GMD:"D",
+  INR:"₹",
+  AFN:"؋",
+  GBP:"£",
+  USD:"$",
+  CAD:"$",
+  EUR:"€",
+  KES:"KES",
+  RWF:"RWF",
+  UGX:"UGX",
+  ZAR:"ZAR",
+  TZS:"TZS",
+  ZMW:"ZMW",
+  PKR:"PKR",
+  XOF:"XOF"
+}
+
+
+let exchangeRates = {}
+
+const currencySelect = document.getElementById("currencySelect")
+
+
+
+function updateCurrencyDisplay(currency) {
+  
+  const symbol = currencySymbols[currency] || currency
+  
+  const el = document.getElementById("currentCurrency")
+  
+  el.textContent = `${symbol} ${currency}`
+  
+}
+
+/* --------------------------
+LOAD EXCHANGE RATES
+-------------------------- */
+
+async function loadExchangeRates() {
+  
+  const cachedRates = localStorage.getItem("exchangeRates")
+  const cacheTime = localStorage.getItem("ratesTime")
+  const now = Date.now()
+  
+  /* use cache for 24 hours */
+  if (cachedRates && cacheTime && now - cacheTime < 86400000) {
+    
+    exchangeRates = JSON.parse(cachedRates)
+    return
+    
+  }
+  
+  const res = await fetch("https://v6.exchangerate-api.com/v6/990a7b4f58303b8dc1270ce1/latest/NGN")
+  
+  const data = await res.json()
+  
+  exchangeRates = data.rates
+  
+  localStorage.setItem("exchangeRates", JSON.stringify(exchangeRates))
+  localStorage.setItem("ratesTime", now)
+  
+}
+
+/* --------------------------
+CONVERT ALL PRICES
+-------------------------- */
+
+function convertAllPrices(currency) {
+  
+  document.querySelectorAll("[data-price-base]").forEach(el => {
+    
+    const base = parseFloat(el.dataset.priceBase)
+    
+    const rate = exchangeRates[currency] || 1
+    
+    const converted = base * rate
+    
+    el.textContent =
+      `${currency} ${converted.toLocaleString(undefined,{
+        maximumFractionDigits:2
+      })}`
+    
+  })
+  
+}
+
+/* --------------------------
+WATCH FOR NEW PRICES
+-------------------------- */
+
+function watchForNewPrices(currency) {
+  
+  const observer = new MutationObserver(() => {
+    
+    convertAllPrices(currency)
+    
+  })
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
+  
+}
+
+/* --------------------------
+LOAD USER CURRENCY
+-------------------------- */
+
+async function loadUserCurrency() {
+  
+  if (!currentUser) return
+  
+  const { data } = await supabase
+    .from("users")
+    .select("currency")
+    .eq("id", currentUser.id)
+    .single()
+  
+  let currency = "NGN"
+  
+  if (data && data.currency) {
+    
+    currency = data.currency
+    
+  }
+  
+  currencySelect.value = currency
+  
+  updateCurrencyDisplay(currency)
+  
+  convertAllPrices(currency)
+  
+  watchForNewPrices(currency)
+  
+}
+
+/* --------------------------
+CHANGE CURRENCY
+-------------------------- */
+
+currencySelect.addEventListener("change", async function() {
+  
+  const currency = this.value
+  
+  await supabase
+    .from("users")
+    .update({ currency })
+    .eq("id", currentUser.id)
+  
+  updateCurrencyDisplay(currency)
+  
+  convertAllPrices(currency)
+  
+  showToast("Currency updated ✅", "success")
+  
+})
+
+
+
+async function getCurrentUser() {
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    currentUser = data.user;
+    if (!currentUser) throw new Error("No authenticated user found.");
+    return currentUser;
+  } catch (err) {
+    console.error("Failed to get current user:", err);
+    showToast("You must be logged in to view notifications", "error");
+    return null;
+  }
+}
+
+
+
+
+
+
+
+
+// Delete all
+deleteAllBtn.addEventListener("click", async () => {
+  if (!currentUser) return;
+  if (!confirm("Are you sure you want to delete all notifications?")) return;
+  try {
+    const { error } = await supabase.from("notifications").delete().eq("user_id", currentUser.id);
+    if (error) throw error;
+    notificationsList.innerHTML = `<p class="empty-text">No notifications yet.</p>`;
+    showToast("All notifications deleted", "success");
+    updateNotificationCount();
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to delete all notifications", "error");
+  }
+});
+
+
+
+
+// ----------------------------
+// PANEL TOGGLE
+// ----------------------------
+document.getElementById("level-btn").addEventListener("click", () => {
+  openPanel();
+  loadProgression(); // refresh data on open
+});
+
+function openPanel() {
+  document.getElementById("premium-panel").classList.add("open");
+  document.getElementById("panel-overlay").classList.add("show");
+}
+
+function closePanel() {
+  document.getElementById("premium-panel").classList.remove("open");
+  document.getElementById("panel-overlay").classList.remove("show");
+}
+
+// Config – easy to change later
+const LEVELS = [
+  { min: 0, name: "Node", emoji: "⚪" },
+  { min: 100, name: "Runner", emoji: "🏃" },
+  { min: 500, name: "Decoder", emoji: "💻" },
+  { min: 1500, name: "Architect", emoji: "🧠" },
+  { min: 5000, name: "Net Sovereign", emoji: "👑" }
+];
+
+// ----------------------------
+// LOAD USER PROGRESSION
+// ----------------------------
+async function loadProgression() {
+  const usernameEl = document.getElementById("username-display");
+  const avatarEl = document.getElementById("profile-avatar");
+  const historyList = document.getElementById("history-list");
+  
+  // Quick fallback while loading
+  if (usernameEl) usernameEl.textContent = "Loading...";
+  if (historyList) historyList.innerHTML = "<p>Loading...</p>";
+  
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) throw new Error("Not logged in");
+    
+    // Load profile + total points in fewer queries if possible
+    // Option A: two queries (current)
+    const { data: profile, error: profileError } = await supabase
+      .from("users")
+      .select("username, profile_image")
+      .eq("id", user.id)
+      .single();
+    
+    let displayName = "User";
+    let avatarSrc = "https://via.placeholder.com/120?text=You";
+    
+    if (!profileError && profile) {
+      displayName = profile.username || user.email?.split("@")[0] || "User";
+      if (profile.profile_image) avatarSrc = profile.profile_image;
+    }
+    
+    if (avatarEl) {
+      avatarEl.src = avatarSrc;
+      avatarEl.alt = displayName;
+    }
+    if (usernameEl) usernameEl.textContent = displayName;
+    
+    // Get all coin amounts
+    const { data: coins, error: coinsError } = await supabase
+      .from("coins")
+      .select("amount")
+      .eq("user_id", user.id);
+    
+    if (coinsError) throw coinsError;
+    
+    const totalPoints = coins?.reduce((sum, row) => sum + Number(row.amount || 0), 0) || 0;
+    
+    setUserPoints(totalPoints);
+    
+    // Load recent history
+    const { data: history, error: histError } = await supabase
+      .from("coins")
+      .select("amount, type, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    
+    if (histError) throw histError;
+    
+    if (historyList) {
+      historyList.innerHTML = history?.length ?
+        "" :
+        "<p class='empty'>No points earned yet.</p>";
+      
+      history?.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <strong>${item.amount > 0 ? "+" : ""}${item.amount}</strong>
+          ${item.type.replace(/_/g, " ")}
+          <small>${new Date(item.created_at).toLocaleString('en-GB', {
+            dateStyle: 'medium',
+            timeStyle: 'short'
+          })}</small>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+    
+  } catch (err) {
+    console.error("Failed to load progression:", err);
+    
+    if (usernameEl) usernameEl.textContent = "Guest";
+    if (avatarEl) avatarEl.src = "https://via.placeholder.com/120?text=Guest";
+    if (historyList) historyList.innerHTML = "<p>Error loading history</p>";
+    
+    setUserPoints(0); // reset visuals
+  }
+}
+
+// ----------------------------
+// UPDATE ALL POINT-RELATED UI
+// ----------------------------
+function setUserPoints(points) {
+  const prevStage = document.getElementById("current-level-display")?.textContent || "Node";
+  
+  animatePoints(points);
+  updateStage(points);
+  updateProgress(points);
+  updateStageCards(points);
+  triggerLevelUp(prevStage);
+}
+
+// Animate counter
+function animatePoints(target) {
+  const counter = document.getElementById("point-count");
+  if (!counter) return;
+  
+  let current = Number(counter.textContent) || 0;
+  const step = () => {
+    const diff = target - current;
+    if (Math.abs(diff) < 1) {
+      counter.textContent = target;
+      return;
+    }
+    current += Math.ceil(diff / 20); // faster when far, slower near end
+    counter.textContent = current;
+    requestAnimationFrame(step);
+  };
+  step();
+}
+
+// Determine stage
+function updateStage(points) {
+  const level = LEVELS.find(l => points >= l.min) || LEVELS[0];
+  const el = document.getElementById("current-level-display");
+  const emojiEl = document.getElementById("stage-emoji");
+  
+  if (el) el.textContent = level.name;
+  if (emojiEl) emojiEl.textContent = level.emoji;
+}
+
+// Progress ring (assuming circumference ~ 251 * 2 * π ≈ but using your 251)
+function updateProgress(points) {
+  const circle = document.querySelector(".ring-progress");
+  if (!circle) return;
+  
+  let percent = 0;
+  const currentLevel = LEVELS.find(l => points >= l.min) || LEVELS[0];
+  const nextLevel = LEVELS[LEVELS.indexOf(currentLevel) + 1];
+  
+  if (nextLevel) {
+    percent = ((points - currentLevel.min) / (nextLevel.min - currentLevel.min)) * 100;
+  } else {
+    percent = 100; // max level
+  }
+  
+  const offset = 251 - (251 * percent / 100);
+  circle.style.strokeDashoffset = offset;
+}
+
+// Level cards
+function updateStageCards(points) {
+  document.querySelectorAll(".level-card").forEach(card => {
+    const min = Number(card.dataset.min);
+    if (isNaN(min)) return;
+    
+    const nextCard = card.nextElementSibling;
+    const nextMin = nextCard ? Number(nextCard.dataset.min) : Infinity;
+    
+    card.classList.remove("active", "current", "locked");
+    
+    if (points >= min && points < nextMin) {
+      card.classList.add("active", "current");
+      const fill = card.querySelector(".fill");
+      if (fill) {
+        fill.style.width = `${((points - min) / (nextMin - min)) * 100}%`;
+      }
+    } else if (points < min) {
+      card.classList.add("locked");
+      const fill = card.querySelector(".fill");
+      if (fill) fill.style.width = "0%";
+    } else {
+      const fill = card.querySelector(".fill");
+      if (fill) fill.style.width = "100%";
+    }
+  });
+}
+
+// Level-up animation trigger
+function triggerLevelUp(prevStage) {
+  const currentStage = document.getElementById("current-level-display")?.textContent;
+  if (!currentStage || prevStage === currentStage) return;
+  
+  const activeCard = document.querySelector(".level-card.current");
+  if (activeCard) {
+    activeCard.classList.add("levelup");
+    setTimeout(() => activeCard.classList.remove("levelup"), 1400);
+  }
+  
+  // Trigger confetti only on real level change
+  if (typeof spawnConfetti === "function") {
+    spawnConfetti(currentStage);
+  }
+}
+
+
+
+// ----------------------------
+// SPAWN CONFETTI AROUND AVATAR
+// ----------------------------
+function spawnConfetti(stage) {
+  // Stage colors
+  const colors = {
+    "Node": "#6b7280", // gray
+    "Runner": "#10b981", // green
+    "Decoder": "#8b5cf6", // purple
+    "Architect": "#f59e0b", // orange
+    "Net Sovereign": "#ec4899" // pink
+  };
+  
+  const avatar = document.getElementById("profile-avatar");
+  if (!avatar) return;
+  
+  const rect = avatar.getBoundingClientRect();
+  const avatarX = rect.left + rect.width / 2;
+  const avatarY = rect.top + rect.height / 2;
+  
+  const duration = 2000;
+  const end = Date.now() + duration;
+  
+  (function frame() {
+    // Spawn a confetti particle
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.left = avatarX + (Math.random() * 80 - 40) + "px"; // around avatar
+    confetti.style.top = avatarY + (Math.random() * 80 - 40) + "px";
+    confetti.style.width = confetti.style.height = Math.random() * 8 + 4 + "px";
+    confetti.style.background = colors[stage] || "#fff";
+    confetti.style.position = "fixed";
+    confetti.style.borderRadius = "50%";
+    confetti.style.opacity = 0.9;
+    confetti.style.pointerEvents = "none";
+    confetti.style.zIndex = 3000;
+    document.body.appendChild(confetti);
+    
+    // Animate falling + spinning
+    const velocityX = Math.random() * 4 - 2;
+    const velocityY = Math.random() * 3 + 2;
+    const rotate = Math.random() * 360;
+    const rotationSpeed = Math.random() * 10 - 5;
+    
+    const anim = setInterval(() => {
+      const top = parseFloat(confetti.style.top);
+      const left = parseFloat(confetti.style.left);
+      
+      confetti.style.top = top + velocityY + "px";
+      confetti.style.left = left + velocityX + "px";
+      confetti.style.transform = `rotate(${rotate + rotationSpeed}px)`;
+      
+      if (top > window.innerHeight || left < 0 || left > window.innerWidth) {
+        confetti.remove();
+        clearInterval(anim);
+      }
+    }, 16);
+    
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+ const starsContainer = document.querySelector('.stars');
+ const starCount = 100;
+ const stars = [];
+ 
+ // Create twinkling stars
+ for (let i = 0; i < starCount; i++) {
+   const star = document.createElement('div');
+   star.className = 'star';
+   star.dataset.depth = Math.random() * 0.5 + 0.5; // Depth for parallax (0.5–1)
+   star.style.top = Math.random() * 100 + '%';
+   star.style.left = Math.random() * 100 + '%';
+   const size = Math.random() * 3 + 1;
+   star.style.width = star.style.height = size + 'px';
+   star.style.animationDuration = 3 + Math.random() * 4 + 's';
+   starsContainer.appendChild(star);
+   stars.push(star);
+ }
+ 
+ // Shooting star function
+ function createShootingStar() {
+   const shootingStar = document.createElement('div');
+   shootingStar.className = 'shooting-star';
+   shootingStar.style.top = Math.random() * 50 + 'vh';
+   shootingStar.style.left = '-10vw';
+   shootingStar.style.animationDuration = (1 + Math.random()) + 's';
+   starsContainer.appendChild(shootingStar);
+   
+   shootingStar.addEventListener('animationend', () => shootingStar.remove());
+ }
+ 
+ // Random shooting stars
+ setInterval(() => {
+   if (Math.random() < 0.3) createShootingStar();
+ }, 2000);
+ 
+ // Parallax effect based on mouse
+ document.addEventListener('mousemove', (e) => {
+   const centerX = window.innerWidth / 2;
+   const centerY = window.innerHeight / 2;
+   const offsetX = (e.clientX - centerX) / centerX; // -1 to 1
+   const offsetY = (e.clientY - centerY) / centerY;
+   
+   stars.forEach(star => {
+     const depth = parseFloat(star.dataset.depth);
+     star.style.transform = `translate3d(${offsetX * depth * 20}px, ${offsetY * depth * 20}px, 0)`;
+   });
+ });
+ 
+// ================================================
+//  Realtime + Leaderboard Logic (Final Version)
+// ================================================
+
+let leaderboardChannel = null;
+let refreshTimeout = null;
+
+function setupLeaderboardRealtime() {
+  if (leaderboardChannel) {
+    console.log("Leaderboard channel already active");
+    return;
+  }
+
+  leaderboardChannel = supabase
+    .channel('public:leaderboard-changes')
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'coins' },
+      () => debounceRefreshLeaderboard()
+    )
+    .on(
+      'postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'coins' },
+      () => debounceRefreshLeaderboard()
+    )
+    .on(
+      'postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'users' },   // Simplified - no broken filter
+      () => debounceRefreshLeaderboard()
+    )
+    .subscribe((status) => {
+      console.log('Leaderboard realtime status:', status);
+
+      if (status === 'SUBSCRIBED') {
+        console.log("✅ Realtime leaderboard listening");
+      } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+        console.warn("Realtime leaderboard disconnected:", status);
+      }
+    });
+
+  // Cleanup
+  window.addEventListener('beforeunload', cleanupLeaderboardRealtime);
+}
+
+function cleanupLeaderboardRealtime() {
+  if (leaderboardChannel) {
+    supabase.removeChannel(leaderboardChannel);
+    leaderboardChannel = null;
+  }
+  if (refreshTimeout) {
+    clearTimeout(refreshTimeout);
+    refreshTimeout = null;
+  }
+}
+
+// Debounce: max 1 refresh every 3 seconds
+function debounceRefreshLeaderboard() {
+  if (refreshTimeout) clearTimeout(refreshTimeout);
+
+  refreshTimeout = setTimeout(() => {
+    console.log("🔄 Debounced refresh triggered");
+    loadLeaderboard(20);
+  }, 3000);
+}
+async function loadLeaderboard(limit = 20) {
+  const container = document.getElementById("leaderboardList");
+  if (!container) return;
+  
+  container.innerHTML = `<p class="loading-text">Loading top learners...</p>`;
+  
+  try {
+    const { data, error } = await supabase
+      .from("leaderboard")
+      .select("rank, username, profile_image, coins, user_id")
+      .order("rank", { ascending: true })
+      .limit(limit);
+    
+    console.log("Leaderboard data received:", data); // ← Add this for debugging
+    
+    if (error) throw error;
+    
+    if (!data || data.length === 0) {
+      container.innerHTML = `<p class="empty-text">No learners yet...</p>`;
+      return;
+    }
+    
+    let html = `<div class="horizontal-scroll">`;
+    
+    data.forEach(entry => {
+      const rank = Number(entry.rank);
+      const rankClass =
+        rank === 1 ? "top-1" :
+        rank === 2 ? "top-2" :
+        rank === 3 ? "top-3" : "";
+      
+      const imageHtml = entry.profile_image ?
+        `<img src="${entry.profile_image}" class="user-image" alt="${entry.username || 'User'}">` :
+        `<div class="user-image fallback">${(entry.username || '?')[0].toUpperCase()}</div>`;
+      
+      html += `
+        <div class="rank-card ${rankClass}">
+          <div class="rank-number">
+            ${rank}
+            ${rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : ""}
+          </div>
+          <div class="profile-wrapper">
+            <div class="image-wrapper">
+              ${imageHtml}
+              ${rank === 1 ? `<div class="crown">👑</div>` : ""}
+            </div>
+            <div class="username">${entry.username || "Anonymous"}</div>
+            <div class="coins">${Number(entry.coins).toLocaleString()} points</div>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+    container.innerHTML = html;
+    
+  } catch (err) {
+    console.error("Leaderboard fetch failed:", err);
+    container.innerHTML = `
+      <p class="error-text">
+        Failed to load leaderboard<br>
+        <small>${err.message || "Check console"}</small>
+      </p>
+    `;
+  }
+}
+
+
+
+
+
+
+function openProfilePage() {
+  console.log('Opening profile page');
+  closeAllOverlays();
+  const page = document.getElementById('profilePage');
+  if (page) page.classList.add('open');
+  else console.warn('profilePage element missing');
+}
+
+
+function closeProfilePage() {
+  const page = document.getElementById('profilePage');
+  if (page) {
+    page.classList.remove('open');
+    page.style.display = 'none'; // safety fallback
+  }
+}
+
+let postsChannel = null;
+
+function subscribeToUserPosts(userId) {
+  // Clean up old subscription if exists
+  if (postsChannel) {
+    supabase.removeChannel(postsChannel);
+  }
+  
+  postsChannel = supabase
+    .channel(`posts:user=${userId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'posts',
+        filter: `user_id=eq.${userId}`
+      },
+      (payload) => {
+        // New post arrived → add to top of list
+        const post = payload.new;
+        const container = document.getElementById('user-posts-container');
+        
+        if (!container) return;
+        
+        const div = document.createElement('div');
+        div.className = 'post-item new-post'; // optional highlight class
+        div.innerHTML = `
+          <p>${escapeHtml(post.content)}</p>
+          <small>Just now</small>
+        `;
+        container.prepend(div); // add to top
+        
+        // Optional: remove "no posts" message if it was visible
+        const noPosts = document.getElementById('no-posts-message');
+        if (noPosts) noPosts.style.display = 'none';
+        
+        // Optional: brief highlight animation
+        setTimeout(() => div.classList.remove('new-post'), 3000);
+      }
+    )
+    .subscribe();
+  
+  // Cleanup when leaving tab / page
+  // You can call this in a close function or beforeunload
+  // supabase.removeChannel(postsChannel);
+}
+
+
+// Call this when user profile is loaded or tab is opened
+async function loadCommunityProfile(forceRefresh = false) {
+    if (!currentUser?.id) return;
+    
+    const card = document.getElementById('community-profile-card');
+    if (!card) return;
+    
+    // ── Start loading ───────────────────────────────
+    card.classList.add('loading');
+  try {
+    // 1. Always fetch fresh profile if forced or missing critical fields
+    let profile = currentProfile;
+    if (forceRefresh || !profile?.username || !profile?.full_name) {
+      const { data, error } = await supabase
+        .from('users')
+        .select(`
+          full_name, username, profile_image, headline, bio, location,
+          twitter, github, whatsapp, website, tiktok,
+          last_active_at, created_at,
+          leaderboard_wins_1st, leaderboard_wins_2nd, leaderboard_wins_3rd,
+          community_points
+        `)
+        .eq('id', currentUser.id)
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        currentProfile = data;
+        profile = data;
+      }
+    }
+
+    // 2. Membership check
+    const { data: membership } = await supabase
+      .from('community_members')
+      .select('joined_at')
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+
+
+    const isMember = !!membership;
+    if (isMember) {
+  await loadUserPosts(currentUser.id, isMember); // initial load
+  subscribeToUserPosts(currentUser.id); // start listening
+}
+
+    // ── Update UI ───────────────────────────────────────
+    setIfExists('community-full-name', 'textContent', profile.full_name || 'User');
+    setIfExists('community-profile-avatar', 'src', profile.profile_image || 'https://i.pravatar.cc/150?u=' + currentUser.id);
+
+    // Active status
+    const lastActive = profile.last_active_at ? new Date(profile.last_active_at) : new Date(0);
+    const isActive = Date.now() - lastActive < 5 * 60 * 1000;
+    setIfExists('community-active-status', 'className', `status-dot ${isActive ? 'online' : 'offline'}`);
+    setIfExists('community-active-text', 'textContent', isActive ? 'Active now' : 'Offline');
+
+    // Join date
+    const joinDate = membership?.joined_at || profile.created_at || new Date();
+    setIfExists('member-since-date', 'textContent',
+      new Date(joinDate).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+    );
+
+    // Join button / badge
+    setIfExists('join-community-btn', 'style.display', isMember ? 'none' : 'block');
+    setIfExists('joined-badge', 'style.display', isMember ? 'inline-block' : 'none');
+
+    // Stats
+    setIfExists('wins-1st', 'textContent', profile.leaderboard_wins_1st || 0);
+    setIfExists('wins-2nd', 'textContent', profile.leaderboard_wins_2nd || 0);
+    setIfExists('wins-3rd', 'textContent', profile.leaderboard_wins_3rd || 0);
+    setIfExists('community-points', 'textContent', profile.community_points || 0);
+
+    // About
+    setIfExists('community-headline', 'textContent', profile.headline || '');
+    setIfExists('community-bio', 'textContent', profile.bio || '');
+    setIfExists('community-location', 'textContent', profile.location ? `📍 ${profile.location}` : '');
+    setIfExists('community-username', 'textContent', profile.username || '—');
+
+    // Social links
+    const social = document.getElementById('social-links');
+    if (social) {
+      social.innerHTML = '';
+      const platforms = [
+        { key: 'twitter', icon: 'x-twitter' },
+        { key: 'github',  icon: 'github' },
+        { key: 'whatsapp', icon: 'whatsapp' },
+        { key: 'website', icon: 'globe' },
+        { key: 'tiktok',  icon: 'tiktok' }
+      ];
+
+      platforms.forEach(({ key, icon }) => {
+        const val = profile[key]?.trim();
+        if (!val) return;
+        const url = val.startsWith('http') ? val : `https://${val}`;
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.innerHTML = `<i class="fab fa-${icon}"></i>`;
+        social.appendChild(a);
+      });
+    }
+
+    // Posts
+    await loadUserPosts(currentUser.id, isMember);
+
+  } catch (err) {
+    console.error("Community profile load failed:", err);
+    showToast("Couldn't load community profile", "error");
+  } finally {
+    card.classList.remove('loading');
+  }
+}
+
+// ────────────────────────────────────────────────
+// Join handler
+// ────────────────────────────────────────────────
+document.getElementById('join-community-btn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  if (!currentUser) return showToast("Please log in", "error");
+
+  const btn = e.currentTarget;
+  btn.disabled = true;
+  btn.textContent = "Joining...";
+
+  try {
+    const { error } = await supabase
+      .from('community_members')
+      .insert({ user_id: currentUser.id });
+
+    if (error) throw error;
+
+    showToast("Welcome to the community!", "success");
+    await loadCommunityProfile(true); // force refresh
+  } catch (err) {
+    console.error("Join failed:", err);
+    showToast("Could not join – try again", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Join Community";
+  }
+});
+
+
+
+
+
+async function loadUserPosts(userId, isMember) {
+  const container = document.getElementById('user-posts-container');
+  const noPostsMsg = document.getElementById('no-posts-message');
+  const joinPrompt = document.getElementById('join-to-post-btn');
+  
+  if (!container) return;
+  
+  container.innerHTML = '';
+  if (noPostsMsg) noPostsMsg.style.display = 'none';
+  if (joinPrompt) joinPrompt.style.display = 'none';
+  
+  if (!isMember) {
+    if (noPostsMsg) noPostsMsg.style.display = 'block';
+    if (joinPrompt) joinPrompt.style.display = 'inline-block';
+    return;
+  }
+  
+  try {
+    const { data: posts, error } = await supabase
+      .from('posts')
+      .select('content, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(20);
+    
+    if (error) throw error;
+    
+    if (!posts?.length) {
+      if (noPostsMsg) {
+        noPostsMsg.style.display = 'block';
+        noPostsMsg.querySelector('p').textContent = "No posts yet. Share something!";
+      }
+      return;
+    }
+    
+    posts.forEach(post => {
+      const div = document.createElement('div');
+      div.className = 'post-item';
+      div.innerHTML = `
+        <p>${escapeHtml(post.content)}</p>
+        <small>${new Date(post.created_at).toLocaleString('en-GB', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        })}</small>
+      `;
+      container.appendChild(div);
+    });
+    
+  } catch (err) {
+    console.error("Posts load failed:", err);
+    if (noPostsMsg) {
+      noPostsMsg.style.display = 'block';
+      noPostsMsg.querySelector('p').textContent = "Failed to load posts";
+    }
+  }
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const tab = btn.dataset.tab;
+    document.getElementById('about-tab').style.display = tab === 'about' ? 'block' : 'none';
+    document.getElementById('posts-tab').style.display = tab === 'posts' ? 'block' : 'none';
+    
+    if (tab === 'posts') loadCommunityProfile(); // reload posts if needed
+  });
+});
+
+
+async function hasCompletedPublicProfile() {
+  if (!currentUser?.id) return false;
+  
+  try {
+    const { data, error } = await supabase
+      .from('profile_completed')
+      .select('completed')
+      .eq('user_id', currentUser.id)
+      .single();
+    
+    // If no row exists yet → treat as not completed
+    if (error && error.code === 'PGRST116') return false;
+    if (error) {
+      console.warn('Failed to check profile completion', error);
+      return false;
+    }
+    
+    return data?.completed === true;
+  } catch (err) {
+    console.error('Error checking profile completion', err);
+    return false;
+  }
+}
+// ────────────────────────────────────────────────
+// Show community view (this becomes the "locked" view after completion)
+// ────────────────────────────────────────────────
+function showCommunityFullView() {
+  const edit = document.getElementById('profilePage');
+  const view = document.getElementById('community-full-view');
+
+  if (edit) edit.classList.add('hidden');
+  if (view) view.classList.remove('hidden');
+
+  // remove blur if used
+  document.querySelector('main, .dashboard-content')?.classList.remove('blurred');
+
+  // Always refresh when showing
+  loadCommunityProfile(true);
+}
+
+function showProfileEditForm() {
+  const edit = document.getElementById('profilePage');
+  const view = document.getElementById('community-full-view');
+
+  if (view) view.classList.add('hidden');
+  if (edit) edit.classList.remove('hidden');
+}
+
+// ────────────────────────────────────────────────
+// Close edit form (can be used from save or cancel)
+// ────────────────────────────────────────────────
+function closeProfileEdit() {
+  const editPage = document.getElementById('profilePage');
+  if (editPage) {
+    editPage.classList.remove('visible', 'open', 'active');
+    editPage.classList.add('hidden');
+  }
+}
+
+// ────────────────────────────────────────────────
+// Set up all interceptors — only allow edit if not completed
+// ────────────────────────────────────────────────
+function setupProfileAccessInterceptors() {
+  // Selectors for anything that would normally open the public profile edit
+  const selectors = [
+    '[data-open="public-profile"]',
+    '.open-public-profile-btn',
+    '#open-profile-menu-item',
+    '.profile-link', // ← add your actual classes/IDs here
+    // Add more selectors as needed
+  ];
+  
+  document.querySelectorAll(selectors.join(', ')).forEach(el => {
+    // Remove any previous listeners to avoid duplicates
+    const newListener = async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const isCompleted = await hasCompletedPublicProfile();
+      
+      if (isCompleted) {
+        showCommunityFullView();
+      } else {
+        showProfileEditForm();
+      }
+    };
+    
+    // Clean previous listeners if you re-run this function
+    el.removeEventListener('click', newListener);
+    el.addEventListener('click', newListener);
+  });
+}
+
+// ────────────────────────────────────────────────
+// Attach pencil button (this one ALWAYS opens edit)
+// ────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// Attach Pencil Button Listener (Edit Profile)
+// ────────────────────────────────────────────────
+function attachEditPencilButton() {
+  // More specific selector to target only the one inside community view
+  const pencilSelector = '#community-full-view .edit-profile-btn, .community-profile-card .edit-profile-btn';
+  const pencilBtn = document.querySelector(pencilSelector);
+  
+  if (!pencilBtn) {
+    console.warn(`Pencil button not found. Tried selector: ${pencilSelector}`);
+    return;
+  }
+  
+  console.log("Pencil button found → attaching click listener");
+  
+  const handler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Pencil clicked → attempting to show edit form");
+    showProfileEditForm();
+  };
+  
+  // Clean up any previous listener (important if this runs multiple times)
+  pencilBtn.removeEventListener('click', handler);
+  pencilBtn.addEventListener('click', handler);
+}
+
+// ────────────────────────────────────────────────
+// Close Button – using event delegation (recommended)
+// ────────────────────────────────────────────────
+function attachCloseButtonListener() {
+  const handler = (e) => {
+    const closeBtn = e.target.closest('.close-full-view');
+    if (!closeBtn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const fullView = document.getElementById('community-full-view');
+    if (!fullView) {
+      console.warn("community-full-view container not found when trying to close");
+      return;
+    }
+    
+    console.log("Close button clicked → hiding community view");
+    
+    fullView.classList.remove('visible');
+    fullView.classList.add('hidden');
+    
+    // Optional: restore main content visibility
+    document.querySelector('main, .dashboard-content, .app-wrapper')?.classList.remove('blurred', 'blur-or-hidden');
+  };
+  
+  // Remove old delegation listener first (prevents multiples)
+  document.removeEventListener('click', handler);
+  document.addEventListener('click', handler);
+  
+  console.log("Close button delegation listener attached");
+}
+
+
+// ────────────────────────────────────────────────
+// Make sure these are called when the DOM is ready
+// ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  // Attach once
+  attachCloseButtonListener();
+  attachEditPencilButton();
+  setupProfileAccessInterceptors();
+  
+  // Check completion → decide initial view
+  if (currentUser) {
+    const completed = await hasCompletedPublicProfile();
+    if (completed) {
+      showCommunityFullView();
+    } else {
+      // show edit form or whatever default you want
+    }
+  }
+});
+
+
+// ──────────────────────────────────────────────
+//  Put it here ↓↓↓
+async function initializeCommunityProfile() {
+  
+  // Get logged-in user (you probably already do this somewhere)
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  
+  currentUser = user;
+  
+  // ────→ PASTE YOUR QUERY HERE ←────
+  const { data: profile, error } = await supabase
+    .from('users') // ← change to your actual table name if different
+    .select(`
+      full_name, username, profile_image, headline, bio, location,
+      twitter, github, whatsapp, website, tiktok,
+      last_active_at, created_at,
+      leaderboard_wins_1st, leaderboard_wins_2nd, leaderboard_wins_3rd,
+      community_points
+    `)
+    .eq('id', currentUser.id)
+    .single();
+  
+  if (error) {
+    console.error("Profile load error:", error);
+    // optional: showToast("Could not load your profile", "error");
+    return;
+  }
+  
+  if (profile) {
+    currentProfile = profile;
+  }
+  
+  // Now it's safe to call
+  await loadCommunityProfile();
+}
+
+
+
+// Call this when needed, examples:
+window.addEventListener('load', initializeCommunityProfile);
+// or when tab becomes visible
+// or when user clicks "Community" tab
+// or in mounted()/onMounted() if using Vue/React/etc.
+
+
+
+
+// ────────────────────────────────────────────────
+// Initialize everything once DOM is ready
+// ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  // Set up interceptors for menu/sidebar/profile links
+  setupProfileAccessInterceptors();
+  
+  // Attach the pencil button listener
+  attachEditPencilButton();
+  
+  // If already completed → show community view immediately
+  const isCompleted = await hasCompletedPublicProfile();
+  if (isCompleted) {
+    showCommunityFullView();
+  }
+});
+
+
+
+ 
+
+
+
+// ----------------------------
+// INITIALIZE ON PAGE LOAD
+// ----------------------------
+document.addEventListener("DOMContentLoaded", async () => {
+  
+  loadLeaderboard(20);
+  // Load user progression panel
+  await loadProgression();
+  
+  
+  
+  // Initialize notifications system
+  await initNotifications();
+  
+  // Initialize currency/exchange system
+  await initCurrencySystem();
+});
+
+// ----------------------------
+// NOTIFICATIONS SYSTEM
+// ----------------------------
+async function initNotifications() {
+  await getCurrentUser();
+  if (!currentUser) return;
+  updateNotificationCount();
+  setupRealtimeNotifications();
+}
+
+
+
+// ----------------------------
+// OPTIONAL: REFRESH PROGRESSION WHEN PANEL OPENS
+// ----------------------------
+document.getElementById("level-btn").addEventListener("click", () => {
+  initRealTime();
+  openPanel(); // show panel
+  loadProgression(); // refresh user points & levels
+});
+/* -------------------------------
+   GLOBAL FUNCTIONS
+-------------------------------- */
+
+window.toggleTheme = toggleTheme
+window.openProfilePage = openProfilePage
+window.closeProfilePage = closeProfilePage
+window.loadSessions = loadSessions
+window.savePublicProfile = savePublicProfile
+window.openAssessmentPage = openAssessmentPage
+window.saveSession = saveSession
+window.loadLoginActivity = loadLoginActivity
+window.detectNewDevice = detectNewDevice
+window.getDeviceInfo = getDeviceInfo
+window.closeAssessmentPage = closeAssessmentPage
+window.logoutOtherDevices = logoutOtherDevices
+window.saveLoginActivity = saveLoginActivity
+window.switchTab = switchTab
+window.startUpload = startUpload
+window.togglePasswordForm = togglePasswordForm
+window.updatePassword = updatePassword
+window.openLogoutModal = openLogoutModal
+window.showToast = showToast
+window.logoutOtherDevices = logoutOtherDevices
+window.togglePasswordVisibility = togglePasswordVisibility
+window.closeLogoutModal = closeLogoutModal
+window.closePanel = closePanel
+window.escapeHtml = escapeHtml
+window.confirmLogout = confirmLogout
+window.createStars = createStars
+// Auto-load when page opens
+window.onload = loadUserProgress;
+window.completeNow = completeNow
+window.maybeLater = maybeLater
+
+
+</script>
+
+</body>
+</html>

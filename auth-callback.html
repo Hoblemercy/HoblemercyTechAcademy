@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Authenticating – Hoblemercy Tech</title>
+
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@200,300,400,500,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #000;
+      --text: #fff;
+      --accent: #a855f7;
+      --secondary: #60a5fa;
+      --glow: rgba(168, 85, 247, 0.4);
+      --transition: all 0.4s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Cosmic background – same as login page */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(168,85,247,0.25), transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(96,165,250,0.2), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08), transparent 60%),
+        #000;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle 6s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.9; }
+    }
+
+    /* Main content – centered premium loader */
+    .loader-container {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 4.8rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+      text-shadow: 0 0 40px rgba(168,85,247,0.6);
+    }
+
+    .subtitle {
+      font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+      opacity: 0.85;
+      margin-bottom: 50px;
+    }
+
+    .orb-loader {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 30px;
+    }
+
+    .orb {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(168,85,247,0.9), rgba(96,165,250,0.4) 60%, transparent 80%);
+      box-shadow: 
+        0 0 60px rgba(168,85,247,0.7),
+        inset 0 0 40px rgba(255,255,255,0.15);
+      animation: pulse 2.5s ease-in-out infinite;
+      backdrop-filter: blur(8px);
+    }
+
+    .ring {
+      position: absolute;
+      inset: -20px;
+      border: 2px solid rgba(168,85,247,0.4);
+      border-radius: 50%;
+      animation: rotate 8s linear infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .status-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 20px 0 8px;
+      opacity: 0;
+      animation: fadeIn 1.2s forwards 0.6s;
+    }
+
+    .redirect-text {
+      font-size: 1rem;
+      opacity: 0.7;
+      animation: fadeIn 1.2s forwards 1.2s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      background: radial-gradient(circle, rgba(168,85,247,0.18), transparent 60%);
+      filter: blur(50px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Starfield -->
+  <div class="stars"></div>
+
+  <!-- Subtle cursor glow (matches login page) -->
+  <div class="cursor-glow"></div>
+
+  <div class="loader-container">
+    <h1>Authenticating</h1>
+    <div class="subtitle">Hoblemercy Tech</div>
+
+    <div class="orb-loader">
+      <div class="orb"></div>
+      <div class="ring"></div>
+    </div>
+
+    <div class="status-text" id="status">Verifying session...</div>
+    <div class="redirect-text" id="redirectMsg">Redirecting to dashboard</div>
+  </div>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  
+  const supabase = createClient(
+    'https://jffkatwagcfshvddnipr.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8'
+  );
+  
+  const statusEl = document.getElementById('status');
+  const redirectEl = document.getElementById('redirectMsg');
+  
+  async function handleAuthCallback() {
+    statusEl.textContent = 'Processing login...';
+    
+    try {
+      // Small delay to let tokens settle
+      await new Promise(r => setTimeout(r, 700));
+      
+      console.log('Current URL:', window.location.href);
+      
+      // Try to get session
+      let { data: { session }, error } = await supabase.auth.getSession();
+      
+      console.log('getSession result →', { hasSession: !!session, error: error?.message });
+      
+      if (!session) {
+        console.log('No session → trying refreshSession()');
+        const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+        
+        console.log('refreshSession result →', {
+          hasSession: !!refreshData?.session,
+          error: refreshError?.message
+        });
+        
+        if (refreshError) throw refreshError;
+        if (!refreshData.session) throw new Error('Still no session after refresh');
+        
+        session = refreshData.session;
+      }
+      
+      if (session) {
+        statusEl.textContent = 'Login successful ✓';
+        
+        // Profile check (optional)
+        const { data: profile } = await supabase
+          .from('users')
+          .select('id')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        
+        await new Promise(r => setTimeout(r, 1000));
+        
+        const url = new URL('/welcome.html', window.location.origin);
+        url.searchParams.set('newUser', (!profile).toString());
+        window.location.href = url.toString();
+      }
+      
+    } catch (err) {
+      console.error('Callback failed:', err);
+      statusEl.textContent = 'Authentication issue';
+      redirectEl.textContent = err.message || 'No active session found';
+      
+      // Show more helpful message for this specific error
+      if (err.message?.includes('AuthSessionMissingError') || err.status === 400) {
+        redirectEl.textContent = 'Redirect URL mismatch or Google OAuth config issue. Check Supabase Redirect URLs.';
+      }
+      
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 5000);
+    }
+  }
+  
+  handleAuthCallback();
+</script>
+</body>
+</html>
