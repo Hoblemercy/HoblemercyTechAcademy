@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome - Hoblemercy Tech</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Cabinet Grotesk Font -->
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@200,300,400,500,700,800,900&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+  --primary:   #8a2be2;
+  --accent:    #ff8c00;
+  --secondary: #00ffd6;     /* ← add this — or any color you actually want */
+  --dark:      #000;
+  --light:     #f5f5f7;
+  --card:      rgba(255,255,255,.05);
+  --glass:     rgba(255,255,255,.07);
+  --text-dark: #111;
+  --particle-color: rgba(138,43,226,.3);
+}
+
+body{
+margin:0;
+font-family:'Cabinet Grotesk',sans-serif;
+background:var(--dark);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+
+}
+
+/* PARTICLES BACKGROUND */
+
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:0;
+}
+
+/* NEURAL CANVAS */
+
+#network{
+position:fixed;
+top:0;
+left:0;
+z-index:1;
+}
+
+/* MAIN CARD */
+
+.container{
+position:relative;
+z-index:5;
+background:var(--glass);
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+padding:50px 60px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 0 50px rgba(0,255,214,0.2);
+max-width:500px;
+overflow:hidden;
+
+opacity:0;
+transform:translateY(30px) scale(.98);
+transition:all .8s cubic-bezier(.17,.67,.37,.99);
+}
+
+.container.show{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+
+.container:hover{
+box-shadow:
+0 0 40px rgba(0,255,214,.25),
+0 0 80px rgba(0,123,255,.15);
+}
+
+/* MAIN ICON */
+
+.tech-icon{
+font-size:80px;
+margin-bottom:20px;
+background:linear-gradient(90deg,var(--primary),var(--secondary));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+}
+
+/* TEXT */
+
+.welcome{
+font-size:28px;
+font-weight:900;
+margin-bottom:10px;
+letter-spacing:1px;
+}
+
+.subtext{
+opacity:.95;
+margin-bottom:25px;
+text-align:center;
+font-size:15px;
+line-height:1.7;
+max-width:420px;
+margin-left:auto;
+margin-right:auto;
+}
+
+/* AVATAR */
+
+.profile-avatar{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:15px;
+border:3px solid var(--primary);
+box-shadow:0 10px 25px rgba(0,0,0,.4);
+animation:avatarGlow 3s infinite alternate;
+}
+
+@keyframes avatarGlow{
+from{box-shadow:0 0 10px var(--primary)}
+to{box-shadow:0 0 25px var(--accent)}
+}
+
+/* FLOATING ICONS */
+
+#floatingIcons{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+}
+
+.floating-icon{
+position:absolute;
+font-size:40px;
+color:var(--primary);
+opacity:0;
+transform-style:preserve-3d;
+transition:transform .3s,opacity 1s ease;
+}
+
+.floating-icon.show{
+opacity:.8;
+}
+
+.floating-icon:hover{
+transform:scale(1.3) rotateY(20deg) rotateX(20deg);
+opacity:1;
+}
+
+/* TOAST */
+
+.toast{
+display:flex;
+align-items:center;
+gap:10px;
+padding:15px 20px;
+background:linear-gradient(90deg,#4f46e5,#7b8cff);
+border-radius:12px;
+opacity:0;
+transform:scale(.8);
+transition:.5s;
+}
+
+.toast.show{
+opacity:1;
+transform:scale(1);
+}
+
+/* PROGRESS BAR */
+
+.progress-container{
+width:260px;
+height:8px;
+background:rgba(255,255,255,0.2);
+border-radius:5px;
+margin-top:20px;
+overflow:hidden;
+}
+
+.progress-bar{
+width:0%;
+height:100%;
+background:linear-gradient(90deg,var(--primary),var(--secondary));
+transition:width .2s ease;
+}
+
+.percent{
+margin-top:8px;
+font-weight:700;
+}
+
+/* SIGNUP MODAL */
+
+#signupForm {
+  position: fixed;
+  inset: 0;                     /* top:0; right:0; bottom:0; left:0; */
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: flex-start;      /* changed from center → better for scrolling */
+  z-index: 10;
+  backdrop-filter: blur(5px);
+  overflow-y: auto;             /* ← THIS enables scrolling the modal */
+  -webkit-overflow-scrolling: touch;  /* smooth momentum scrolling on iOS */
+  padding: 20px 0 60px;         /* breathing room top + extra bottom space */
+  box-sizing: border-box;
+}
+
+/* Optional: lock body scroll when modal is open */
+body:has(#signupForm[style*="display: flex"]),
+body:has(#signupForm[style*="display: block"]) {
+  overflow: hidden;
+}
+
+/* The form itself – improved for scrolling */
+#signupForm form {
+  background: var(--dark);
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 360px;
+  max-width: 90vw;              /* ← prevents overflow on small screens */
+  min-width: 320px;             /* reasonable minimum width */
+  margin: 40px auto 80px;       /* top & bottom margin for scrolling feel */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  position: relative;
+  box-sizing: border-box;
+  /* Optional: limit height + inner scroll if you prefer form to never grow too tall */
+  /* max-height: 90vh; */
+  /* overflow-y: auto; */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Optional: make it feel more centered when there's little content */
+@media (min-height: 700px) {
+  #signupForm {
+    align-items: center;
+    padding: 20px 0;
+  }
+  
+  #signupForm form {
+    margin: 20px auto;
+  }
+}
+#signupForm h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+#signupForm input,
+#signupForm select {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  outline: none;
+  font-size: 14px;
+  background: var(--card);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+#signupForm input:focus,
+#signupForm select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  background: var(--glass);
+}
+
+#signupForm button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#signupForm button:hover {
+  background: var(--accent);
+  transform: scale(1.05);
+}
+
+#signupForm button .btn-text {
+  z-index: 2;
+}
+
+#signupForm button svg.progress-circle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  width: 24px;
+  height: 24px;
+  z-index: 2;
+}
+
+#signupForm button svg .progress-bg {
+  stroke: rgba(255,255,255,0.2);
+}
+
+#signupForm button svg .progress-bar {
+  stroke: #fff;
+  stroke-dasharray: 125.6; /* 2 * π * r (r=20) */
+  stroke-dashoffset: 125.6;
+  transition: stroke-dashoffset 0.5s linear;
+  transform-origin: center;
+}
+
+#signupForm input[type="file"] {
+  padding: 6px;
+  color: #fff;
+  border-radius: 8px;
+}
+/* CONFETTI */
+
+#confetti{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+}
+
+/* Spinner inside button */
+#registerBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#registerBtn svg.progress-circle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  width: 24px;
+  height: 24px;
+  display: none;
+}
+
+.progress-bg {
+  stroke: rgba(255,255,255,0.3);
+}
+
+.progress-bar {
+  stroke: #000;
+  stroke-dasharray: 126; /* 2 * PI * r (r=20) */
+  stroke-dashoffset: 126;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.05s linear;
+}
+#registerBtn .spinner i {
+  font-size: 16px;
+  color: #000;
+}
+
+/* ===============================
+MOBILE
+=============================== */
+
+@media (max-width:600px) {
+  
+  body {
+    padding: 20px;
+    align-items: center;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 35px 25px;
+    border-radius: 16px;
+  }
+  
+  .tech-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .welcome {
+    font-size: 22px;
+  }
+  
+  .subtext {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+  
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .progress-container {
+    width: 100%;
+  }
+  
+  .percent {
+    font-size: 14px;
+  }
+  
+  .toast {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  
+  #signupForm form {
+    width: 90%;
+    padding: 25px;
+  }
+  
+  #signupForm input,
+  #signupForm select {
+    font-size: 16px;
+    padding: 9px;
+  }
+  
+  #signupForm button {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .floating-icon {
+    font-size: 26px;
+  }
+  
+}
+/* ===============================
+TABLET
+=============================== */
+
+@media (min-width:601px) and (max-width:1024px) {
+  
+  .container {
+    max-width: 460px;
+    padding: 45px 40px;
+  }
+  
+  .tech-icon {
+    font-size: 70px;
+  }
+  
+  .welcome {
+    font-size: 26px;
+  }
+  
+  .subtext {
+    font-size: 15px;
+  }
+  
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .progress-container {
+    width: 80%;
+  }
+  
+  .toast {
+    font-size: 15px;
+  }
+  
+  .floating-icon {
+    font-size: 32px;
+  }
+  
+  #signupForm form {
+    width: 420px;
+  }
+  
+}
+/* ===============================
+DESKTOP / LAPTOP
+=============================== */
+
+@media (min-width:1025px) {
+  
+  .container {
+    max-width: 520px;
+    padding: 55px 65px;
+  }
+  
+  .tech-icon {
+    font-size: 85px;
+  }
+  
+  .welcome {
+    font-size: 30px;
+  }
+  
+  .subtext {
+    font-size: 16px;
+  }
+  
+  .profile-avatar {
+    width: 95px;
+    height: 95px;
+  }
+  
+  .progress-container {
+    width: 260px;
+  }
+  
+  .floating-icon {
+    font-size: 40px;
+  }
+  
+}
+@media (max-width:380px) {
+  
+  .container {
+    padding: 30px 18px;
+  }
+  
+  .welcome {
+    font-size: 20px;
+  }
+  
+  .subtext {
+    font-size: 13px;
+  }
+  
+  .tech-icon {
+    font-size: 50px;
+  }
+  
+  .profile-avatar {
+    width: 65px;
+    height: 65px;
+  }
+  
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+<canvas id="network"></canvas>
+
+<!-- Signup Form -->
+<div id="signupForm">
+  <form id="form">
+    <h2 style="text-align:center;">Sign Up</h2>
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="text" id="usernameInput" placeholder="Username" required>
+    <input type="tel" id="phone" placeholder="Phone Number" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <select id="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+    <input type="text" id="country" placeholder="Country" required>
+    <input type="text" id="state" placeholder="State" required>
+    <input type="text" id="city" placeholder="City" required>
+    <input type="text" id="level" placeholder="Level of Education" required>
+    <input type="text" id="department" placeholder="Department" required>
+    <input type="text" id="institution" placeholder="Institution Name" required>
+    <label for="profile_image">Profile Image</label>
+    <input type="file" id="profileImage" accept="image/*" required>
+   <button type="submit" id="registerBtn">
+  <span class="btn-text">Register</span>
+  <svg class="progress-circle" width="24" height="24" viewBox="0 0 50 50">
+    <circle class="progress-bg" cx="25" cy="25" r="20" stroke-width="4" fill="none" />
+    <circle class="progress-bar" cx="25" cy="25" r="20" stroke-width="4" fill="none" />
+  </svg>
+</button>
+  </form>
+</div>
+
+<div class="container">
+  <i class="tech-icon fas fa-rocket" id="icon"></i>
+  <div class="welcome" id="welcome">WELCOME</div>
+  <div class="subtext" id="username">Loading user...</div>
+  <div id="floaotingIcons"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-circle-check"></i>
+    <div>
+      <div id="toastTitle">Success</div>
+      <div id="toastMessage">Preparing dashboard...</div>
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="percent" id="percent">0%</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+// ────────────────────────────────────────────────
+// CONFIG
+// ────────────────────────────────────────────────
+const supabaseUrl  = 'https://jffkatwagcfshvddnipr.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZmthdHdhZ2Nmc2h2ZGRuaXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjc2MzUsImV4cCI6MjA4ODgwMzYzNX0.MnOvMKZ49gafMEToQeHYtmoH3qZVEJU3Yg8x3mykeQ8'
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+console.log("Welcome script STARTED");
+
+// ────────────────────────────────────────────────
+// Particles – safe loading (unchanged)
+// ────────────────────────────────────────────────
+function initParticles() {
+  if (typeof particlesJS === 'undefined') {
+    console.warn("particles.js not loaded yet – skipping particles");
+    return;
+  }
+  console.log("particles.js ready → initializing");
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 90 },
+      color: { value: "#00ffd6" },
+      shape: { type: "circle" },
+      opacity: { value: 0.5 },
+      size: { value: 3 },
+      line_linked: { enable: true, distance: 150, color: "#007bff", opacity: 0.4, width: 1 },
+      move: { enable: true, speed: 2 }
+    },
+    interactivity: {
+      events: { onhover: { enable: true, mode: "grab" } },
+      modes: { grab: { distance: 140, line_linked: { opacity: 1 } } }
+    },
+    retina_detect: true
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initParticles);
+} else {
+  initParticles();
+}
+
+// ────────────────────────────────────────────────
+// Floating Icons (unchanged)
+// ────────────────────────────────────────────────
+function createFloatingIcons() {
+  const icons = ['fa-robot','fa-laptop-code','fa-code','fa-microchip'];
+  const container = document.getElementById('floatingIcons');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  for(let i=0;i<8;i++){
+    const icon = document.createElement('i');
+    icon.className = `fas ${icons[i%icons.length]} floating-icon`;
+    container.appendChild(icon);
+
+    setTimeout(()=>{ icon.classList.add('show'); }, i*150);
+
+    let x = Math.random()*100;
+    let y = Math.random()*100;
+    let z = Math.random()*100;
+    let scale = 0.8 + Math.random()*0.5;
+    let speed = 0.5 + Math.random();
+
+    function animate(){
+      x += (Math.random()-0.5)*speed;
+      y += (Math.random()-0.5)*speed;
+      z += (Math.random()-0.5)*speed;
+      if(x<0)x=100; if(x>100)x=0;
+      if(y<0)y=100; if(y>100)y=0;
+      icon.style.transform = `translate3d(${x}%,${y}%,${z}px) scale(${scale}) rotateY(${x*3.6}deg) rotateX(${y*3.6}deg)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+}
+
+function startConfetti() {
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  
+  canvas.width = canvas.clientWidth
+  canvas.height = canvas.clientHeight
+  
+  let particles = [];
+  
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 6 + 2,
+      speedY: Math.random() * 3 + 1,
+      color: `hsl(${Math.random()*360},70%,60%)`
+    });
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(p => {
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+      p.y += p.speedY;
+      if (p.y > canvas.height) p.y = -10;
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+  setTimeout(() => { canvas.style.display = "none"; }, 4000)
+}
+
+
+
+
+const dailyMotivations = [
+  "Believe in yourself — you are capable of amazing things!",
+  "Consistency beats intensity — keep coding every day.",
+  "Mistakes are proof that you’re trying — learn from them.",
+  "Every expert was once a beginner — keep pushing.",
+  "Small progress each day adds up to big results.",
+  "The best way to predict the future is to create it.",
+  "Your skills are your superpower — sharpen them daily.",
+  "Dream big, code bigger.",
+  "Challenges are just stepping stones to success.",
+  "Learning never exhausts the mind — embrace it.",
+  "Stay curious — curiosity is the fuel for growth.",
+  "Code, build, break, repeat — mastery comes from practice.",
+  "Your journey in tech is unique — own it.",
+  "Focus on progress, not perfection.",
+  "Imagination is your first line of code.",
+  "The harder you work, the luckier you get.",
+  "Never stop learning — technology evolves every day.",
+  "Solve problems, and you will create opportunities.",
+  "Your effort today builds your career tomorrow.",
+  "Be patient — great developers aren’t made overnight.",
+  "Creativity is intelligence having fun — unleash it.",
+  "Persistence beats resistance — never give up.",
+  "Turn challenges into achievements.",
+  "Your code can change the world — start small.",
+  "Celebrate small wins, they lead to big victories.",
+  "Collaboration and curiosity will take you far.",
+  "Think like a programmer, act like a creator.",
+  "Every bug you fix makes you stronger.",
+  "Innovation starts with trying something new.",
+  "Today is a new chance to become a better developer."
+];
+
+function getMotivationOfTheDay() {
+  const day = new Date().getDate();
+  return dailyMotivations[day % dailyMotivations.length];
+}
+
+// ────────────────────────────────────────────────
+// Show Welcome Card
+// ────────────────────────────────────────────────
+function showWelcomeCard(name = null, photo = null, isNew = false) {
+  let displayName = name || 'New Student';
+  const welcomeEl = document.getElementById('welcome');
+  const usernameEl = document.getElementById('username');
+  const iconEl = document.getElementById('icon');
+  
+  if (!welcomeEl || !usernameEl || !iconEl) return;
+  
+  welcomeEl.textContent = isNew ? 'WELCOME!' : 'WELCOME BACK!';
+  
+  if (isNew) {
+    usernameEl.innerHTML = `
+      <strong class="welcome-title">
+        Welcome to Hoblemercy Tech Digital Academy 🚀, ${displayName}!
+      </strong>
+      <p>Your number one destination to learn modern technology skills.</p>
+      <p>Here, you will gain practical knowledge, build real projects, and grow your career in tech — all at an affordable price.</p>
+      <p>Stay focused, explore our courses, and begin your journey to becoming a professional in the tech world.</p>
+    `;
+    startConfetti();
+  } else {
+    usernameEl.innerHTML = `
+      <strong class="welcome-title">
+        Welcome back, ${displayName} 👋
+      </strong>
+      <p>We’re excited to see you again. Continue learning, improve your skills, and move closer to becoming a professional developer.</p>
+    `;
+  }
+  
+  if (photo) {
+    const img = document.createElement('img');
+    img.src = photo;
+    img.alt = `${displayName}'s profile picture`;
+    img.classList.add('profile-avatar');
+    usernameEl.prepend(img);
+  }
+
+  const motivationMsg = getMotivationOfTheDay();
+  if (usernameEl) {
+    const msgEl = document.createElement('p');
+    msgEl.style.fontStyle = "italic";
+    msgEl.style.marginTop = "12px";
+    msgEl.style.color = "#00ffd6";
+    msgEl.textContent = `💡 Motivation: ${motivationMsg}`;
+    usernameEl.appendChild(msgEl);
+  }
+
+  if ('speechSynthesis' in window) {
+    const message = isNew ? `Welcome to Hoblemercy Tech Digital Academy, ${displayName}!` : `Welcome back ${displayName}`;
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = 'en-US';
+    utterance.volume = 0.95;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.05;
+    
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v =>
+          v.lang.includes('en') &&
+          (v.name.includes('Google') || v.name.includes('Microsoft') || v.name.includes('Natural') || v.name.includes('Samantha'))
+      ) || voices.find(v => v.lang.includes('en')) || voices[0];
+      if (preferred) utterance.voice = preferred;
+      setTimeout(() => window.speechSynthesis.speak(utterance), 400);
+    };
+    
+    if (window.speechSynthesis.getVoices().length) loadVoices();
+    else window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  
+  iconEl.className = 'tech-icon fas fa-robot';
+  iconEl.style.animation = 'float 3s ease-in-out infinite';
+  createFloatingIcons();
+}
+
+// ────────────────────────────────────────────────
+// Progress & Redirect
+// ────────────────────────────────────────────────
+function startProgressAndRedirect() {
+  let progress = 0;
+  const percent = document.getElementById("percent");
+  const bar = document.getElementById("progressBar");
+  const toast = document.getElementById("toast");
+  const toastTitle = document.getElementById("toastTitle");
+  const toastMessage = document.getElementById("toastMessage");
+  
+  if (!percent || !bar) return;
+  
+  const loader = setInterval(() => {
+    progress++;
+    bar.style.width = progress + "%";
+    percent.innerText = progress + "%";
+    
+    if (progress >= 100) {
+      clearInterval(loader);
+      
+      const container = document.querySelector('.container');
+      if (container) container.classList.add('show');
+      
+      if (toast && toastTitle && toastMessage) {
+        toastTitle.innerText = "Success";
+        toastMessage.innerText = "Redirecting to dashboard…";
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+      
+      setTimeout(() => window.location.href = "dashboard.html", 2000);
+    }
+  }, 120);
+}
+
+// ────────────────────────────────────────────────
+// MAIN PAGE LOGIC – Fully Updated & Robust
+// ────────────────────────────────────────────────
+async function initializePage() {
+  try {
+    console.log("🔍 Welcome page: Starting auth check...");
+    
+    // Small delay to let Supabase storage/cookies settle after redirect from callback
+    await new Promise(resolve => setTimeout(resolve, 400));
+    
+    // 1. Try getSession first (faster, checks local storage)
+    let { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    let user = session?.user;
+    
+    console.log("Session check result:", user ? `User found: ${user.email}` : "No session yet");
+    
+    // 2. If no session, try refresh (common right after callback)
+    if (!user) {
+      console.log("⚠️ No active session – attempting refreshSession...");
+      const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+      
+      if (refreshError) {
+        console.warn("Refresh failed:", refreshError.message);
+      } else if (refreshed?.session) {
+        user = refreshed.session.user;
+        console.log("✅ Session recovered via refresh:", user.email);
+      }
+    }
+    
+    // 3. Final fallback: use getUser() (makes a network call to verify)
+    if (!user) {
+      console.log("⚠️ Still no user – trying getUser()...");
+      const { data: { user: verifiedUser }, error: userError } = await supabase.auth.getUser();
+      user = verifiedUser;
+      
+      if (userError) console.warn("getUser error:", userError.message);
+      else if (user) console.log("✅ User verified via getUser():", user.email);
+    }
+    
+    const container = document.querySelector('.container');
+    if (!container) throw new Error("Main container not found");
+    
+    if (!user) {
+      console.error("❌ No authenticated user found after all attempts");
+      container.classList.add('show');
+      const fallback = document.getElementById('fallback');
+      if (fallback) {
+        fallback.style.display = 'block';
+        fallback.innerHTML = `No active session detected.<br>Please <a href="/">go back to login</a> and try again.`;
+      }
+      return;
+    }
+    
+    console.log("✅ User is logged in:", user.email, "ID:", user.id);
+    
+    // Fetch profile
+    const { data: profile, error: profileError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle(); // Use maybeSingle instead of single to avoid error on no row
+    
+    console.log("Profile fetch result:", { hasProfile: !!profile, error: profileError?.message });
+    
+    // Handle newUser flag from callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const isNewUser = urlParams.get('newUser') === 'true';
+    if (urlParams.has('newUser')) {
+      window.history.replaceState({}, document.title, window.location.pathname); // Clean URL
+    }
+    
+    const signupForm = document.getElementById('signupForm'); // assuming this is your form ID
+    
+    if (isNewUser || profileError || !profile) {
+      console.log("Treating as NEW user (showing signup form)");
+      
+      if (signupForm) signupForm.style.display = 'flex';
+      if (user.email) {
+        const emailField = document.getElementById('email');
+        if (emailField) emailField.value = user.email;
+      }
+      
+      const displayName = user.email ? user.email.split('@')[0] : 'New Student';
+      showWelcomeCard(displayName, null, true);
+    } else {
+      console.log("Returning user – starting progress to dashboard");
+      
+      if (signupForm) signupForm.style.display = 'none';
+      
+      const displayName = profile?.username || profile?.full_name || 'Returning Student';
+      showWelcomeCard(displayName, profile?.profile_image, false);
+      
+      // Toast for returning users
+      const toast = document.getElementById("toast");
+      const toastTitle = document.getElementById("toastTitle");
+      const toastMessage = document.getElementById("toastMessage");
+      if (toast && toastTitle && toastMessage) {
+        toastTitle.innerText = "Login Successful";
+        toastMessage.innerText = `Welcome back, ${displayName}! Redirecting…`;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+      
+      startProgressAndRedirect();
+    }
+    
+    container.classList.add('show');
+    const fallback = document.getElementById('fallback');
+    if (fallback) fallback.style.display = 'none';
+    
+  } catch (err) {
+    console.error("❌ Critical error in initializePage:", err);
+    const fallback = document.getElementById('fallback');
+    if (fallback) {
+      fallback.style.display = 'block';
+      fallback.innerHTML += `<br><br><strong>Error: ${err.message || 'Unknown error'}</strong><br>Please try logging in again.`;
+    }
+  }
+}
+// ────────────────────────────────────────────────
+// FORM SUBMIT – FIXED & IMPROVED
+// ────────────────────────────────────────────────
+const form = document.getElementById('form');
+const registerBtn = document.getElementById('registerBtn');
+if (form && registerBtn) {
+  const btnText = registerBtn.querySelector('.btn-text');
+  const svg = registerBtn.querySelector('.progress-circle');
+  const progressBar = svg.querySelector('.progress-bar');
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fullName = document.getElementById('fullName')?.value?.trim();
+    if (!fullName) { alert('Please enter your full name'); return; }
+    
+    btnText.style.display = 'none';
+    svg.style.display = 'block';
+    registerBtn.disabled = true;
+    
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+      progress = Math.min(progress + 2, 126);
+      progressBar.style.strokeDashoffset = 126 - progress;
+    }, 16);
+    
+    try {
+      // Double-check session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session?.user) throw new Error('No active session. Please sign in again.');
+      const user = session.user;
+      console.log("Form submit – authenticated user:", user.email, user.id);
+      
+      // Collect form data
+      const username = document.getElementById('usernameInput')?.value?.trim() || '';
+      const phone = document.getElementById('phone')?.value?.trim() || '';
+      const gender = document.getElementById('gender')?.value || '';
+      const country = document.getElementById('country')?.value?.trim() || '';
+      const state = document.getElementById('state')?.value?.trim() || '';
+      const city = document.getElementById('city')?.value?.trim() || '';
+      const level = document.getElementById('level')?.value?.trim() || '';
+      const department = document.getElementById('department')?.value?.trim() || '';
+      const institution = document.getElementById('institution')?.value?.trim() || '';
+      
+      let profileImage = null;
+      const file = document.getElementById('profileImage')?.files?.[0];
+      
+      if (file) {
+        // Basic validation
+        if (file.size > 5 * 1024 * 1024) throw new Error('File too large (max 5MB)');
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) throw new Error('Invalid file type – only images allowed');
+        
+        const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+        const path = `profiles/${user.id}/avatar.${ext}`;
+        
+        console.log("Uploading to path:", path);
+        
+        // Debug: list buckets to confirm 'profiles' exists
+        const { data: buckets, error: bucketErr } = await supabase.storage.listBuckets();
+        console.log("Available buckets:", buckets, "Bucket error:", bucketErr);
+        
+        const { data: uploadData, error: uploadErr } = await supabase.storage
+          .from('profiles')
+          .upload(path, file, { cacheControl: '3600' }); // NO upsert!
+        
+        if (uploadErr) {
+          console.error("Upload failed:", uploadErr);
+          throw new Error(`Upload failed: ${uploadErr.message || uploadErr.error || 'Unknown'}`);
+        }
+        
+        console.log("Upload success:", uploadData);
+        
+        const { data: urlData } = supabase.storage.from('profiles').getPublicUrl(path);
+        profileImage = urlData?.publicUrl;
+        
+        if (!profileImage) {
+          console.warn("Public URL not generated – falling back");
+          profileImage = `${supabaseUrl}/storage/v1/object/public/profiles/${path}`;
+        }
+      }
+      
+// Save profile data
+const { error: saveErr } = await supabase.from('users').upsert({
+  id: user.id,
+  full_name: fullName,
+  username,
+  phone,
+  email: user.email,
+  gender,
+  country,
+  state,
+  city,
+  level,
+  department,
+  institution,
+  profile_image: profileImage,
+}, { onConflict: 'id' });
+
+if (saveErr) {
+  console.error("Database save error:", saveErr);
+  throw saveErr;
+}
+
+// ==================== Notify Admin ====================
+try {
+  const { error: notifError } = await supabase
+    .from('admin_notifications')
+    .insert({
+      user_id: user.id,
+      title: '🆕 New User Signup',
+      message: `${fullName || username || 'A new user'} just joined the platform.`,
+      type: 'new_user',
+      is_read: false,
+      created_at: new Date().toISOString()
+    });
+  
+  if (notifError) {
+    console.warn("Failed to create admin notification:", notifError);
+  } else {
+    console.log("✅ Admin notification created successfully");
+  }
+} catch (notifErr) {
+  console.warn("Notification error:", notifErr);
+}
+
+// =====================================================================
+
+clearInterval(progressInterval);
+progressBar.style.strokeDashoffset = 0;
+
+document.getElementById('signupForm').style.display = 'none';
+const displayName = username || fullName || 'New Student';
+showWelcomeCard(displayName, profileImage, true);
+startProgressAndRedirect();
+
+} catch (err) {
+  console.error("Form submission error:", err);
+  let message = 'Error saving profile';
+  
+  if (err.__isStorageError) {
+    message = `Storage error: ${err.message || err.error || 'Unknown storage issue'} (code: ${err.statusCode || 'N/A'})`;
+  } else if (err.code === '42501' || err.message?.includes('row-level security')) {
+    message = 'Permission denied – check RLS policies on users table or storage.objects';
+  } else if (err.message?.includes('session')) {
+    message = 'Session expired. Please sign in again.';
+  } else if (err.message) {
+    message += `: ${err.message}`;
+  }
+  
+  alert(message);
+} finally {
+  clearInterval(progressInterval);
+  progressBar.style.strokeDashoffset = 126;
+  btnText.style.display = 'inline-block';
+  svg.style.display = 'none';
+  registerBtn.disabled = false;
+}
+  });
+}
+
+// ────────────────────────────────────────────────
+// START
+// ────────────────────────────────────────────────
+initializePage();
+</script>
+</body>
+</html>
